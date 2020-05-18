@@ -16,7 +16,8 @@ class AuthViewModel extends BaseViewModel
 	String username, email, password, confirmPassword;
 	String passwordError, requestError;
 
-	String get switchText => isLogin ? "Register an account" : "Login to your account";
+	String get switchText => isLogin ? "Don't have an account ?" : "Already have an account ?";
+	String get switchTextButton => isLogin ? "Login" : "Signup";
 	String get authText => isLogin ? "Login" : "Register";
 
 	final BuildContext context;
@@ -66,10 +67,6 @@ class AuthViewModel extends BaseViewModel
 
 		if(!isLogin)
 		{
-			if(!RegExp(r"^.{8,32}$").hasMatch(str))
-			{
-				return "Password length : 8-32 characters";
-			}
 			if(!RegExp(r"(?=.*[a-z])").hasMatch(str))
 			{
 				return "At least one lowercase letter is required";
@@ -81,6 +78,10 @@ class AuthViewModel extends BaseViewModel
 			if(!RegExp(r"(?=.*\d)").hasMatch(str))
 			{
 				return "At least one number is required";
+			}
+			if(!RegExp(r"^.{8,32}$").hasMatch(str))
+			{
+				return "Password length : 8-32 characters";
 			}
 		}
 
@@ -103,6 +104,8 @@ class AuthViewModel extends BaseViewModel
 	void toggleLogin()
 	{
 		isLogin = !isLogin;
+		formKey.currentState.reset();
+		requestError = null;
 
 		if(isLogin)
 		{
@@ -135,10 +138,9 @@ class AuthViewModel extends BaseViewModel
 			final res = await authApi.register(username, email, password);
 			if(res.isSuccessful)
 			{
-				isLogin = true;
 				username = null;
 				confirmPassword = null;
-				notifyListeners();
+				toggleLogin();
 			}
 			else
 			{
