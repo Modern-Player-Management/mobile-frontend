@@ -85,7 +85,7 @@ class _$AppDatabase extends AppDatabase {
         await database.execute(
             'CREATE TABLE IF NOT EXISTS `teams` (`id` TEXT, `user` TEXT, `name` TEXT, `save` INTEGER, `update` INTEGER, `delete` INTEGER, PRIMARY KEY (`id`))');
         await database.execute(
-            'CREATE TABLE IF NOT EXISTS `events` (`id` TEXT, `team` TEXT, `start` TEXT, `end` TEXT, `title` TEXT, `description` TEXT, `save` INTEGER, `update` INTEGER, `delete` INTEGER, FOREIGN KEY (`team`) REFERENCES `teams` (`id`) ON UPDATE NO ACTION ON DELETE NO ACTION, PRIMARY KEY (`id`))');
+            'CREATE TABLE IF NOT EXISTS `events` (`id` TEXT, `team` TEXT, `start` TEXT, `end` TEXT, `title` TEXT, `description` TEXT, `save` INTEGER, `update` INTEGER, `delete` INTEGER, FOREIGN KEY (`team`) REFERENCES `teams` (`id`) ON UPDATE NO ACTION ON DELETE CASCADE, PRIMARY KEY (`id`))');
         await database
             .execute('CREATE INDEX `index_teams_user` ON `teams` (`user`)');
 
