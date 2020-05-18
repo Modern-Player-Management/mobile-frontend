@@ -12,11 +12,11 @@ class SplashViewModel extends BaseViewModel
 	{
 		if(_storage.token == null)
 		{
-			_navigator.navigateTo(Routes.authViewRoute);
+			_navigator.replaceWith(Routes.authViewRoute);
 		}
 		else
 		{
-			_navigator.navigateTo(Routes.homeViewRoute);
+			_navigator.replaceWith(Routes.homeViewRoute);
 		}
 	}
 }
