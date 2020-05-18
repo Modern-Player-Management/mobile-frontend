@@ -28,6 +28,6 @@ void main() async
 		),
 		initialRoute: Routes.splashViewRoute,
 		onGenerateRoute: Router().onGenerateRoute,
-		navigatorKey: getIt<NavigationService>().navigatorKey,
+		navigatorKey: locator<NavigationService>().navigatorKey,
 	));
 }
