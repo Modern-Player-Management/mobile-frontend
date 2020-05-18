@@ -18,11 +18,11 @@ abstract class EventDao
 	Future<List<Event>> getUndeletedEvents(String user);
 
 	@insert
-	Future<void> insertEvent(Event unit);
+	Future<void> insertEvent(Event event);
 
 	@update
-	Future<void> updateEvent(Event unit);
+	Future<void> updateEvent(Event event);
 
 	@delete
-	Future<void> deleteEvent(Event unit);
+	Future<void> deleteEvent(Event event);
 }
