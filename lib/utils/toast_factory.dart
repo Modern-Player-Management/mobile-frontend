@@ -2,28 +2,24 @@ import 'package:flutter/material.dart';
 
 import 'package:bot_toast/bot_toast.dart';
 
-enum ToastStyle
-{
+enum ToastStyle {
 	error,
 	warning,
 	success,
 	info
 }
 
-class ToastFactory
-{
+class ToastFactory {
 	static void show({
 		@required BuildContext context, 
 		@required String msg, 
 		ToastStyle style = ToastStyle.info,
 		Duration duration = const Duration(milliseconds: 1500)
-	})
-	{
+	}) {
 		IconData icon;
 		Color color;
 
-		switch(style)
-		{
+		switch(style) {
 			case ToastStyle.error: 
 				icon = Icons.error;
 				color = Colors.red.shade800;
@@ -68,8 +64,7 @@ class ToastFactory
 		Duration duration = const Duration(milliseconds: 1500),
 		Duration animationDuration = const Duration(milliseconds: 300),
 		bool crossPage = false
-	})
-	{
+	}) {
 		BotToast.showCustomNotification(
 			toastBuilder: (_){
 				return Card(
