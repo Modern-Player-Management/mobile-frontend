@@ -5,17 +5,18 @@ import 'package:mpm/services/database/models/team.dart';
 
 part 'event.g.dart';
 
-@JsonSerializable()
 @Entity(
 	tableName: "events",
 	foreignKeys: [
 		ForeignKey(
 			childColumns: ["team"],
 			parentColumns: ["id"],
-			entity: Team
+			entity: Team,
+			onDelete: ForeignKeyAction.CASCADE
 		)
 	]
 )
+@JsonSerializable()
 class Event 
 {
 	@primaryKey
