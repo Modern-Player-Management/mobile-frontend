@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 
 import 'package:stacked/stacked.dart';
+import 'package:stacked_hooks/stacked_hooks.dart';
 
 import 'package:mpm/ui/views/auth/auth_view_model.dart';
-import 'package:stacked_hooks/stacked_hooks.dart';
+import 'package:mpm/utils/colors.dart';
 
 class AuthView extends ViewModelBuilderWidget<AuthViewModel>
 {
@@ -17,35 +18,36 @@ class AuthView extends ViewModelBuilderWidget<AuthViewModel>
 	Widget builder(context, model, child)
 	{
 		return Scaffold(
-			appBar: AppBar(
-				title: _Title()
-			),
-			body: SingleChildScrollView(
-				child: Padding(
-					padding: const EdgeInsets.all(16),
-					child: Form(
-						key: model.formKey,
-						child: Column(
-							mainAxisAlignment: MainAxisAlignment.center,
-							crossAxisAlignment: CrossAxisAlignment.center,
-							children: <Widget>[
-								SizedBox(height: 16),
-								Text(
-									"Modern Player Management",
-									style: TextStyle(
-										fontSize: 24
-									),
+			body: Center(
+				child: Container(
+					width: MediaQuery.of(context).size.width * 0.9,
+					child: Padding(
+						padding: const EdgeInsets.all(16),
+						child: SingleChildScrollView(
+							child: Form(
+								key: model.formKey,
+								child: Column(
+									mainAxisAlignment: MainAxisAlignment.center,
+									crossAxisAlignment: CrossAxisAlignment.center,
+									children: <Widget>[
+										SizedBox(height: 32),
+										Text(
+											"MPM Logo",
+											style: Theme.of(context).textTheme.headline4
+										),
+										SizedBox(height: 16),
+										_UsernameTextField(),
+										_EmailTextField(),
+										_PasswordTextField(),
+										_ConfirmPasswordTextField(),
+										SizedBox(height: 16),
+										_AuthButton(),
+										_ToggleAuthMethod(),
+										SizedBox(height: 16),
+										_Error(),
+									],
 								),
-								SizedBox(height: 16),
-								_UsernameTextField(),
-								_EmailTextField(),
-								_PasswordTextField(),
-								_ConfirmPasswordTextField(),
-								SizedBox(height: 16),
-								_Buttons(),
-								SizedBox(height: 32),
-								_Error()
-							],
+							),
 						),
 					),
 				),
@@ -62,22 +64,6 @@ class AuthView extends ViewModelBuilderWidget<AuthViewModel>
 	}
 }
 
-class _Title extends ViewModelWidget<AuthViewModel>
-{
-	@override
-	bool get reactive => true;
-
-	@override
-	Widget build(context, model)
-	{
-		return Text(
-			model.isLogin ? 
-			"Authentification" :
-			"Registration",
-		);
-	}
-}
-
 class _UsernameTextField extends HookViewModelWidget<AuthViewModel>
 {
 	@override
@@ -90,8 +76,9 @@ class _UsernameTextField extends HookViewModelWidget<AuthViewModel>
 			initialValue: model.username,
 			decoration: InputDecoration(
 				labelText: "Username *",
-				icon: Icon(
-					Icons.person
+				prefixIcon: Icon(
+					Icons.person,
+					size: 32,
 				),
 			),
 			validator: model.usernameValidator,
@@ -115,9 +102,10 @@ class _EmailTextField extends HookViewModelWidget<AuthViewModel>
 			initialValue: model.email,
 			decoration: InputDecoration(
 				labelText: "Email *",
-				icon: Icon(
-					Icons.email
-				)
+				prefixIcon: Icon(
+					Icons.email,
+					size: 32,
+				),
 			),
 			validator: model.emailValidator,
 			onChanged: (str) => model.email = str,
@@ -129,7 +117,7 @@ class _EmailTextField extends HookViewModelWidget<AuthViewModel>
 class _PasswordTextField extends HookViewModelWidget<AuthViewModel>
 {
 	@override
-  	bool get reactive => false;
+  	bool get reactive => true;
 
 	@override
 	Widget buildViewModelWidget(context, model) 
@@ -138,8 +126,9 @@ class _PasswordTextField extends HookViewModelWidget<AuthViewModel>
 			initialValue: model.password,
 			decoration: InputDecoration(
 				labelText: "Password *",
-				icon: Icon(
-					Icons.lock
+				prefixIcon: Icon(
+					Icons.lock,
+					size: 32,
 				),
 				errorText: model.passwordError
 			),
@@ -164,8 +153,9 @@ class _ConfirmPasswordTextField extends HookViewModelWidget<AuthViewModel>
 		TextFormField(
 			decoration: InputDecoration(
 				labelText: "Confirm password *",
-				icon: Icon(
-					Icons.lock
+				prefixIcon: Icon(
+					Icons.lock,
+					size: 32,
 				),
 			),
 			obscureText: true,
@@ -174,7 +164,7 @@ class _ConfirmPasswordTextField extends HookViewModelWidget<AuthViewModel>
 	}
 }
 
-class _Buttons extends ViewModelWidget<AuthViewModel>
+class _AuthButton extends ViewModelWidget<AuthViewModel>
 {
 	@override
 	bool get reactive => true;
@@ -185,21 +175,57 @@ class _Buttons extends ViewModelWidget<AuthViewModel>
 		return Row(
 			mainAxisAlignment: MainAxisAlignment.spaceEvenly,
 			children: <Widget>[
-				FlatButton(
-					child: Text(
-						model.switchText
+				Expanded(
+					child: RaisedButton(
+						child: Text(
+							model.authText,
+							style: TextStyle(
+								color: Colors.white,
+								fontSize: 16
+							),
+						),
+						color: Theme.of(context).primaryColor,
+						onPressed: model.auth
 					),
-					onPressed: model.toggleLogin,
+				)
+			],
+		);
+	}
+}
+
+class _ToggleAuthMethod extends ViewModelWidget<AuthViewModel>
+{
+	@override
+	bool get reactive => true;
+
+	@override
+	Widget build(context, model)
+	{
+		return Row(
+			mainAxisAlignment: MainAxisAlignment.center,
+			children: <Widget>[
+				Text(
+					model.switchText,
+					style: TextStyle(
+						fontSize: 16
+					),
 				),
-				RaisedButton(
-					child: Text(
-						model.authText,
-						style: TextStyle(
-							color: Colors.white
+				InkWell(
+					hoverColor: Colors.transparent,
+					focusColor: Colors.transparent,
+					splashColor: Colors.transparent,
+					highlightColor: Colors.transparent,
+					child: Padding(
+						padding: const EdgeInsets.all(8.0),
+						child: Text(
+							model.switchTextButton,
+							style: TextStyle(
+								color: ThemeColors.primary,
+								fontSize: 16
+							),
 						),
 					),
-					color: Theme.of(context).primaryColor,
-					onPressed: model.auth
+					onTap: model.toggleLogin,
 				)
 			],
 		);
@@ -217,18 +243,28 @@ class _Error extends ViewModelWidget<AuthViewModel>
 		return model.requestError == null ?
 		Container() :
 		Card(
-			color: Colors.red.shade200,
-			child: Center(
-				child: Padding(
-					padding: const EdgeInsets.all(8.0),
-					child: Text(
-						model.requestError,
-						style: TextStyle(
-							fontSize: 20
+			elevation: 0,
+			color: Colors.red.shade50,
+			child: Padding(
+				padding: const EdgeInsets.all(8.0),
+				child: Row(
+					mainAxisAlignment: MainAxisAlignment.center,
+					children: <Widget>[
+						Icon(
+							Icons.error_outline,
+							color: Colors.red.shade400
 						),
-					),
-				),
-			)
+						SizedBox(width: 8,),
+						Text(
+							model.requestError,
+							style: TextStyle(
+								color: Colors.red.shade900,
+								fontSize: 20
+							),
+						),
+					],
+				)
+			),
 		);
 	}
 }
