@@ -5,7 +5,8 @@ import 'package:bot_toast/bot_toast.dart';
 import 'package:mpm/app/locator.dart';
 import 'package:mpm/utils/colors.dart';
 
-void main() async {
+void main() async 
+{
 
 	WidgetsFlutterBinding.ensureInitialized();
 

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
-void showLoadingDialog(BuildContext context, [Function willPop]) {
+void showLoadingDialog(BuildContext context, [Function willPop]) 
+{
 	showDialog(
 		context: context,
 		builder: (_) => WillPopScope(
@@ -21,7 +22,8 @@ void showLoadingDialog(BuildContext context, [Function willPop]) {
 	);
 }
 
-Future<bool> showConfirmDialog(BuildContext context, String title, String content) async {
+Future<bool> showConfirmDialog(BuildContext context, String title, String content) async 
+{
 	return await showDialog<bool>(
 		barrierDismissible: false,
 		context: context,
