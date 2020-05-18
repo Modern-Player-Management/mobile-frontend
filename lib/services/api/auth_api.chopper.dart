@@ -18,7 +18,7 @@ class _$AuthApi extends AuthApi {
 
   @override
   Future<Response<Map<String, dynamic>>> register(
-      String username, String email, dynamic password) {
+      String username, String email, String password) {
     final $url = '/register';
     final $body = <String, dynamic>{
       'username': username,
@@ -31,7 +31,7 @@ class _$AuthApi extends AuthApi {
 
   @override
   Future<Response<Map<String, dynamic>>> authenticate(
-      String username, dynamic password) {
+      String username, String password) {
     final $url = '/authenticate';
     final $body = <String, dynamic>{'username': username, 'password': password};
     final $request = Request('POST', $url, client.baseUrl, body: $body);

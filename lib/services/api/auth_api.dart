@@ -22,8 +22,9 @@ abstract class AuthApi extends ChopperService
 	));
 
 	@Post(path: "/register")
-	Future<Response<Map<String, dynamic>>> register(@Field() String username, @Field() String email, @Field() password);
+	Future<Response<Map<String, dynamic>>> register(@Field() String username, @Field() String email, 
+		@Field() String password);
 
 	@Post(path: "/authenticate")
-	Future<Response<Map<String, dynamic>>> authenticate(@Field() String username, @Field() password);
+	Future<Response<Map<String, dynamic>>> authenticate(@Field() String username, @Field() String password);
 }
