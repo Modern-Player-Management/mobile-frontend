@@ -11,23 +11,29 @@ class SecureStorage {
 	String _token, _user;
 
 	String get user => _user;
-	set user(String user) {
+	set user(String user) 
+	{
 		_user = user;
-		if(user == null) {
+		if(user == null) 
+		{
 			_storage.delete(key: _storageUser);
 		}
-		else {
+		else 
+		{
 			_storage.write(key: _storageUser, value: _user);
 		}
 	}
 
 	String get token => _token;
-	set token(String token) {
+	set token(String token) 
+	{
 		_token = token;
-		if(token == null) {
+		if(token == null) 
+		{
 			_storage.delete(key: _storageToken);
 		}
-		else {
+		else 
+		{
 			_storage.write(key: _storageToken, value: _token);
 		}
 	}
