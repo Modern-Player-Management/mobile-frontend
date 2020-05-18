@@ -5,7 +5,6 @@ import 'package:mpm/services/database/models/event.dart';
 
 part 'team.g.dart';
 
-@JsonSerializable()
 @Entity(
 	tableName: 'teams',
 	indices: [
@@ -14,6 +13,7 @@ part 'team.g.dart';
 		)
 	]
 )
+@JsonSerializable()
 class Team
 {
 	@primaryKey
