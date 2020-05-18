@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:chopper/chopper.dart';
+import 'package:http/http.dart' as http;
 import 'package:http/io_client.dart' as io;
 import 'package:injectable/injectable.dart';
 
@@ -13,9 +14,11 @@ part 'auth_api.chopper.dart';
 abstract class AuthApi extends ChopperService 
 {
 	@factoryMethod
-	static AuthApi create() => _$AuthApi(ChopperClient(
+	static AuthApi create() => createWith();
+
+	static AuthApi createWith([http.BaseClient client]) => _$AuthApi(ChopperClient(
 		baseUrl: serverUrl,
-		client: io.IOClient(
+		client: client ?? io.IOClient(
 			HttpClient()..connectionTimeout = const Duration(seconds: 4),
 		),
 		converter: JsonConverter(),
