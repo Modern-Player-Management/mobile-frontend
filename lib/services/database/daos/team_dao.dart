@@ -18,11 +18,11 @@ abstract class TeamDao
 	Future<List<Team>> getUndeletedTeams(String user);
 
 	@insert
-	Future<void> insertTeam(Team team);
+	Future<int> insertTeam(Team team);
 
 	@update
-	Future<void> updateTeam(Team team);
+	Future<int> updateTeam(Team team);
 
 	@delete
-	Future<void> deleteTeam(Team team);
+	Future<int> deleteTeam(Team team);
 }

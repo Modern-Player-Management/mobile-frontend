@@ -5,24 +5,24 @@ import 'package:mpm/services/database/models/event.dart';
 @dao
 abstract class EventDao
 {
-	@Query('select * from events where user = :user and `delete` = 0')
-	Stream<List<Event>> getEvents(String user);
+	@Query('select * from events where team = :team and `delete` = 0')
+	Stream<List<Event>> getEvents(String team);
 
-	@Query('select * from events where user = :user and save = 1 and `delete` = 0')
-	Future<List<Event>> getSavedEvents(String user);
+	@Query('select * from events where team = :team and save = 1 and `delete` = 0')
+	Future<List<Event>> getSavedEvents(String team);
 
-	@Query('select * from events where user = :user and save = 0 and `delete` = 0')
-	Future<List<Event>> getUnsavedEvents(String user);
+	@Query('select * from events where team = :team and save = 0 and `delete` = 0')
+	Future<List<Event>> getUnsavedEvents(String team);
 
-	@Query('select * from events where user = :user and `delete` = 1')
-	Future<List<Event>> getUndeletedEvents(String user);
+	@Query('select * from events where team = :team and `delete` = 1')
+	Future<List<Event>> getUndeletedEvents(String team);
 
 	@insert
-	Future<void> insertEvent(Event event);
+	Future<int> insertEvent(Event event);
 
 	@update
-	Future<void> updateEvent(Event event);
+	Future<int> updateEvent(Event event);
 
 	@delete
-	Future<void> deleteEvent(Event event);
+	Future<int> deleteEvent(Event event);
 }

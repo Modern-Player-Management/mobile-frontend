@@ -201,18 +201,20 @@ class _$TeamDao extends TeamDao {
   }
 
   @override
-  Future<void> insertTeam(Team unit) async {
-    await _teamInsertionAdapter.insert(unit, sqflite.ConflictAlgorithm.abort);
+  Future<int> insertTeam(Team team) {
+    return _teamInsertionAdapter.insertAndReturnId(
+        team, sqflite.ConflictAlgorithm.abort);
   }
 
   @override
-  Future<void> updateTeam(Team unit) async {
-    await _teamUpdateAdapter.update(unit, sqflite.ConflictAlgorithm.abort);
+  Future<int> updateTeam(Team team) {
+    return _teamUpdateAdapter.updateAndReturnChangedRows(
+        team, sqflite.ConflictAlgorithm.abort);
   }
 
   @override
-  Future<void> deleteTeam(Team unit) async {
-    await _teamDeletionAdapter.delete(unit);
+  Future<int> deleteTeam(Team team) {
+    return _teamDeletionAdapter.deleteAndReturnChangedRows(team);
   }
 }
 
@@ -291,50 +293,52 @@ class _$EventDao extends EventDao {
   final DeletionAdapter<Event> _eventDeletionAdapter;
 
   @override
-  Stream<List<Event>> getEvents(String user) {
+  Stream<List<Event>> getEvents(String team) {
     return _queryAdapter.queryListStream(
-        'select * from events where user = ? and `delete` = 0',
-        arguments: <dynamic>[user],
+        'select * from events where team = ? and `delete` = 0',
+        arguments: <dynamic>[team],
         tableName: 'events',
         mapper: _eventsMapper);
   }
 
   @override
-  Future<List<Event>> getSavedEvents(String user) async {
+  Future<List<Event>> getSavedEvents(String team) async {
     return _queryAdapter.queryList(
-        'select * from events where user = ? and save = 1 and `delete` = 0',
-        arguments: <dynamic>[user],
+        'select * from events where team = ? and save = 1 and `delete` = 0',
+        arguments: <dynamic>[team],
         mapper: _eventsMapper);
   }
 
   @override
-  Future<List<Event>> getUnsavedEvents(String user) async {
+  Future<List<Event>> getUnsavedEvents(String team) async {
     return _queryAdapter.queryList(
-        'select * from events where user = ? and save = 0 and `delete` = 0',
-        arguments: <dynamic>[user],
+        'select * from events where team = ? and save = 0 and `delete` = 0',
+        arguments: <dynamic>[team],
         mapper: _eventsMapper);
   }
 
   @override
-  Future<List<Event>> getUndeletedEvents(String user) async {
+  Future<List<Event>> getUndeletedEvents(String team) async {
     return _queryAdapter.queryList(
-        'select * from events where user = ? and `delete` = 1',
-        arguments: <dynamic>[user],
+        'select * from events where team = ? and `delete` = 1',
+        arguments: <dynamic>[team],
         mapper: _eventsMapper);
   }
 
   @override
-  Future<void> insertEvent(Event unit) async {
-    await _eventInsertionAdapter.insert(unit, sqflite.ConflictAlgorithm.abort);
+  Future<int> insertEvent(Event event) {
+    return _eventInsertionAdapter.insertAndReturnId(
+        event, sqflite.ConflictAlgorithm.abort);
   }
 
   @override
-  Future<void> updateEvent(Event unit) async {
-    await _eventUpdateAdapter.update(unit, sqflite.ConflictAlgorithm.abort);
+  Future<int> updateEvent(Event event) {
+    return _eventUpdateAdapter.updateAndReturnChangedRows(
+        event, sqflite.ConflictAlgorithm.abort);
   }
 
   @override
-  Future<void> deleteEvent(Event unit) async {
-    await _eventDeletionAdapter.delete(unit);
+  Future<int> deleteEvent(Event event) {
+    return _eventDeletionAdapter.deleteAndReturnChangedRows(event);
   }
 }
