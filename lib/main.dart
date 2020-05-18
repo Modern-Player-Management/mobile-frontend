@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 
 import 'package:bot_toast/bot_toast.dart';
+import 'package:stacked_services/stacked_services.dart';
 
 import 'package:mpm/app/locator.dart';
+import 'package:mpm/app/router.gr.dart';
 import 'package:mpm/utils/colors.dart';
 
 void main() async 
 {
-
 	WidgetsFlutterBinding.ensureInitialized();
 
 	// configure 
@@ -15,7 +16,7 @@ void main() async
 
 	// run app
 	runApp(MaterialApp(
-		title: "MPM",
+		title: "Modern Player Management",
 		builder: BotToastInit(),
 		navigatorObservers: [BotToastNavigatorObserver()],
 		theme: ThemeData(
@@ -25,6 +26,8 @@ void main() async
 				
 			)
 		),
-		home: Scaffold(),
+		initialRoute: Routes.splashViewRoute,
+		onGenerateRoute: Router().onGenerateRoute,
+		navigatorKey: getIt<NavigationService>().navigatorKey,
 	));
 }
