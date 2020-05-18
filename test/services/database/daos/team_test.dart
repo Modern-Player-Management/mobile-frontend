@@ -5,7 +5,7 @@ import 'package:mpm/services/database/database.dart';
 
 import '../database_test.dart';
 
-String teamId = "id";
+String teamId = "team";
 String user = "user";
 
 Future<Team> insert_team() async
