@@ -42,6 +42,7 @@ dependencies:
   path_provider: ^1.6.8
   permission_handler: ^5.0.0+hotfix.6
   connectivity: ^0.4.8+6
+  validators: ^2.0.0+1
 
 dev_dependencies:
   flutter_test:
