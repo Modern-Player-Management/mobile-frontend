@@ -15,9 +15,38 @@ class SplashView extends ViewModelBuilderWidget<SplashViewModel>
   	Widget builder(context, model, child)
 	{
 		return Scaffold(
-			appBar: AppBar(),
 			body: Center(
-				child: CircularProgressIndicator(),
+				child: Column(
+					mainAxisAlignment: MainAxisAlignment.center,
+					crossAxisAlignment: CrossAxisAlignment.center,
+					children: <Widget>[
+						CircularProgressIndicator(),
+						SizedBox(height: 32),
+						Text(
+							"Put a splash screen here !",
+							style: TextStyle(
+								fontSize: 20
+							),
+						)
+					],
+				),
+			),
+			floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+			floatingActionButton: Row(
+				children: <Widget>[
+					Expanded(
+						child: Padding(
+							padding: const EdgeInsets.symmetric(horizontal: 8.0),
+							child: RaisedButton(
+								color: Theme.of(context).primaryColor,
+								child: Text(
+									"Next view"
+								),
+								onPressed: model.nextView,
+							),
+						),
+					),
+				],
 			),
 		);
 	}
