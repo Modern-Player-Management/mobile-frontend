@@ -31,11 +31,13 @@ dependencies:
   flutter_secure_storage: ^3.3.3
   floor: ^0.12.0
   chopper: ^3.0.2
+  stacked_services: ^0.3.0+1
 
   # logic
-  provider: ^4.1.2
+  stacked: ^1.5.1
   get_it: ^4.0.2
   injectable: ^0.4.0
+  auto_route: ^0.5.0
   json_serializable: ^3.3.0
   path_provider: ^1.6.8
   permission_handler: ^5.0.0+hotfix.6
@@ -49,6 +51,7 @@ dev_dependencies:
   injectable_generator: ^0.4.0
   floor_generator: ^0.12.0
   chopper_generator: ^3.0.4
+  auto_route_generator: ^0.5.0
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
