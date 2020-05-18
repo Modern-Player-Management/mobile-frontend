@@ -2,15 +2,18 @@ import 'package:chopper/chopper.dart';
 
 typedef T JsonFactory<T>(Map<String, dynamic> json);
 
-class JsonSerializableConverter extends JsonConverter {
+class JsonSerializableConverter extends JsonConverter 
+{
 	final Map<Type, JsonFactory> factories;
 
 	JsonSerializableConverter(this.factories);
 
-	T _decodeMap<T>(Map<String, dynamic> values) {
+	T _decodeMap<T>(Map<String, dynamic> values) 
+	{
 		final jsonFactory = factories[T];
-		if (jsonFactory == null || jsonFactory is! JsonFactory<T>) {
-				return null;
+		if (jsonFactory == null || jsonFactory is! JsonFactory<T>) 
+		{
+			return null;
 		}
 
 		return jsonFactory(values);
@@ -19,12 +22,15 @@ class JsonSerializableConverter extends JsonConverter {
 	List<T> _decodeList<T>(List values) =>
 		values.where((v) => v != null).map<T>((v) => _decode<T>(v)).toList();
 
-	dynamic _decode<T>(entity) {
-		if (entity is Iterable) {
+	dynamic _decode<T>(entity) 
+	{
+		if (entity is Iterable) 
+		{
 			return _decodeList<T>(entity);
 		}
 
-		if (entity is Map) {
+		if (entity is Map) 
+		{
 			return _decodeMap<T>(entity);
 		}
 
@@ -32,10 +38,10 @@ class JsonSerializableConverter extends JsonConverter {
 	}
 
 	@override
-	Response<ResultType> convertResponse<ResultType, Item>(Response response) {
+	Response<ResultType> convertResponse<ResultType, Item>(Response response) 
+	{
 		response.headers[contentTypeKey] = jsonHeaders;
 		final jsonRes = super.convertResponse(response);
-
 		return jsonRes.copyWith<ResultType>(body: _decode<Item>(jsonRes.body));
 	}
 
