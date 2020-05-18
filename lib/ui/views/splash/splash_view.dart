@@ -1,13 +1,30 @@
 import 'package:flutter/material.dart';
+import 'package:stacked/stacked.dart';
 
-class SplashView extends StatelessWidget
+import 'package:mpm/ui/views/splash/splash_view_model.dart';
+
+class SplashView extends ViewModelBuilderWidget<SplashViewModel>
 {
 	@override
-	Widget build(BuildContext context)
+	bool get reactive => false;
+	
+	@override
+	bool get disposeViewModel => true;
+
+  	@override
+  	Widget builder(context, model, child)
 	{
 		return Scaffold(
 			appBar: AppBar(),
-			body: Container(),
+			body: Center(
+				child: CircularProgressIndicator(),
+			),
 		);
+	}
+  
+	@override
+	SplashViewModel viewModelBuilder(context)
+	{
+		return SplashViewModel();
 	}
 }
