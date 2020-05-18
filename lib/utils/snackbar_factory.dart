@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
-enum MessageStyle
-{
+enum MessageStyle {
 	error,
 	warning,
 	success,
@@ -10,15 +9,13 @@ enum MessageStyle
 
 // easy snackbar
 // show snackbar with different theme
-class SnackbarFactory
-{
-	static void show(BuildContext context, String msg, MessageStyle style, {int duration = 2, ScaffoldState scaffoldState})
-	{
+class SnackbarFactory {
+	static void show(BuildContext context, String msg, MessageStyle style, 
+		{int duration = 2, ScaffoldState scaffoldState}) {
 		IconData icon;
 		Color backgroundColor;
 
-		switch(style)
-		{
+		switch(style) {
 			case MessageStyle.error:
 				icon = Icons.info_outline;
 				backgroundColor = Colors.red.shade800;
@@ -37,8 +34,7 @@ class SnackbarFactory
 				backgroundColor = Colors.blue.shade800;
 		}
 
-		if(scaffoldState == null)
-		{
+		if(scaffoldState == null) {
 			scaffoldState = Scaffold.of(context);
 		}
 
