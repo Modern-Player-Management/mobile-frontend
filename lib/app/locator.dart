@@ -6,7 +6,8 @@ import 'package:mpm/app/locator.iconfig.dart';
 final getIt = GetIt.instance;
 
 @injectableInit
-Future<void> configure() async {
+Future<void> configure() async 
+{
 	$initGetIt(getIt);
 	await getIt.allReady(ignorePendingAsyncCreation: false);
 }
