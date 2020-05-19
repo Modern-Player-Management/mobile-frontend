@@ -2,8 +2,10 @@ import 'package:get_it/get_it.dart';
 import 'package:injectable/injectable.dart';
 
 import 'package:mpm/app/locator.iconfig.dart';
+export 'package:mpm/app/router.gr.dart';
 
 export 'package:mpm/services/database/database.dart';
+export 'package:mpm/services/managers/team_manager.dart';
 
 export 'package:mpm/services/api/auth_api.dart';
 export 'package:mpm/services/api/team_api.dart';

@@ -1,6 +1,5 @@
 import 'package:stacked/stacked.dart';
 
-import 'package:mpm/app/router.gr.dart';
 import 'package:mpm/app/locator.dart';
 
 class SplashViewModel extends BaseViewModel
