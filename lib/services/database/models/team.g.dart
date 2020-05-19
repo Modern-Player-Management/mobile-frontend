@@ -31,10 +31,10 @@ Map<String, dynamic> _$TeamToJson(Team instance) => <String, dynamic>{
       'user': instance.user,
       'name': instance.name,
       'managerId': instance.managerId,
-      'save': instance.save,
-      'update': instance.update,
-      'delete': instance.delete,
       'isCurrentUserManager': instance.isCurrentUserManager,
       'manager': instance.manager,
       'members': instance.members,
+      'save': instance.save,
+      'update': instance.update,
+      'delete': instance.delete,
     };
