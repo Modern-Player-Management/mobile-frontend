@@ -3,6 +3,7 @@ import 'package:sqflite_ffi_test/sqflite_ffi_test.dart';
 
 import 'services/api/api_test.dart';
 import 'services/database/database_test.dart';
+import 'ui/ui_test.dart';
 
 void main() 
 {
@@ -11,4 +12,5 @@ void main()
 
 	database_tests();
 	api_tests();
+	ui_tests();
 }
