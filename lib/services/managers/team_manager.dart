@@ -20,6 +20,35 @@ class TeamManager
 		@required @factoryParam Function validResponse
 	}) : this.validResponse = validResponse;
 
+	Future<void> syncTeams(List<Team> teams) async
+	{
+		var savedTeams = await _dao.getSavedTeams(_storage.user);
+		var teamsKey = [
+			for(var team in savedTeams)
+				team.id
+		];
+
+		for(var team in teams)
+		{
+			team.user = _storage.user;
+			team.save = true;
+			_dao.insertTeam(team);
+
+			int index = teamsKey.indexOf(team.id);
+			if(index != -1)
+			{
+				savedTeams.removeAt(index);
+				teamsKey.removeAt(index);
+			}
+
+			//await modulesManager.syncModules(team, team.modules);
+		}
+
+		for(var team in savedTeams) {
+			_dao.deleteTeam(team);
+		}
+	}
+
 	Stream<List<Team>> getTeams()
 	{
 		return _dao.getTeams(_storage.user);
@@ -86,5 +115,15 @@ class TeamManager
 		catch(e) {
 			print(e);
 		}
+	}
+
+	Future<void> addUser(Team team, User user) async
+	{
+		
+	}
+
+	Future<void> removeUser(Team team, User user) async
+	{
+		
 	}
 }
