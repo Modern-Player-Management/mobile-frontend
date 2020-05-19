@@ -9,6 +9,7 @@ import 'package:mpm/services/api/auth_api.dart';
 import 'package:mpm/services/third_party_services.dart';
 import 'package:stacked_services/stacked_services.dart';
 import 'package:mpm/services/secure_storage.dart';
+import 'package:mpm/services/api/team_api.dart';
 import 'package:get_it/get_it.dart';
 
 void $initGetIt(GetIt g, {String environment}) {
@@ -20,6 +21,7 @@ void $initGetIt(GetIt g, {String environment}) {
       () => thirdPartyServices.navigationService);
   g.registerLazySingleton<SnackbarService>(
       () => thirdPartyServices.snackBarService);
+  g.registerLazySingleton<TeamApi>(() => TeamApi.create());
 
   //Eager singletons must be registered in the right order
   g.registerSingletonAsync<AppDatabase>(() => AppDatabase.create());
