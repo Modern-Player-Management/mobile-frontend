@@ -83,11 +83,9 @@ class _$AppDatabase extends AppDatabase {
       },
       onCreate: (database, version) async {
         await database.execute(
-            'CREATE TABLE IF NOT EXISTS `teams` (`id` TEXT, `user` TEXT, `name` TEXT, `save` INTEGER, `update` INTEGER, `delete` INTEGER, PRIMARY KEY (`id`))');
+            'CREATE TABLE IF NOT EXISTS `teams` (`id` TEXT, `name` TEXT, `managerId` TEXT, `save` INTEGER, `update` INTEGER, `delete` INTEGER, FOREIGN KEY (`managerId`) REFERENCES `users` (`id`) ON UPDATE NO ACTION ON DELETE NO ACTION, PRIMARY KEY (`id`))');
         await database.execute(
             'CREATE TABLE IF NOT EXISTS `events` (`id` TEXT, `team` TEXT, `start` TEXT, `end` TEXT, `title` TEXT, `description` TEXT, `save` INTEGER, `update` INTEGER, `delete` INTEGER, FOREIGN KEY (`team`) REFERENCES `teams` (`id`) ON UPDATE NO ACTION ON DELETE CASCADE, PRIMARY KEY (`id`))');
-        await database
-            .execute('CREATE INDEX `index_teams_user` ON `teams` (`user`)');
 
         await callback?.onCreate?.call(database, version);
       },
@@ -113,8 +111,8 @@ class _$TeamDao extends TeamDao {
             'teams',
             (Team item) => <String, dynamic>{
                   'id': item.id,
-                  'user': item.user,
                   'name': item.name,
+                  'managerId': item.managerId,
                   'save': item.save ? 1 : 0,
                   'update': item.update ? 1 : 0,
                   'delete': item.delete ? 1 : 0
@@ -126,8 +124,8 @@ class _$TeamDao extends TeamDao {
             ['id'],
             (Team item) => <String, dynamic>{
                   'id': item.id,
-                  'user': item.user,
                   'name': item.name,
+                  'managerId': item.managerId,
                   'save': item.save ? 1 : 0,
                   'update': item.update ? 1 : 0,
                   'delete': item.delete ? 1 : 0
@@ -139,8 +137,8 @@ class _$TeamDao extends TeamDao {
             ['id'],
             (Team item) => <String, dynamic>{
                   'id': item.id,
-                  'user': item.user,
                   'name': item.name,
+                  'managerId': item.managerId,
                   'save': item.save ? 1 : 0,
                   'update': item.update ? 1 : 0,
                   'delete': item.delete ? 1 : 0
@@ -155,8 +153,8 @@ class _$TeamDao extends TeamDao {
 
   static final _teamsMapper = (Map<String, dynamic> row) => Team(
       id: row['id'] as String,
-      user: row['user'] as String,
       name: row['name'] as String,
+      managerId: row['managerId'] as String,
       save: (row['save'] as int) != 0,
       update: (row['update'] as int) != 0,
       delete: (row['delete'] as int) != 0);
