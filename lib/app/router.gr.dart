@@ -9,15 +9,21 @@ import 'package:flutter/cupertino.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:mpm/ui/views/splash/splash_view.dart';
 import 'package:mpm/ui/views/auth/auth_view.dart';
+import 'package:mpm/ui/views/auth/login/login_view.dart';
+import 'package:mpm/ui/views/auth/register/register_view.dart';
 import 'package:mpm/ui/views/home/home_view.dart';
 
 abstract class Routes {
   static const splashViewRoute = '/';
   static const authViewRoute = '/auth-view-route';
+  static const loginViewRoute = '/login-view-route';
+  static const registerViewRoute = '/register-view-route';
   static const homeViewRoute = '/home-view-route';
   static const all = {
     splashViewRoute,
     authViewRoute,
+    loginViewRoute,
+    registerViewRoute,
     homeViewRoute,
   };
 }
@@ -41,6 +47,16 @@ class Router extends RouterBase {
       case Routes.authViewRoute:
         return MaterialPageRoute<dynamic>(
           builder: (context) => AuthView(),
+          settings: settings,
+        );
+      case Routes.loginViewRoute:
+        return MaterialPageRoute<dynamic>(
+          builder: (context) => LoginView(),
+          settings: settings,
+        );
+      case Routes.registerViewRoute:
+        return MaterialPageRoute<dynamic>(
+          builder: (context) => RegisterView(),
           settings: settings,
         );
       case Routes.homeViewRoute:
