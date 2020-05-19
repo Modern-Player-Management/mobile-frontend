@@ -62,6 +62,8 @@ class _$AppDatabase extends AppDatabase {
 
   TeamDao _teamDaoInstance;
 
+  UserDao _userDaoInstance;
+
   EventDao _eventDaoInstance;
 
   Future<sqflite.Database> open(String path, List<Migration> migrations,
@@ -83,9 +85,13 @@ class _$AppDatabase extends AppDatabase {
       },
       onCreate: (database, version) async {
         await database.execute(
-            'CREATE TABLE IF NOT EXISTS `teams` (`id` TEXT, `name` TEXT, `managerId` TEXT, `save` INTEGER, `update` INTEGER, `delete` INTEGER, FOREIGN KEY (`managerId`) REFERENCES `users` (`id`) ON UPDATE NO ACTION ON DELETE NO ACTION, PRIMARY KEY (`id`))');
+            'CREATE TABLE IF NOT EXISTS `teams` (`id` TEXT, `user` TEXT, `name` TEXT, `managerId` TEXT, `save` INTEGER, `update` INTEGER, `delete` INTEGER, FOREIGN KEY (`managerId`) REFERENCES `users` (`id`) ON UPDATE NO ACTION ON DELETE NO ACTION, PRIMARY KEY (`id`))');
+        await database.execute(
+            'CREATE TABLE IF NOT EXISTS `users` (`id` TEXT, `username` TEXT, `email` TEXT, `save` INTEGER, `update` INTEGER, `delete` INTEGER, PRIMARY KEY (`id`))');
         await database.execute(
             'CREATE TABLE IF NOT EXISTS `events` (`id` TEXT, `team` TEXT, `start` TEXT, `end` TEXT, `title` TEXT, `description` TEXT, `save` INTEGER, `update` INTEGER, `delete` INTEGER, FOREIGN KEY (`team`) REFERENCES `teams` (`id`) ON UPDATE NO ACTION ON DELETE CASCADE, PRIMARY KEY (`id`))');
+        await database
+            .execute('CREATE INDEX `index_teams_user` ON `teams` (`user`)');
 
         await callback?.onCreate?.call(database, version);
       },
@@ -95,6 +101,11 @@ class _$AppDatabase extends AppDatabase {
   @override
   TeamDao get teamDao {
     return _teamDaoInstance ??= _$TeamDao(database, changeListener);
+  }
+
+  @override
+  UserDao get userDao {
+    return _userDaoInstance ??= _$UserDao(database, changeListener);
   }
 
   @override
@@ -111,6 +122,7 @@ class _$TeamDao extends TeamDao {
             'teams',
             (Team item) => <String, dynamic>{
                   'id': item.id,
+                  'user': item.user,
                   'name': item.name,
                   'managerId': item.managerId,
                   'save': item.save ? 1 : 0,
@@ -124,6 +136,7 @@ class _$TeamDao extends TeamDao {
             ['id'],
             (Team item) => <String, dynamic>{
                   'id': item.id,
+                  'user': item.user,
                   'name': item.name,
                   'managerId': item.managerId,
                   'save': item.save ? 1 : 0,
@@ -137,6 +150,7 @@ class _$TeamDao extends TeamDao {
             ['id'],
             (Team item) => <String, dynamic>{
                   'id': item.id,
+                  'user': item.user,
                   'name': item.name,
                   'managerId': item.managerId,
                   'save': item.save ? 1 : 0,
@@ -154,6 +168,7 @@ class _$TeamDao extends TeamDao {
   static final _teamsMapper = (Map<String, dynamic> row) => Team(
       id: row['id'] as String,
       name: row['name'] as String,
+      user: row['user'] as String,
       managerId: row['managerId'] as String,
       save: (row['save'] as int) != 0,
       update: (row['update'] as int) != 0,
@@ -213,6 +228,112 @@ class _$TeamDao extends TeamDao {
   @override
   Future<int> deleteTeam(Team team) {
     return _teamDeletionAdapter.deleteAndReturnChangedRows(team);
+  }
+}
+
+class _$UserDao extends UserDao {
+  _$UserDao(this.database, this.changeListener)
+      : _queryAdapter = QueryAdapter(database, changeListener),
+        _userInsertionAdapter = InsertionAdapter(
+            database,
+            'users',
+            (User item) => <String, dynamic>{
+                  'id': item.id,
+                  'username': item.username,
+                  'email': item.email,
+                  'save': item.save ? 1 : 0,
+                  'update': item.update ? 1 : 0,
+                  'delete': item.delete ? 1 : 0
+                },
+            changeListener),
+        _userUpdateAdapter = UpdateAdapter(
+            database,
+            'users',
+            ['id'],
+            (User item) => <String, dynamic>{
+                  'id': item.id,
+                  'username': item.username,
+                  'email': item.email,
+                  'save': item.save ? 1 : 0,
+                  'update': item.update ? 1 : 0,
+                  'delete': item.delete ? 1 : 0
+                },
+            changeListener),
+        _userDeletionAdapter = DeletionAdapter(
+            database,
+            'users',
+            ['id'],
+            (User item) => <String, dynamic>{
+                  'id': item.id,
+                  'username': item.username,
+                  'email': item.email,
+                  'save': item.save ? 1 : 0,
+                  'update': item.update ? 1 : 0,
+                  'delete': item.delete ? 1 : 0
+                },
+            changeListener);
+
+  final sqflite.DatabaseExecutor database;
+
+  final StreamController<String> changeListener;
+
+  final QueryAdapter _queryAdapter;
+
+  static final _usersMapper = (Map<String, dynamic> row) => User(
+      id: row['id'] as String,
+      username: row['username'] as String,
+      email: row['email'] as String,
+      save: (row['save'] as int) != 0,
+      update: (row['update'] as int) != 0,
+      delete: (row['delete'] as int) != 0);
+
+  final InsertionAdapter<User> _userInsertionAdapter;
+
+  final UpdateAdapter<User> _userUpdateAdapter;
+
+  final DeletionAdapter<User> _userDeletionAdapter;
+
+  @override
+  Stream<List<User>> getUsers() {
+    return _queryAdapter.queryListStream('select * from users `delete` = 0',
+        tableName: 'users', mapper: _usersMapper);
+  }
+
+  @override
+  Future<List<User>> getSavedUsers() async {
+    return _queryAdapter.queryList(
+        'select * from users save = 1 and `delete` = 0',
+        mapper: _usersMapper);
+  }
+
+  @override
+  Future<List<User>> getUnsavedUsers() async {
+    return _queryAdapter.queryList(
+        'select * from users save = 0 and `delete` = 0',
+        mapper: _usersMapper);
+  }
+
+  @override
+  Future<List<User>> getUndeletedUsers() async {
+    return _queryAdapter.queryList('select * from users `delete` = 1',
+        mapper: _usersMapper);
+  }
+
+  @override
+  Future<int> insertUser(User team) {
+    return _userInsertionAdapter.insertAndReturnId(
+        team, sqflite.ConflictAlgorithm.abort);
+  }
+
+  @override
+  Future<int> updateUser(User team) {
+    return _userUpdateAdapter.updateAndReturnChangedRows(
+        team, sqflite.ConflictAlgorithm.abort);
+  }
+
+  @override
+  Future<int> deleteUser(User team) {
+    return _userDeletionAdapter.deleteAndReturnChangedRows(team);
   }
 }
 
