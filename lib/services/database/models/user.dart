@@ -14,15 +14,18 @@ class User
 
 	String username, email;
 
-	bool save, update, delete;
-
 	@ignore
+	@JsonKey(ignore: true)
 	String password;
 
 	@ignore
+	@JsonKey(ignore: true)
 	String confirmPassword;
 
+	bool save, update, delete;
+
 	User({
+		this.id,
 		this.username,
 		this.email,
 		bool save = false,
