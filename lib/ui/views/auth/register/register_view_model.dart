@@ -4,7 +4,7 @@ import 'package:stacked/stacked.dart';
 import 'package:validators/validators.dart';
 
 import 'package:mpm/app/locator.dart';
-import 'package:mpm/models/user.dart';
+import 'package:mpm/services/database/models/user.dart';
 
 class RegisterViewModel extends BaseViewModel
 {
