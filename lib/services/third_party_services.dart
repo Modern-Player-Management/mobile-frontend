@@ -1,4 +1,5 @@
 import 'package:injectable/injectable.dart';
+import 'package:mpm/app/locator.dart';
 import 'package:stacked_services/stacked_services.dart';
 
 @module
@@ -12,4 +13,7 @@ abstract class ThirdPartyServices
 	
 	@lazySingleton
 	SnackbarService get snackBarService;
+
+	@lazySingleton
+	Uuid get uuid => Uuid();
 }
