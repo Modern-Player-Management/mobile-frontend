@@ -1,14 +1,37 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:matcher/matcher.dart';
+import 'package:sqflite_ffi_test/sqflite_ffi_test.dart';
 
 import 'package:mpm/services/database/database.dart';
 
-import '../database_test.dart';
 import 'team_test.dart';
+
+AppDatabase _db;
+
+void main() async
+{
+	TestWidgetsFlutterBinding.ensureInitialized();
+	sqfliteFfiTestInit();
+
+	setUp(() async {
+		_db = await $FloorAppDatabase.inMemoryDatabaseBuilder().build();
+	});
+
+	group('simple database event tests', (){
+		test('insert one event',insert_event);
+		test('find one event', find_event);
+		test('update event', update_event);
+		test('delete event', delete_event);
+	});
+
+	tearDown((){
+		_db.close();
+	});	
+}
 
 Future<Event> insert_event() async
 {
-	final team = await insert_team();
+	await insert_team(_db);
 
 	final event = Event(
 		id: "id",
@@ -17,7 +40,7 @@ Future<Event> insert_event() async
 		description: "description"
 	);
 
-	int id = await db.eventDao.insertEvent(event);
+	int id = await _db.eventDao.insertEvent(event);
 
 	expect(id, equals(1));
 
@@ -28,7 +51,7 @@ void find_event() async
 {
 	await insert_event();
 
-	final events = await db.eventDao.getEvents(teamId).first;
+	final events = await _db.eventDao.getEvents(teamId).first;
 
 	expect(events.length, equals(1));
 }
@@ -38,11 +61,11 @@ void update_event() async
 	final event = await insert_event();
 
 	event.title = "test";
-	int rows = await db.eventDao.updateEvent(event);
+	int rows = await _db.eventDao.updateEvent(event);
 
 	expect(rows, equals(1));
 
-	final events = await db.eventDao.getEvents(teamId).first;
+	final events = await _db.eventDao.getEvents(teamId).first;
 
 	expect(events[0].title, equals("test"));
 }
@@ -51,9 +74,9 @@ void delete_event() async
 {
 	final event = await insert_event();
 
-	await db.eventDao.deleteEvent(event);
+	await _db.eventDao.deleteEvent(event);
 
-	final events = await db.eventDao.getEvents(teamId).first;
+	final events = await _db.eventDao.getEvents(teamId).first;
 
 	expect(events.length, equals(0));
 }

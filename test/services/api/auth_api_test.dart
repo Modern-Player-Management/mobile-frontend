@@ -6,6 +6,14 @@ import 'package:http/http.dart' as http;
 import 'package:http/testing.dart';
 import 'package:mpm/services/api/auth_api.dart';
 
+void main()
+{
+	group('simple auth tests', (){
+		test('register request', register);
+		test('authenticate request', authenticate);
+	});
+}
+
 void register() async
 {
 	final client = MockClient((req) async {

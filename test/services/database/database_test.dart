@@ -1,29 +1,18 @@
 import 'package:flutter_test/flutter_test.dart';
+import 'package:sqflite_ffi_test/sqflite_ffi_test.dart';
+
 import 'package:mpm/services/database/database.dart';
 
-import 'daos/event_test.dart';
 import 'daos/team_test.dart';
 
 AppDatabase db;
 
-void database_tests() async
+void main() async
 {
 	setUp(() async {
+		TestWidgetsFlutterBinding.ensureInitialized();
+		sqfliteFfiTestInit();
 		db = await $FloorAppDatabase.inMemoryDatabaseBuilder().build();
-	});
-
-	group('simple database team tests', (){
-		test('insert one team', insert_team);
-		test('find one team', find_team);
-		test('update team', update_team);
-		test('delete team', delete_team);
-	});
-
-	group('simple database event tests', (){
-		test('insert one event', insert_event);
-		test('find one event', find_event);
-		test('update event', update_event);
-		test('delete event', delete_event);
 	});
 
 	group('complex database tests', (){
