@@ -1,20 +1,24 @@
+import 'package:flutter/material.dart';
+
 import 'package:chopper/chopper.dart';
+import 'package:injectable/injectable.dart';
 
 import 'package:mpm/app/locator.dart';
 
+@injectable
 class TeamManager
 {
-	final Function(Response) validResponse;
-
 	final _api = locator<TeamApi>();
 	final _dao = locator<AppDatabase>().teamDao;
 
 	final _storage = locator<SecureStorage>();
 	final _uuid = locator<Uuid>();
 
+	final Function(Response) validResponse;
+
 	TeamManager({
-		this.validResponse
-	});
+		@required @factoryParam Function validResponse
+	}) : this.validResponse = validResponse;
 
 	Stream<List<Team>> getTeams()
 	{

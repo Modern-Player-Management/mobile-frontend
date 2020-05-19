@@ -1,7 +1,6 @@
 import 'package:stacked/stacked.dart';
 
 import 'package:mpm/app/locator.dart';
-import 'package:mpm/app/router.gr.dart';
 
 class AuthViewModel extends BaseViewModel
 {
