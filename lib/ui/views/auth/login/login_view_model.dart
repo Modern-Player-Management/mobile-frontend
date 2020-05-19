@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:stacked/stacked.dart';
 
 import 'package:mpm/app/locator.dart';
-import 'package:mpm/models/user.dart';
+import 'package:mpm/services/database/models/user.dart';
 
 class LoginViewModel extends BaseViewModel
 {
