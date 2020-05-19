@@ -6,11 +6,11 @@ import 'package:mpm/services/database/models/team.dart';
 part 'event.g.dart';
 
 @Entity(
-	tableName: "events",
+	tableName: 'events',
 	foreignKeys: [
 		ForeignKey(
-			childColumns: ["team"],
-			parentColumns: ["id"],
+			childColumns: ['team'],
+			parentColumns: ['id'],
 			entity: Team,
 			onDelete: ForeignKeyAction.CASCADE
 		)

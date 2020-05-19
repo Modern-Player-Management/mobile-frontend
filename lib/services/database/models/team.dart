@@ -13,6 +13,11 @@ part 'team.g.dart';
 			parentColumns: ['id'],
 			entity: User
 		)
+	],
+	indices: [
+		Index(
+			value: ['user']
+		)
 	]
 )
 @JsonSerializable()
@@ -20,11 +25,14 @@ class Team
 {
 	@primaryKey
 	String id;
+	
+	// index
+	String user;
 
-	String name;
-	String managerId;
+	String name, managerId;
 
-	bool save, update, delete;
+	@ignore
+	bool isCurrentUserManager;
 
 	@ignore
 	User manager;
@@ -32,21 +40,25 @@ class Team
 	@ignore
 	List<User> members;
 
+	bool save, update, delete;
+
   	Team({
 		this.id, 
 		this.name,
+		this.user,
 		String managerId,
+		this.isCurrentUserManager,
+		User manager,
+		this.members = const [],
 		bool save = false,
 		bool update = false,
 		bool delete = false,
-		User manager,
-		this.members = const []
 	}) : 
 		this.managerId = managerId ?? manager?.id,
+		this.manager = manager,
 		this.save = save ?? false,
 		this.update = update ?? false,
-		this.delete = delete ?? false,
-		this.manager = manager;
+		this.delete = delete ?? false;
 
 	static const fromJson = _$TeamFromJson;
 
