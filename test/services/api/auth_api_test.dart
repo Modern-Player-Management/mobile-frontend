@@ -10,7 +10,7 @@ void register() async
 {
 	final client = MockClient((req) async {
 		expect(req.url.path, equals("/register"));
-		return http.Response(json.encode({}), 200);
+		return http.Response("", 200);
 	});
 
 	AuthApi api = AuthApi.createWith(client);
