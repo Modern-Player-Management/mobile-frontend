@@ -9,6 +9,8 @@ class LoginViewModel extends BaseViewModel
 {
 	final authApi = locator<AuthApi>();
 	final storage = locator<SecureStorage>();
+	final navigation = locator<NavigationService>();
+
 	final formKey = GlobalKey<FormState>();
 
 	final User user = User();
@@ -42,6 +44,8 @@ class LoginViewModel extends BaseViewModel
 			{
 				storage.user = res.body['username'];
 				storage.token = res.body['token'];
+
+				navigation.replaceWith(Routes.homeViewRoute);
 			}
 			else
 			{

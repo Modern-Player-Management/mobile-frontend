@@ -4,7 +4,6 @@ import 'package:bot_toast/bot_toast.dart';
 import 'package:stacked_services/stacked_services.dart';
 
 import 'package:mpm/app/locator.dart';
-import 'package:mpm/app/router.gr.dart';
 import 'package:mpm/utils/colors.dart';
 
 void main() async 

@@ -10,6 +10,7 @@ import 'package:mpm/services/third_party_services.dart';
 import 'package:stacked_services/stacked_services.dart';
 import 'package:mpm/services/secure_storage.dart';
 import 'package:mpm/services/api/team_api.dart';
+import 'package:mpm/services/managers/team_manager.dart';
 import 'package:uuid/uuid.dart';
 import 'package:get_it/get_it.dart';
 
@@ -23,6 +24,8 @@ void $initGetIt(GetIt g, {String environment}) {
   g.registerLazySingleton<SnackbarService>(
       () => thirdPartyServices.snackBarService);
   g.registerLazySingleton<TeamApi>(() => TeamApi.create());
+  g.registerFactoryParam<TeamManager, Function, dynamic>(
+      (validResponse, _) => TeamManager(validResponse: validResponse));
   g.registerLazySingleton<Uuid>(() => thirdPartyServices.uuid);
 
   //Eager singletons must be registered in the right order
