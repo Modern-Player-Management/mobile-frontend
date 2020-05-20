@@ -94,7 +94,7 @@ class RegisterViewModel extends BaseViewModel
 				final res = await authApi.register(user.username, user.email, user.password);
 				if(res.isSuccessful)
 				{
-
+					
 				}
 				else
 				{
