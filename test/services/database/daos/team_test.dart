@@ -5,7 +5,7 @@ import 'package:sqflite_ffi_test/sqflite_ffi_test.dart';
 import 'package:mpm/services/database/database.dart';
 
 String teamId = "team";
-String user = "user";
+String player = "player";
 
 AppDatabase _db;
 
@@ -35,7 +35,7 @@ Future<Team> insert_team([AppDatabase db]) async
 {
 	final team = Team(
 		id: teamId,
-		user: user,
+		player: player,
 		name: "name"
 	);
 
@@ -50,7 +50,7 @@ void find_team() async
 {
 	await insert_team();
 
-	final teams = await _db.teamDao.getTeams(user).first;
+	final teams = await _db.teamDao.getTeams(player).first;
 
 	expect(teams.length, equals(1));
 }
@@ -64,7 +64,7 @@ void update_team() async
 
 	expect(rows, equals(1));
 
-	final teams = await _db.teamDao.getTeams(user).first;
+	final teams = await _db.teamDao.getTeams(player).first;
 
 	expect(teams[0].name, equals("test"));
 }
@@ -75,7 +75,7 @@ void delete_team() async
 
 	await _db.teamDao.deleteTeam(team);
 
-	final teams = await _db.teamDao.getTeams(user).first;
+	final teams = await _db.teamDao.getTeams(player).first;
 
 	expect(teams.length, equals(0));
 }

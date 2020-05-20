@@ -68,7 +68,7 @@ class _UsernameTextField extends HookViewModelWidget<RegisterViewModel>
 	Widget buildViewModelWidget(context, model) 
 	{
 		return TextFormField(
-			initialValue: model.user.username,
+			initialValue: model.player.username,
 			decoration: InputDecoration(
 				labelText: "Username *",
 				prefixIcon: Icon(
@@ -77,8 +77,8 @@ class _UsernameTextField extends HookViewModelWidget<RegisterViewModel>
 				),
 			),
 			validator: model.usernameValidator,
-			onChanged: (str) => model.user.username = str,
-			onSaved: (str) => model.user.username = str,
+			onChanged: (str) => model.player.username = str,
+			onSaved: (str) => model.player.username = str,
 		);
 	}
 }
@@ -92,7 +92,7 @@ class _EmailTextField extends HookViewModelWidget<RegisterViewModel>
 	Widget buildViewModelWidget(context, model) 
 	{
 		return TextFormField(
-			initialValue: model.user.email,
+			initialValue: model.player.email,
 			decoration: InputDecoration(
 				labelText: "Email *",
 				prefixIcon: Icon(
@@ -101,8 +101,8 @@ class _EmailTextField extends HookViewModelWidget<RegisterViewModel>
 				),
 			),
 			validator: model.emailValidator,
-			onChanged: (str) => model.user.email = str,
-			onSaved: (str) => model.user.email = str,
+			onChanged: (str) => model.player.email = str,
+			onSaved: (str) => model.player.email = str,
 		);
 	}
 }
@@ -116,7 +116,7 @@ class _PasswordTextField extends HookViewModelWidget<RegisterViewModel>
 	Widget buildViewModelWidget(context, model) 
 	{
 		return TextFormField(
-			initialValue: model.user.password,
+			initialValue: model.player.password,
 			decoration: InputDecoration(
 				labelText: "Password *",
 				prefixIcon: Icon(
@@ -128,7 +128,7 @@ class _PasswordTextField extends HookViewModelWidget<RegisterViewModel>
 			obscureText: true,
 			validator: model.passwordValidator,
 			onChanged: model.passwordChanged,
-			onSaved: (str) => model.user.password = str,
+			onSaved: (str) => model.player.password = str,
 		);
 	}
 }

@@ -10,15 +10,15 @@ Team _$TeamFromJson(Map<String, dynamic> json) {
   return Team(
     id: json['id'] as String,
     name: json['name'] as String,
-    user: json['user'] as String,
+    player: json['player'] as String,
     managerId: json['managerId'] as String,
     isCurrentUserManager: json['isCurrentUserManager'] as bool,
     manager: json['manager'] == null
         ? null
-        : User.fromJson(json['manager'] as Map<String, dynamic>),
+        : Player.fromJson(json['manager'] as Map<String, dynamic>),
     members: (json['members'] as List)
-        ?.map(
-            (e) => e == null ? null : User.fromJson(e as Map<String, dynamic>))
+        ?.map((e) =>
+            e == null ? null : Player.fromJson(e as Map<String, dynamic>))
         ?.toList(),
     save: json['save'] as bool,
     update: json['update'] as bool,
@@ -28,7 +28,7 @@ Team _$TeamFromJson(Map<String, dynamic> json) {
 
 Map<String, dynamic> _$TeamToJson(Team instance) => <String, dynamic>{
       'id': instance.id,
-      'user': instance.user,
+      'player': instance.player,
       'name': instance.name,
       'managerId': instance.managerId,
       'isCurrentUserManager': instance.isCurrentUserManager,

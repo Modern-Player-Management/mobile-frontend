@@ -4,23 +4,23 @@ import 'package:injectable/injectable.dart';
 @singleton
 class SecureStorage {
 	final _storageToken = "token";
-	final _storageUser = "user";
+	final _storagePlayer = "player";
 
 	final _storage = new FlutterSecureStorage();
 
-	String _token, _user;
+	String _token, _player;
 
-	String get user => _user;
-	set user(String user) 
+	String get player => _player;
+	set player(String player) 
 	{
-		_user = user;
-		if(user == null) 
+		_player = player;
+		if(player == null) 
 		{
-			_storage.delete(key: _storageUser);
+			_storage.delete(key: _storagePlayer);
 		}
 		else 
 		{
-			_storage.write(key: _storageUser, value: _user);
+			_storage.write(key: _storagePlayer, value: _player);
 		}
 	}
 
