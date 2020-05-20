@@ -4,7 +4,7 @@ import 'package:stacked/stacked.dart';
 import 'package:validators/validators.dart';
 
 import 'package:mpm/app/locator.dart';
-import 'package:mpm/services/database/models/user.dart';
+import 'package:mpm/services/database/models/player.dart';
 
 class RegisterViewModel extends BaseViewModel
 {
@@ -12,7 +12,7 @@ class RegisterViewModel extends BaseViewModel
 	final storage = locator<SecureStorage>();
 	final formKey = GlobalKey<FormState>();
 
-	final User user = User();
+	final Player player = Player();
 	String passwordError, requestError;
 
 	String usernameValidator(String str)
@@ -40,7 +40,7 @@ class RegisterViewModel extends BaseViewModel
 	void passwordChanged(String str)
 	{
 		passwordError = passwordValidator(str);
-		user.password = str;
+		player.password = str;
 		notifyListeners();
 	}
 
@@ -57,7 +57,7 @@ class RegisterViewModel extends BaseViewModel
 		}
 		if(!RegExp(r"(?=.*[A-Z])").hasMatch(str))
 		{
-			return "At least one upercase letter is required";
+			return "At least one uppercase letter is required";
 		}
 		if(!RegExp(r"(?=.*\d)").hasMatch(str))
 		{
@@ -77,7 +77,7 @@ class RegisterViewModel extends BaseViewModel
 		{
 			return "You must confirm the password";
 		}
-		if(str != user.password)
+		if(str != player.password)
 		{
 			return "Password confirmation and password must match";
 		}
@@ -91,7 +91,7 @@ class RegisterViewModel extends BaseViewModel
 			formKey.currentState.save();
 			try
 			{
-				final res = await authApi.register(user.username, user.email, user.password);
+				final res = await authApi.register(player.username, player.email, player.password);
 				if(res.isSuccessful)
 				{
 					

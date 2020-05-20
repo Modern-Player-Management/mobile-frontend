@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:stacked/stacked.dart';
 
 import 'package:mpm/app/locator.dart';
-import 'package:mpm/services/database/models/user.dart';
+import 'package:mpm/services/database/models/player.dart';
 
 class LoginViewModel extends BaseViewModel
 {
@@ -13,7 +13,7 @@ class LoginViewModel extends BaseViewModel
 
 	final formKey = GlobalKey<FormState>();
 
-	final User user = User();
+	final Player player = Player();
 	String requestError;
 
 	String usernameValidator(String str)
@@ -39,10 +39,10 @@ class LoginViewModel extends BaseViewModel
 	{
 		try
 		{
-			final res = await authApi.authenticate(user.username, user.password);
+			final res = await authApi.authenticate(player.username, player.password);
 			if(res.isSuccessful)
 			{
-				storage.user = res.body['username'];
+				storage.player = res.body['username'];
 				storage.token = res.body['token'];
 
 				navigation.replaceWith(Routes.homeViewRoute);
