@@ -28,7 +28,7 @@ void delete_team_with_two_events() async
 {
 	final team = Team(
 		id: teamId,
-		user: user,
+		player: player,
 		name: "name"
 	);
 
@@ -52,7 +52,7 @@ void delete_team_with_two_events() async
 
 	await db.teamDao.deleteTeam(team);
 
-	final teams = await db.teamDao.getTeams(user).first;
+	final teams = await db.teamDao.getTeams(player).first;
 	expect(teams.length, equals(0));
 
 	final events = await db.eventDao.getEvents(teamId).first;

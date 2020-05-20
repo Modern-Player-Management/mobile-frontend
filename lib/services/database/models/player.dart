@@ -1,13 +1,13 @@
 import 'package:floor/floor.dart';
 import 'package:json_annotation/json_annotation.dart';
 
-part 'user.g.dart';
+part 'player.g.dart';
 
 @Entity(
-	tableName: 'users'
+	tableName: 'players'
 )
 @JsonSerializable()
-class User
+class Player
 {
 	@primaryKey
 	String id;
@@ -24,7 +24,7 @@ class User
 
 	bool save, update, delete;
 
-	User({
+	Player({
 		this.id,
 		this.username,
 		this.email,
@@ -36,7 +36,7 @@ class User
 		this.update = update ?? false,
 		this.delete = delete ?? false;
 
-	static const fromJson = _$UserFromJson;
+	static const fromJson = _$PlayerFromJson;
 
 	Map<String, dynamic> toJson() 
 	{

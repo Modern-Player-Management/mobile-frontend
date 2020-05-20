@@ -66,7 +66,7 @@ class _UsernameTextField extends HookViewModelWidget<LoginViewModel>
 	Widget buildViewModelWidget(context, model) 
 	{
 		return TextFormField(
-			initialValue: model.user.username,
+			initialValue: model.player.username,
 			decoration: InputDecoration(
 				labelText: "Username *",
 				prefixIcon: Icon(
@@ -75,8 +75,8 @@ class _UsernameTextField extends HookViewModelWidget<LoginViewModel>
 				),
 			),
 			validator: model.usernameValidator,
-			onChanged: (str) => model.user.username = str,
-			onSaved: (str) => model.user.username = str,
+			onChanged: (str) => model.player.username = str,
+			onSaved: (str) => model.player.username = str,
 		);
 	}
 }
@@ -90,7 +90,7 @@ class _PasswordTextField extends HookViewModelWidget<LoginViewModel>
 	Widget buildViewModelWidget(context, model) 
 	{
 		return TextFormField(
-			initialValue: model.user.password,
+			initialValue: model.player.password,
 			decoration: InputDecoration(
 				labelText: "Password *",
 				prefixIcon: Icon(
@@ -100,7 +100,7 @@ class _PasswordTextField extends HookViewModelWidget<LoginViewModel>
 			),
 			obscureText: true,
 			validator: model.passwordValidator,
-			onSaved: (str) => model.user.password = str,
+			onSaved: (str) => model.player.password = str,
 		);
 	}
 }

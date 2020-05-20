@@ -29,7 +29,7 @@ abstract class TeamApi extends ChopperService
 			baseUrl: serverUrl,
 			converter: JsonSerializableConverter({
 				Team: Team.fromJson,
-				User: User.fromJson,
+				Player: Player.fromJson,
 				Event: Event.fromJson
 			}),
 			interceptors: [
@@ -57,9 +57,9 @@ abstract class TeamApi extends ChopperService
 	@Delete(path: "/api/teams/{teamId}")
 	Future<Response> deleteTeam(@Path() String teamId);
 
-	@Post(path: "/api/teams")
-	Future<Response<Team>> addUser(@Body() String teamId, User user);
+	@Post(path: "/api/teams/{teamId}/player")
+	Future<Response<Team>> addUser(@Body() String teamId, Player playerId);
 
-	@Delete(path: "/api/teams/{userId}")
-	Future<Response> deleteUser(@Path() String userId);
+	@Delete(path: "/api/teams/{teamId}/player/{playerId}")
+	Future<Response> deleteUser(@Path() String teamId, @Path() String playerId);
 }

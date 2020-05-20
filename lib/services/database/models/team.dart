@@ -1,7 +1,7 @@
 import 'package:floor/floor.dart';
 import 'package:json_annotation/json_annotation.dart';
 
-import 'package:mpm/services/database/models/user.dart';
+import 'package:mpm/services/database/models/player.dart';
 
 part 'team.g.dart';
 
@@ -11,12 +11,12 @@ part 'team.g.dart';
 		ForeignKey(
 			childColumns: ['managerId'],
 			parentColumns: ['id'],
-			entity: User
+			entity: Player
 		)
 	],
 	indices: [
 		Index(
-			value: ['user']
+			value: ['player']
 		)
 	]
 )
@@ -27,7 +27,7 @@ class Team
 	String id;
 	
 	// index
-	String user;
+	String player;
 
 	String name, managerId;
 
@@ -35,20 +35,20 @@ class Team
 	bool isCurrentUserManager;
 
 	@ignore
-	User manager;
+	Player manager;
 
 	@ignore
-	List<User> members;
+	List<Player> members;
 
 	bool save, update, delete;
 
   	Team({
 		this.id, 
 		this.name,
-		this.user,
+		this.player,
 		String managerId,
 		this.isCurrentUserManager,
-		User manager,
+		Player manager,
 		this.members = const [],
 		bool save = false,
 		bool update = false,

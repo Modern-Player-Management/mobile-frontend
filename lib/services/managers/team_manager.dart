@@ -22,7 +22,7 @@ class TeamManager
 
 	Future<void> syncTeams(List<Team> teams) async
 	{
-		var savedTeams = await _dao.getSavedTeams(_storage.user);
+		var savedTeams = await _dao.getSavedTeams(_storage.player);
 		var teamsKey = [
 			for(var team in savedTeams)
 				team.id
@@ -30,7 +30,7 @@ class TeamManager
 
 		for(var team in teams)
 		{
-			team.user = _storage.user;
+			team.player = _storage.player;
 			team.save = true;
 			_dao.insertTeam(team);
 
@@ -51,7 +51,7 @@ class TeamManager
 
 	Stream<List<Team>> getTeams()
 	{
-		return _dao.getTeams(_storage.user);
+		return _dao.getTeams(_storage.player);
 	}
 
 	Future<void> insertTeam(Team team, [bool add = true]) async
@@ -59,7 +59,7 @@ class TeamManager
 		if(add) 
 		{
 			team.id = _uuid.v1();
-			team.user = _storage.user;
+			team.player = _storage.player;
 			team.save = true;
 
 			await _dao.insertTeam(team);
@@ -73,7 +73,7 @@ class TeamManager
 				await _dao.deleteTeam(team);
 
 				team = response.body;
-				team.user = _storage.user;
+				team.player = _storage.player;
 				team.save = true;
 				await _dao.insertTeam(team);
 			}
@@ -117,12 +117,12 @@ class TeamManager
 		}
 	}
 
-	Future<void> addUser(Team team, User user) async
+	Future<void> addUser(Team team, Player player) async
 	{
 		
 	}
 
-	Future<void> removeUser(Team team, User user) async
+	Future<void> removeUser(Team team, Player player) async
 	{
 		
 	}

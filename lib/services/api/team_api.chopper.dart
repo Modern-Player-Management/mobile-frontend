@@ -47,16 +47,16 @@ class _$TeamApi extends TeamApi {
   }
 
   @override
-  Future<Response<Team>> addUser(String teamId, User user) {
-    final $url = '/api/teams';
+  Future<Response<Team>> addUser(String teamId, Player playerId) {
+    final $url = '/api/teams/{teamId}/player';
     final $body = teamId;
     final $request = Request('POST', $url, client.baseUrl, body: $body);
     return client.send<Team, Team>($request);
   }
 
   @override
-  Future<Response<dynamic>> deleteUser(String userId) {
-    final $url = '/api/teams/$userId';
+  Future<Response<dynamic>> deleteUser(String teamId, String playerId) {
+    final $url = '/api/teams/$teamId/player/$playerId';
     final $request = Request('DELETE', $url, client.baseUrl);
     return client.send<dynamic, dynamic>($request);
   }
