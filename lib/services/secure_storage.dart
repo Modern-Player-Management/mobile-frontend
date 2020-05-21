@@ -8,6 +8,20 @@ class SecureStorage {
 
 	final _storage = new FlutterSecureStorage();
 
+	@factoryMethod
+	static Future<SecureStorage> create() async
+	{
+		var storage = SecureStorage();
+		await storage.load();
+		return storage;
+	}
+
+	Future<void> load() async
+	{
+		_token = await _storage.read(key: _storageToken);
+		_player = await _storage.read(key: _storagePlayer);
+	}
+
 	String _token, _player;
 
 	String get player => _player;
