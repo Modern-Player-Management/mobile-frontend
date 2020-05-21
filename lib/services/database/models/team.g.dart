@@ -16,7 +16,7 @@ Team _$TeamFromJson(Map<String, dynamic> json) {
     manager: json['manager'] == null
         ? null
         : Player.fromJson(json['manager'] as Map<String, dynamic>),
-    members: (json['members'] as List)
+    players: (json['memberships'] as List)
         ?.map((e) =>
             e == null ? null : Player.fromJson(e as Map<String, dynamic>))
         ?.toList(),
@@ -33,7 +33,7 @@ Map<String, dynamic> _$TeamToJson(Team instance) => <String, dynamic>{
       'managerId': instance.managerId,
       'isCurrentUserManager': instance.isCurrentUserManager,
       'manager': instance.manager,
-      'members': instance.members,
+      'memberships': instance.players,
       'save': instance.save,
       'update': instance.update,
       'delete': instance.delete,
