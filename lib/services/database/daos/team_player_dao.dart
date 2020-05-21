@@ -6,7 +6,7 @@ import 'package:mpm/services/database/models/team_player.dart';
 abstract class TeamPlayerDao
 {
 	@Query('select * from teams_players where teamId = :teamId and `delete` = 0')
-	Stream<List<TeamPlayer>> getTeamPlayers(String teamId);
+	Future<List<TeamPlayer>> getTeamPlayers(String teamId);
 
 	@Query('select * from teams_players where teamId = :teamId and save = 1 and `delete` = 0')
 	Future<List<TeamPlayer>> getSavedTeamPlayers(String teamId);
