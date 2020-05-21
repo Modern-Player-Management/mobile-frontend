@@ -10,7 +10,7 @@ import 'package:mpm/services/third_party_services.dart';
 import 'package:stacked_services/stacked_services.dart';
 import 'package:mpm/services/secure_storage.dart';
 import 'package:mpm/services/api/team_api.dart';
-import 'package:mpm/services/managers/team_manager.dart';
+import 'package:mpm/models/managers/team_manager.dart';
 import 'package:uuid/uuid.dart';
 import 'package:get_it/get_it.dart';
 
