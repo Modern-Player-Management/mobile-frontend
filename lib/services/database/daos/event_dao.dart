@@ -17,7 +17,9 @@ abstract class EventDao
 	@Query('select * from events where team = :team and `delete` = 1')
 	Future<List<Event>> getUndeletedEvents(String team);
 
-	@insert
+	@Insert(
+		onConflict: OnConflictStrategy.REPLACE
+	)
 	Future<int> insertEvent(Event event);
 
 	@update
