@@ -24,6 +24,11 @@ class TeamManager
 
 	Future<void> syncTeams() async
 	{
+		if(_storage.token == null)
+		{
+			return;
+		}
+
 		List<Team> teams = [];
 
 		try
@@ -51,6 +56,7 @@ class TeamManager
 
 		for(var team in teams)
 		{
+			_playerDao.insertPlayer(team.manager);
 			team.player = _storage.player;
 			team.save = true;
 			_teamDao.insertTeam(team);
@@ -139,10 +145,7 @@ class TeamManager
 
 	Future<void> addTeamPlayer(Team team, Player player) async
 	{
-		if(await _playerDao.getPlayer(player.id) == null)
-		{
-			_playerDao.insertPlayer(player);
-		}
+		_playerDao.insertPlayer(player);
 
 		var teamPlayer = TeamPlayer(
 			teamId: team.id,
