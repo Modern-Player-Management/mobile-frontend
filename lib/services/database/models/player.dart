@@ -22,19 +22,11 @@ class Player
 	@JsonKey(ignore: true)
 	String confirmPassword;
 
-	bool save, update, delete;
-
 	Player({
 		this.id,
 		this.username,
 		this.email,
-		bool save = false,
-		bool update = false,
-		bool delete = false,
-	}) : 
-		this.save = save ?? false,
-		this.update = update ?? false,
-		this.delete = delete ?? false;
+	});
 
 	static const fromJson = _$PlayerFromJson;
 
