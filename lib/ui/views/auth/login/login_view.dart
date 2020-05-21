@@ -72,7 +72,6 @@ class _UsernameTextField extends HookViewModelWidget<LoginViewModel>
 				),
 			),
 			validator: model.usernameValidator,
-			onChanged: (str) => model.player.username = str,
 			onSaved: (str) => model.player.username = str,
 		);
 	}
