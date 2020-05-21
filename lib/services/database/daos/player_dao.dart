@@ -11,7 +11,9 @@ abstract class PlayerDao
 	@Query('select * from players where id = :id')
 	Future<Player> getPlayer(String id);
 
-	@insert
+	@Insert(
+		onConflict: OnConflictStrategy.REPLACE
+	)
 	Future<int> insertPlayer(Player player);
 
 	@update
