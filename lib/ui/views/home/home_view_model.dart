@@ -13,4 +13,6 @@ class HomeViewModel extends BaseViewModel
 	HomeViewModel({
 		@required this.context
 	});
+
+	Stream<List<Team>> get teams => _teamManager.getTeams();
 }
