@@ -62,7 +62,9 @@ class _$AppDatabase extends AppDatabase {
 
   TeamDao _teamDaoInstance;
 
-  PlayerDao _userDaoInstance;
+  PlayerDao _playerDaoInstance;
+
+  TeamPlayerDao _teamPlayerDaoInstance;
 
   EventDao _eventDaoInstance;
 
@@ -87,7 +89,9 @@ class _$AppDatabase extends AppDatabase {
         await database.execute(
             'CREATE TABLE IF NOT EXISTS `teams` (`id` TEXT, `player` TEXT, `name` TEXT, `managerId` TEXT, `save` INTEGER, `update` INTEGER, `delete` INTEGER, FOREIGN KEY (`managerId`) REFERENCES `players` (`id`) ON UPDATE NO ACTION ON DELETE NO ACTION, PRIMARY KEY (`id`))');
         await database.execute(
-            'CREATE TABLE IF NOT EXISTS `players` (`id` TEXT, `username` TEXT, `email` TEXT, `save` INTEGER, `update` INTEGER, `delete` INTEGER, PRIMARY KEY (`id`))');
+            'CREATE TABLE IF NOT EXISTS `players` (`id` TEXT, `username` TEXT, `email` TEXT, `created` TEXT, PRIMARY KEY (`id`))');
+        await database.execute(
+            'CREATE TABLE IF NOT EXISTS `teams_playerss` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `teamId` TEXT, `playerId` TEXT, `save` INTEGER, `delete` INTEGER, FOREIGN KEY (`teamId`) REFERENCES `teams` (`id`) ON UPDATE NO ACTION ON DELETE NO ACTION, FOREIGN KEY (`playerId`) REFERENCES `players` (`id`) ON UPDATE NO ACTION ON DELETE NO ACTION)');
         await database.execute(
             'CREATE TABLE IF NOT EXISTS `events` (`id` TEXT, `team` TEXT, `start` TEXT, `end` TEXT, `title` TEXT, `description` TEXT, `save` INTEGER, `update` INTEGER, `delete` INTEGER, FOREIGN KEY (`team`) REFERENCES `teams` (`id`) ON UPDATE NO ACTION ON DELETE CASCADE, PRIMARY KEY (`id`))');
         await database
@@ -104,8 +108,13 @@ class _$AppDatabase extends AppDatabase {
   }
 
   @override
-  PlayerDao get userDao {
-    return _userDaoInstance ??= _$PlayerDao(database, changeListener);
+  PlayerDao get playerDao {
+    return _playerDaoInstance ??= _$PlayerDao(database, changeListener);
+  }
+
+  @override
+  TeamPlayerDao get teamPlayerDao {
+    return _teamPlayerDaoInstance ??= _$TeamPlayerDao(database, changeListener);
   }
 
   @override
@@ -214,6 +223,13 @@ class _$TeamDao extends TeamDao {
   }
 
   @override
+  Future<void> updateTeamId(String oldId, String newId, int save) async {
+    await _queryAdapter.queryNoReturn(
+        'update teams set id = ? save = ? where id = ?',
+        arguments: <dynamic>[oldId, newId, save]);
+  }
+
+  @override
   Future<int> insertTeam(Team team) {
     return _teamInsertionAdapter.insertAndReturnId(
         team, sqflite.ConflictAlgorithm.abort);
@@ -241,9 +257,7 @@ class _$PlayerDao extends PlayerDao {
                   'id': item.id,
                   'username': item.username,
                   'email': item.email,
-                  'save': item.save ? 1 : 0,
-                  'update': item.update ? 1 : 0,
-                  'delete': item.delete ? 1 : 0
+                  'created': item.created
                 },
             changeListener),
         _playerUpdateAdapter = UpdateAdapter(
@@ -254,9 +268,7 @@ class _$PlayerDao extends PlayerDao {
                   'id': item.id,
                   'username': item.username,
                   'email': item.email,
-                  'save': item.save ? 1 : 0,
-                  'update': item.update ? 1 : 0,
-                  'delete': item.delete ? 1 : 0
+                  'created': item.created
                 },
             changeListener),
         _playerDeletionAdapter = DeletionAdapter(
@@ -267,9 +279,7 @@ class _$PlayerDao extends PlayerDao {
                   'id': item.id,
                   'username': item.username,
                   'email': item.email,
-                  'save': item.save ? 1 : 0,
-                  'update': item.update ? 1 : 0,
-                  'delete': item.delete ? 1 : 0
+                  'created': item.created
                 },
             changeListener);
 
@@ -282,10 +292,7 @@ class _$PlayerDao extends PlayerDao {
   static final _playersMapper = (Map<String, dynamic> row) => Player(
       id: row['id'] as String,
       username: row['username'] as String,
-      email: row['email'] as String,
-      save: (row['save'] as int) != 0,
-      update: (row['update'] as int) != 0,
-      delete: (row['delete'] as int) != 0);
+      email: row['email'] as String);
 
   final InsertionAdapter<Player> _playerInsertionAdapter;
 
@@ -294,29 +301,24 @@ class _$PlayerDao extends PlayerDao {
   final DeletionAdapter<Player> _playerDeletionAdapter;
 
   @override
-  Stream<List<Player>> getPlayers() {
-    return _queryAdapter.queryListStream('select * from players `delete` = 0',
-        tableName: 'players', mapper: _playersMapper);
-  }
-
-  @override
-  Future<List<Player>> getSavedPlayers() async {
-    return _queryAdapter.queryList(
-        'select * from players save = 1 and `delete` = 0',
+  Stream<List<Player>> getPlayers(List<String> ids) {
+    final valueList1 = ids.map((value) => "'$value'").join(', ');
+    return _queryAdapter.queryListStream(
+        'select * from players where id in ($valueList1)',
+        tableName: 'players',
         mapper: _playersMapper);
   }
 
   @override
-  Future<List<Player>> getUnsavedPlayers() async {
-    return _queryAdapter.queryList(
-        'select * from players save = 0 and `delete` = 0',
-        mapper: _playersMapper);
+  Future<Player> getPlayer(String id) async {
+    return _queryAdapter.query('select * from players where id = ?',
+        arguments: <dynamic>[id], mapper: _playersMapper);
   }
 
   @override
-  Future<List<Player>> getUndeletedPlayers() async {
-    return _queryAdapter.queryList('select * from players `delete` = 1',
-        mapper: _playersMapper);
+  Future<void> updatePlayerId(String oldId, String newId) async {
+    await _queryAdapter.queryNoReturn('update players set id = ? where id = ?',
+        arguments: <dynamic>[oldId, newId]);
   }
 
   @override
@@ -334,6 +336,123 @@ class _$PlayerDao extends PlayerDao {
   @override
   Future<int> deletePlayer(Player player) {
     return _playerDeletionAdapter.deleteAndReturnChangedRows(player);
+  }
+}
+
+class _$TeamPlayerDao extends TeamPlayerDao {
+  _$TeamPlayerDao(this.database, this.changeListener)
+      : _queryAdapter = QueryAdapter(database, changeListener),
+        _teamPlayerInsertionAdapter = InsertionAdapter(
+            database,
+            'teams_playerss',
+            (TeamPlayer item) => <String, dynamic>{
+                  'id': item.id,
+                  'teamId': item.teamId,
+                  'playerId': item.playerId,
+                  'save': item.save ? 1 : 0,
+                  'delete': item.delete ? 1 : 0
+                },
+            changeListener),
+        _teamPlayerUpdateAdapter = UpdateAdapter(
+            database,
+            'teams_playerss',
+            ['id'],
+            (TeamPlayer item) => <String, dynamic>{
+                  'id': item.id,
+                  'teamId': item.teamId,
+                  'playerId': item.playerId,
+                  'save': item.save ? 1 : 0,
+                  'delete': item.delete ? 1 : 0
+                },
+            changeListener),
+        _teamPlayerDeletionAdapter = DeletionAdapter(
+            database,
+            'teams_playerss',
+            ['id'],
+            (TeamPlayer item) => <String, dynamic>{
+                  'id': item.id,
+                  'teamId': item.teamId,
+                  'playerId': item.playerId,
+                  'save': item.save ? 1 : 0,
+                  'delete': item.delete ? 1 : 0
+                },
+            changeListener);
+
+  final sqflite.DatabaseExecutor database;
+
+  final StreamController<String> changeListener;
+
+  final QueryAdapter _queryAdapter;
+
+  static final _teams_playerssMapper = (Map<String, dynamic> row) => TeamPlayer(
+      id: row['id'] as int,
+      teamId: row['teamId'] as String,
+      playerId: row['playerId'] as String,
+      save: (row['save'] as int) != 0,
+      delete: (row['delete'] as int) != 0);
+
+  final InsertionAdapter<TeamPlayer> _teamPlayerInsertionAdapter;
+
+  final UpdateAdapter<TeamPlayer> _teamPlayerUpdateAdapter;
+
+  final DeletionAdapter<TeamPlayer> _teamPlayerDeletionAdapter;
+
+  @override
+  Stream<List<TeamPlayer>> getTeamPlayers(String teamId) {
+    return _queryAdapter.queryListStream(
+        'select * from teams_players where teamId = ? and `delete` = 0',
+        arguments: <dynamic>[teamId],
+        tableName: 'teams_playerss',
+        mapper: _teams_playerssMapper);
+  }
+
+  @override
+  Future<List<TeamPlayer>> getSavedTeamPlayers(String teamId) async {
+    return _queryAdapter.queryList(
+        'select * from teams_players where teamId = ? and save = 1 and `delete` = 0',
+        arguments: <dynamic>[teamId],
+        mapper: _teams_playerssMapper);
+  }
+
+  @override
+  Future<List<TeamPlayer>> getUnsavedTeamPlayers(String teamId) async {
+    return _queryAdapter.queryList(
+        'select * from teams_players where teamId = ? and save = 0 and `delete` = 0',
+        arguments: <dynamic>[teamId],
+        mapper: _teams_playerssMapper);
+  }
+
+  @override
+  Future<List<TeamPlayer>> getUndeletedTeamPlayers(String teamId) async {
+    return _queryAdapter.queryList(
+        'select * from teams_players where teamId = ? and `delete` = 1',
+        arguments: <dynamic>[teamId],
+        mapper: _teams_playerssMapper);
+  }
+
+  @override
+  Future<TeamPlayer> getTeamPlayer(String teamId, String playerId) async {
+    return _queryAdapter.query(
+        'select * from teams_players where teamId = ? and playerId = ?',
+        arguments: <dynamic>[teamId, playerId],
+        mapper: _teams_playerssMapper);
+  }
+
+  @override
+  Future<int> insertTeamPlayer(TeamPlayer teamPlayer) {
+    return _teamPlayerInsertionAdapter.insertAndReturnId(
+        teamPlayer, sqflite.ConflictAlgorithm.abort);
+  }
+
+  @override
+  Future<int> updateTeamPlayer(TeamPlayer teamPlayer) {
+    return _teamPlayerUpdateAdapter.updateAndReturnChangedRows(
+        teamPlayer, sqflite.ConflictAlgorithm.abort);
+  }
+
+  @override
+  Future<int> deleteTeamPlayer(TeamPlayer teamPlayer) {
+    return _teamPlayerDeletionAdapter.deleteAndReturnChangedRows(teamPlayer);
   }
 }
 

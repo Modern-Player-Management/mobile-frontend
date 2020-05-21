@@ -16,13 +16,15 @@ part 'database.g.dart';
 @Database(entities: [
 	Team,
 	Player,
+	TeamPlayer,
 	Event,
 ], version: 1)
 @singleton
 abstract class AppDatabase extends FloorDatabase 
 {
 	TeamDao get teamDao;
-	PlayerDao get userDao;
+	PlayerDao get playerDao;
+	TeamPlayerDao get teamPlayerDao;
 	EventDao get eventDao;
 
 	@factoryMethod
