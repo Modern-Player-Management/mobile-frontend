@@ -12,7 +12,7 @@ class Player
 	@primaryKey
 	String id;
 
-	String username, email;
+	String username, email, created;
 
 	@ignore
 	@JsonKey(ignore: true)
@@ -38,4 +38,6 @@ class Player
 			"email": email
 		};
 	}
+
+	DateTime get date => DateTime.parse(created);
 }
