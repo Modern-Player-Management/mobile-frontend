@@ -7,9 +7,9 @@ import 'package:mpm/services/database/models/player.dart';
 
 class LoginViewModel extends BaseViewModel
 {
-	final authApi = locator<AuthApi>();
-	final storage = locator<SecureStorage>();
-	final navigation = locator<NavigationService>();
+	final _authApi = locator<AuthApi>();
+	final _storage = locator<SecureStorage>();
+	final _navigation = locator<NavigationService>();
 
 	final formKey = GlobalKey<FormState>();
 
@@ -37,25 +37,32 @@ class LoginViewModel extends BaseViewModel
 
 	void login() async
 	{
-		try
+		if(formKey.currentState.validate())
 		{
-			final res = await authApi.authenticate(player.username, player.password);
-			if(res.isSuccessful)
+			formKey.currentState.save();
+			try
 			{
-				storage.player = res.body['username'];
-				storage.token = res.body['token'];
+				final res = await _authApi.authenticate(player.username, player.password);
+				if(res.isSuccessful)
+				{
+					_storage.player = res.body['username'];
+					_storage.token = res.body['token'];
 
-				navigation.replaceWith(Routes.homeViewRoute);
+					_navigation.pushNamedAndRemoveUntil(
+						Routes.homeViewRoute, 
+						predicate: (route) => route == null
+					);
+				}
+				else
+				{
+					requestError = "Invalid credentials";
+					notifyListeners();
+				}
 			}
-			else
+			catch(e)
 			{
-				requestError = "Invalid credentials";
-				notifyListeners();
+				print(e);
 			}
-		}
-		catch(e)
-		{
-			print(e);
 		}
 	}
 }
