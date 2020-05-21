@@ -1,4 +1,3 @@
-import 'package:chopper/chopper.dart';
 import 'package:flutter/material.dart';
 
 import 'package:stacked/stacked.dart';
@@ -9,17 +8,9 @@ class HomeViewModel extends BaseViewModel
 {
 	final BuildContext context;
 
-	TeamManager _teamManager;
+	TeamManager _teamManager = locator<TeamManager>();
 
 	HomeViewModel({
 		@required this.context
-	})
-	{
-		_teamManager = locator<TeamManager>(param1: validResponse);
-	}
-
-	bool validResponse(Response response)
-	{
-		
-	}
+	});
 }
