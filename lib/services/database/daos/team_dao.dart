@@ -17,7 +17,9 @@ abstract class TeamDao
 	@Query('select * from teams where player = :player and `delete` = 1')
 	Future<List<Team>> getUndeletedTeams(String player);
 
-	@insert
+	@Insert(
+		onConflict: OnConflictStrategy.REPLACE
+	)
 	Future<int> insertTeam(Team team);
 
 	@update
