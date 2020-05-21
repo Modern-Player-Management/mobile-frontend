@@ -232,7 +232,7 @@ class _$TeamDao extends TeamDao {
   @override
   Future<int> insertTeam(Team team) {
     return _teamInsertionAdapter.insertAndReturnId(
-        team, sqflite.ConflictAlgorithm.abort);
+        team, sqflite.ConflictAlgorithm.replace);
   }
 
   @override
@@ -324,7 +324,7 @@ class _$PlayerDao extends PlayerDao {
   @override
   Future<int> insertPlayer(Player player) {
     return _playerInsertionAdapter.insertAndReturnId(
-        player, sqflite.ConflictAlgorithm.abort);
+        player, sqflite.ConflictAlgorithm.replace);
   }
 
   @override
@@ -341,7 +341,7 @@ class _$PlayerDao extends PlayerDao {
 
 class _$TeamPlayerDao extends TeamPlayerDao {
   _$TeamPlayerDao(this.database, this.changeListener)
-      : _queryAdapter = QueryAdapter(database, changeListener),
+      : _queryAdapter = QueryAdapter(database),
         _teamPlayerInsertionAdapter = InsertionAdapter(
             database,
             'teams_playerss',
@@ -351,8 +351,7 @@ class _$TeamPlayerDao extends TeamPlayerDao {
                   'playerId': item.playerId,
                   'save': item.save ? 1 : 0,
                   'delete': item.delete ? 1 : 0
-                },
-            changeListener),
+                }),
         _teamPlayerUpdateAdapter = UpdateAdapter(
             database,
             'teams_playerss',
@@ -363,8 +362,7 @@ class _$TeamPlayerDao extends TeamPlayerDao {
                   'playerId': item.playerId,
                   'save': item.save ? 1 : 0,
                   'delete': item.delete ? 1 : 0
-                },
-            changeListener),
+                }),
         _teamPlayerDeletionAdapter = DeletionAdapter(
             database,
             'teams_playerss',
@@ -375,8 +373,7 @@ class _$TeamPlayerDao extends TeamPlayerDao {
                   'playerId': item.playerId,
                   'save': item.save ? 1 : 0,
                   'delete': item.delete ? 1 : 0
-                },
-            changeListener);
+                });
 
   final sqflite.DatabaseExecutor database;
 
@@ -398,11 +395,10 @@ class _$TeamPlayerDao extends TeamPlayerDao {
   final DeletionAdapter<TeamPlayer> _teamPlayerDeletionAdapter;
 
   @override
-  Stream<List<TeamPlayer>> getTeamPlayers(String teamId) {
-    return _queryAdapter.queryListStream(
+  Future<List<TeamPlayer>> getTeamPlayers(String teamId) async {
+    return _queryAdapter.queryList(
         'select * from teams_players where teamId = ? and `delete` = 0',
         arguments: <dynamic>[teamId],
-        tableName: 'teams_playerss',
         mapper: _teams_playerssMapper);
   }
 
@@ -566,7 +562,7 @@ class _$EventDao extends EventDao {
   @override
   Future<int> insertEvent(Event event) {
     return _eventInsertionAdapter.insertAndReturnId(
-        event, sqflite.ConflictAlgorithm.abort);
+        event, sqflite.ConflictAlgorithm.replace);
   }
 
   @override
