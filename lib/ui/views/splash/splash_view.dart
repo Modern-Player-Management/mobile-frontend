@@ -28,23 +28,6 @@ class SplashView extends ViewModelBuilderWidget<SplashViewModel>
 					],
 				),
 			),
-			floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-			floatingActionButton: Row(
-				children: <Widget>[
-					Expanded(
-						child: Padding(
-							padding: const EdgeInsets.symmetric(horizontal: 8.0),
-							child: RaisedButton(
-								color: Theme.of(context).primaryColor,
-								child: Text(
-									"Next view"
-								),
-								onPressed: model.nextView,
-							),
-						),
-					),
-				],
-			),
 		);
 	}
   

@@ -4,18 +4,17 @@ import 'package:mpm/app/locator.dart';
 
 class SplashViewModel extends BaseViewModel
 {
-	final _navigator = locator<NavigationService>();
-	final _storage = locator<SecureStorage>();
+	final _session = locator<Session>();
 
-	void nextView()
+	bool loading = true;
+
+	SplashViewModel()
 	{
-		if(_storage.token == null)
-		{
-			_navigator.replaceWith(Routes.authViewRoute);
-		}
-		else
-		{
-			_navigator.replaceWith(Routes.homeViewRoute);
-		}
+		load();
+	}
+
+	void load() async
+	{
+		await _session.synchronize();
 	}
 }
