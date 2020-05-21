@@ -10,9 +10,6 @@ class AuthView extends ViewModelBuilderWidget<AuthViewModel>
 	bool get reactive => false;
 
 	@override
-	bool get disposeViewModel => true;
-
-	@override
 	Widget builder(context, model, child)
 	{
 		return Scaffold(
