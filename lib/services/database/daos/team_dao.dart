@@ -23,6 +23,9 @@ abstract class TeamDao
 	@update
 	Future<int> updateTeam(Team team);
 
+	@Query('update teams set id = :newId, save = :save where id = :oldId')
+	Future<void> updateTeamId(String oldId, String newId, int save);
+
 	@delete
 	Future<int> deleteTeam(Team team);
 }
