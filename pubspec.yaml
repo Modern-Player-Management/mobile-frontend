@@ -45,6 +45,7 @@ dependencies:
   connectivity: ^0.4.8+6
   validators: ^2.0.0+1
   uuid: ^2.0.4
+  dynamic_theme: ^1.0.1
 
 dev_dependencies:
   flutter_test:
