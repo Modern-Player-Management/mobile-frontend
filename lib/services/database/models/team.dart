@@ -1,5 +1,6 @@
 import 'package:floor/floor.dart';
 import 'package:json_annotation/json_annotation.dart';
+import 'package:mpm/app/locator.dart';
 
 import 'package:mpm/services/database/models/player.dart';
 
@@ -38,7 +39,8 @@ class Team
 	Player manager;
 
 	@ignore
-	List<Player> members;
+	@JsonKey(name: "memberships")
+	List<Player> players;
 
 	bool save, update, delete;
 
@@ -49,7 +51,7 @@ class Team
 		String managerId,
 		this.isCurrentUserManager,
 		Player manager,
-		this.members = const [],
+		this.players = const [],
 		bool save = false,
 		bool update = false,
 		bool delete = false,
@@ -67,5 +69,24 @@ class Team
 		return {
 			"name": name,
 		};
+	}
+
+	Future<void> load(String teamId) async
+	{
+		var db = locator<AppDatabase>();
+
+		var teamPlayers = await db.teamPlayerDao.getTeamPlayers(teamId);
+		for(var teamPlayer in teamPlayers)
+		{
+			var player = await db.playerDao.getPlayer(teamPlayer.playerId);
+			if(teamPlayer.playerId == managerId)
+			{
+				manager = player;
+			}
+			else
+			{
+				players.add(player);
+			}
+		}
 	}
 }
