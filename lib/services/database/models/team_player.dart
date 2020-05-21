@@ -1,4 +1,5 @@
 import 'package:floor/floor.dart';
+import 'package:mpm/app/locator.dart';
 
 import 'package:mpm/services/database/models/models.dart';
 
@@ -6,28 +7,34 @@ import 'package:mpm/services/database/models/models.dart';
 	tableName: 'teams_playerss',
 	foreignKeys: [
 		ForeignKey(
-			childColumns: ['team'],
+			childColumns: ['teamId'],
 			parentColumns: ['id'],
 			entity: Team
 		),
 		ForeignKey(
-			childColumns: ['player'],
+			childColumns: ['playerId'],
 			parentColumns: ['id'],
 			entity: Player
 		),
 	]
 )
-class TeamUser
+class TeamPlayer
 {	
 	@PrimaryKey(autoGenerate: true)
 	final int id;
 	
-	final String team;
-	final String player;
+	final String teamId;
+	final String playerId;
 
-  	TeamUser({
+	bool save, delete;
+
+  	TeamPlayer({
 		this.id, 
-		this.team, 
-		this.player
-	});
+		this.teamId, 
+		this.playerId,
+		bool save = false,
+		bool delete = false,
+	}) : 
+		this.save = save ?? false,
+		this.delete = delete ?? false;
 }
