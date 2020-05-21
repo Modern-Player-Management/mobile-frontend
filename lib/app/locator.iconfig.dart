@@ -34,7 +34,7 @@ void $initGetIt(GetIt g, {String environment}) {
 
   //Eager singletons must be registered in the right order
   g.registerSingletonAsync<AppDatabase>(() => AppDatabase.create());
-  g.registerSingleton<SecureStorage>(SecureStorage());
+  g.registerSingletonAsync<SecureStorage>(() => SecureStorage.create());
 }
 
 class _$ThirdPartyServices extends ThirdPartyServices {
