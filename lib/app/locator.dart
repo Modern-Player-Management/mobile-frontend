@@ -11,8 +11,11 @@ export 'package:mpm/services/api/auth_api.dart';
 export 'package:mpm/services/api/team_api.dart';
 
 export 'package:mpm/services/secure_storage.dart';
+export 'package:mpm/services/session.dart';
+
 export 'package:stacked_services/stacked_services.dart';
 export 'package:uuid/uuid.dart';
+export 'package:connectivity/connectivity.dart';
 
 final locator = GetIt.instance;
 
