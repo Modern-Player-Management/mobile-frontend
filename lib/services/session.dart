@@ -26,7 +26,10 @@ class Session
 
 			if(redirect) 
 			{
-				_navigation.clearStackAndShow(Routes.authViewRoute);
+				_navigation.pushNamedAndRemoveUntil(
+					Routes.authViewRoute, 
+					predicate: (route) => route == null
+				);
 			}
 		}
 
@@ -35,6 +38,17 @@ class Session
 
 	Future<void> synchronize() async
 	{
-		await _teamManager.syncTeams();
+		if(isAuth)
+		{
+			await _teamManager.syncTeams();
+			_navigation.replaceWith(Routes.homeViewRoute);
+		}
+		else
+		{
+			await Future.delayed(Duration(seconds: 2));
+			_navigation.replaceWith(Routes.authViewRoute);
+		}
 	}
+
+	bool get isAuth => _storage.token != null;
 }
