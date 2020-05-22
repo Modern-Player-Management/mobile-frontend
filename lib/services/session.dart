@@ -41,7 +41,7 @@ class Session
 	{
 		if(isAuth)
 		{
-			await _teamManager.syncTeams();
+			_teamManager.syncTeams();
 			_navigation.replaceWith(Routes.homeViewRoute);
 		}
 		else
