@@ -7,7 +7,7 @@ import 'package:mpm/ui/views/home/home_view_model.dart';
 class HomeView extends ViewModelBuilderWidget<HomeViewModel>
 {
 	@override
-	bool get reactive => false;
+  	bool get reactive => false;
 
   	@override
   	Widget builder(context, model, child)
@@ -18,36 +18,16 @@ class HomeView extends ViewModelBuilderWidget<HomeViewModel>
 					"MPM"
 				),
 			),
-			body: StreamBuilder(
-				stream: model.teams,
-				builder: (context, AsyncSnapshot<List<Team>> snapshot){
-					if(snapshot.hasData)
-					{
-						var teams = snapshot.data;
-
-						return ListView.builder(
-							itemCount: teams.length,
-							itemBuilder: (context, i){
-								var team = teams[i];
-								return Card(
-									child: ListTile(
-										title: Text(
-											team.name
-										),
-										subtitle: Text(
-											"Manager : ${team.manager?.username}"
-										),
-									),
-								);
-							},
-						);
-					}
-
-					return Center(
-						child: CircularProgressIndicator(),
-					);
-				},
-			)
+			body: RefreshIndicator(
+				onRefresh: model.onRefresh,
+				child: _TeamsView(),
+			),
+			floatingActionButton: FloatingActionButton(
+				child: Icon(
+					Icons.add
+				),
+				onPressed: model.createTeam,
+			),
 		);
 	}
   
@@ -56,6 +36,65 @@ class HomeView extends ViewModelBuilderWidget<HomeViewModel>
 	{
 		return HomeViewModel(
 			context: context
+		);
+	}
+}
+
+class _TeamsView extends ViewModelBuilderWidget<TeamsViewModel>
+{
+	@override
+	Widget builder(context, model, child)
+	{
+		return model.dataReady ?
+		ListView.builder(
+			itemCount: model.data.length,
+			itemBuilder: (context, i) => _TeamView(team: model.data[i]),
+		) : 
+		Center(
+			child: CircularProgressIndicator(),
+		);
+	}
+
+	@override
+	TeamsViewModel viewModelBuilder(context)
+	{
+		return TeamsViewModel();
+	}
+}
+
+class _TeamView extends ViewModelBuilderWidget<TeamViewModel>
+{
+	final Team team;
+
+	_TeamView({
+		@required this.team
+	});
+
+	@override
+	Widget builder(context, model, child)
+	{
+		return Card(
+			child: ListTile(
+				title: Text(
+					team.name
+				),
+				subtitle: model.loaded ?
+				Text(
+					"Manager : ${model.manager.username}"
+				) : null,
+				trailing: model.loaded ?
+				Text(
+					"Players : ${model.players.length}"
+				) : null,
+			),
+		);
+	}
+
+	@override
+	TeamViewModel viewModelBuilder(context)
+	{
+		return TeamViewModel(
+			team: team
 		);
 	}
 }
