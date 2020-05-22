@@ -18,9 +18,16 @@ class _$PlayerApi extends PlayerApi {
 
   @override
   Future<Response<List<Player>>> searchPlayers(String username) {
-    final $url = '/api/users?search=$username';
+    final $url = '/api/users/search?search=$username';
     final $request = Request('GET', $url, client.baseUrl);
     return client.send<List<Player>, Player>($request);
+  }
+
+  @override
+  Future<Response<Player>> getPlayer(String username) {
+    final $url = '/api/users/$username';
+    final $request = Request('GET', $url, client.baseUrl);
+    return client.send<Player, Player>($request);
   }
 
   @override
