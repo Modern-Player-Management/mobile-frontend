@@ -9,6 +9,7 @@ import 'package:mpm/services/api/auth_api.dart';
 import 'package:mpm/services/third_party_services.dart';
 import 'package:connectivity/connectivity.dart';
 import 'package:stacked_services/stacked_services.dart';
+import 'package:mpm/services/api/file_api.dart';
 import 'package:mpm/services/api/player_api.dart';
 import 'package:mpm/services/secure_storage.dart';
 import 'package:mpm/services/session.dart';
@@ -23,6 +24,7 @@ void $initGetIt(GetIt g, {String environment}) {
   g.registerLazySingleton<Connectivity>(() => thirdPartyServices.connectivity);
   g.registerLazySingleton<DialogService>(
       () => thirdPartyServices.dialogService);
+  g.registerLazySingleton<FileApi>(() => FileApi.create());
   g.registerLazySingleton<NavigationService>(
       () => thirdPartyServices.navigationService);
   g.registerLazySingleton<PlayerApi>(() => PlayerApi.create());
