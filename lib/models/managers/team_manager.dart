@@ -13,7 +13,6 @@ class TeamManager
 	final _playerDao = locator<AppDatabase>().playerDao;
 	final _teamPlayerDao = locator<AppDatabase>().teamPlayerDao;
 
-	final _session = locator<Session>();
 	final _storage = locator<SecureStorage>();
 	final _uuid = locator<Uuid>();
 
@@ -25,7 +24,7 @@ class TeamManager
 
 	Future<void> syncTeams() async
 	{
-		if(_storage.token == null && !_session.online)
+		if(_storage.token == null)
 		{
 			return;
 		}
