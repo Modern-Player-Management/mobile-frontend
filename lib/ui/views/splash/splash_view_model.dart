@@ -15,6 +15,8 @@ class SplashViewModel extends BaseViewModel
 
 	void load() async
 	{
+		// remove this and wait for the end of the splashscreen
+		await Future.delayed(Duration(seconds: 2));
 		await _session.synchronize();
 	}
 }
