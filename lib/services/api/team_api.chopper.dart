@@ -47,8 +47,8 @@ class _$TeamApi extends TeamApi {
   }
 
   @override
-  Future<Response<Team>> addTeamPlayer(String teamId, Player player) {
-    final $url = '/api/teams/{teamId}/player';
+  Future<Response<Team>> addTeamPlayer(String teamId, String playerId) {
+    final $url = '/api/teams/{teamId}/player/{playerId}';
     final $body = teamId;
     final $request = Request('POST', $url, client.baseUrl, body: $body);
     return client.send<Team, Team>($request);

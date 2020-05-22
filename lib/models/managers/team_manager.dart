@@ -156,7 +156,7 @@ class TeamManager
 
 		try
 		{
-			var res = await _api.addTeamPlayer(team.id, player);
+			var res = await _api.addTeamPlayer(team.id, player.id);
 			if(validResponse(res))
 			{
 				teamPlayer.save = true;
