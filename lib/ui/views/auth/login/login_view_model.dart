@@ -9,7 +9,7 @@ class LoginViewModel extends BaseViewModel
 {
 	final _authApi = locator<AuthApi>();
 	final _storage = locator<SecureStorage>();
-	final _navigation = locator<NavigationService>();
+	final _session = locator<Session>();
 
 	final formKey = GlobalKey<FormState>();
 
@@ -48,10 +48,7 @@ class LoginViewModel extends BaseViewModel
 					_storage.player = res.body['username'];
 					_storage.token = res.body['token'];
 
-					_navigation.pushNamedAndRemoveUntil(
-						Routes.homeViewRoute, 
-						predicate: (route) => route == null
-					);
+					_session.synchronize();
 				}
 				else
 				{
