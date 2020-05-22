@@ -91,7 +91,7 @@ class _$AppDatabase extends AppDatabase {
         await database.execute(
             'CREATE TABLE IF NOT EXISTS `players` (`id` TEXT, `username` TEXT, `email` TEXT, `created` TEXT, PRIMARY KEY (`id`))');
         await database.execute(
-            'CREATE TABLE IF NOT EXISTS `teams_playerss` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `teamId` TEXT, `playerId` TEXT, `save` INTEGER, `delete` INTEGER, FOREIGN KEY (`teamId`) REFERENCES `teams` (`id`) ON UPDATE NO ACTION ON DELETE NO ACTION, FOREIGN KEY (`playerId`) REFERENCES `players` (`id`) ON UPDATE NO ACTION ON DELETE NO ACTION)');
+            'CREATE TABLE IF NOT EXISTS `teams_players` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `teamId` TEXT, `playerId` TEXT, `save` INTEGER, `delete` INTEGER, FOREIGN KEY (`teamId`) REFERENCES `teams` (`id`) ON UPDATE NO ACTION ON DELETE NO ACTION, FOREIGN KEY (`playerId`) REFERENCES `players` (`id`) ON UPDATE NO ACTION ON DELETE NO ACTION)');
         await database.execute(
             'CREATE TABLE IF NOT EXISTS `events` (`id` TEXT, `team` TEXT, `start` TEXT, `end` TEXT, `title` TEXT, `description` TEXT, `save` INTEGER, `update` INTEGER, `delete` INTEGER, FOREIGN KEY (`team`) REFERENCES `teams` (`id`) ON UPDATE NO ACTION ON DELETE CASCADE, PRIMARY KEY (`id`))');
         await database
@@ -344,7 +344,7 @@ class _$TeamPlayerDao extends TeamPlayerDao {
       : _queryAdapter = QueryAdapter(database),
         _teamPlayerInsertionAdapter = InsertionAdapter(
             database,
-            'teams_playerss',
+            'teams_players',
             (TeamPlayer item) => <String, dynamic>{
                   'id': item.id,
                   'teamId': item.teamId,
@@ -354,7 +354,7 @@ class _$TeamPlayerDao extends TeamPlayerDao {
                 }),
         _teamPlayerUpdateAdapter = UpdateAdapter(
             database,
-            'teams_playerss',
+            'teams_players',
             ['id'],
             (TeamPlayer item) => <String, dynamic>{
                   'id': item.id,
@@ -365,7 +365,7 @@ class _$TeamPlayerDao extends TeamPlayerDao {
                 }),
         _teamPlayerDeletionAdapter = DeletionAdapter(
             database,
-            'teams_playerss',
+            'teams_players',
             ['id'],
             (TeamPlayer item) => <String, dynamic>{
                   'id': item.id,
@@ -381,7 +381,7 @@ class _$TeamPlayerDao extends TeamPlayerDao {
 
   final QueryAdapter _queryAdapter;
 
-  static final _teams_playerssMapper = (Map<String, dynamic> row) => TeamPlayer(
+  static final _teams_playersMapper = (Map<String, dynamic> row) => TeamPlayer(
       id: row['id'] as int,
       teamId: row['teamId'] as String,
       playerId: row['playerId'] as String,
@@ -399,7 +399,7 @@ class _$TeamPlayerDao extends TeamPlayerDao {
     return _queryAdapter.queryList(
         'select * from teams_players where teamId = ? and `delete` = 0',
         arguments: <dynamic>[teamId],
-        mapper: _teams_playerssMapper);
+        mapper: _teams_playersMapper);
   }
 
   @override
@@ -407,7 +407,7 @@ class _$TeamPlayerDao extends TeamPlayerDao {
     return _queryAdapter.queryList(
         'select * from teams_players where teamId = ? and save = 1 and `delete` = 0',
         arguments: <dynamic>[teamId],
-        mapper: _teams_playerssMapper);
+        mapper: _teams_playersMapper);
   }
 
   @override
@@ -415,7 +415,7 @@ class _$TeamPlayerDao extends TeamPlayerDao {
     return _queryAdapter.queryList(
         'select * from teams_players where teamId = ? and save = 0 and `delete` = 0',
         arguments: <dynamic>[teamId],
-        mapper: _teams_playerssMapper);
+        mapper: _teams_playersMapper);
   }
 
   @override
@@ -423,7 +423,7 @@ class _$TeamPlayerDao extends TeamPlayerDao {
     return _queryAdapter.queryList(
         'select * from teams_players where teamId = ? and `delete` = 1',
         arguments: <dynamic>[teamId],
-        mapper: _teams_playerssMapper);
+        mapper: _teams_playersMapper);
   }
 
   @override
@@ -431,7 +431,7 @@ class _$TeamPlayerDao extends TeamPlayerDao {
     return _queryAdapter.query(
         'select * from teams_players where teamId = ? and playerId = ?',
         arguments: <dynamic>[teamId, playerId],
-        mapper: _teams_playerssMapper);
+        mapper: _teams_playersMapper);
   }
 
   @override
