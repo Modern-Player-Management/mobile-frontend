@@ -83,6 +83,7 @@ class App extends ViewModelBuilderWidget<AppModel> with WidgetsBindingObserver
 class AppModel extends BaseViewModel
 {
 	final _connectivity = locator<Connectivity>();
+	final _session = locator<Session>();
 
 	StreamSubscription _subscription;
 
@@ -93,7 +94,17 @@ class AppModel extends BaseViewModel
 
 	void _onConnectivityChanged(ConnectivityResult result)
 	{
-
+		switch(result)
+		{
+			case ConnectivityResult.mobile:
+			case ConnectivityResult.wifi: 
+				_session.online = true; 
+				break;
+			case ConnectivityResult.none:
+			default: 
+				_session.online = true; 
+				break;
+		}
 	}
 
 	void pause()
@@ -101,8 +112,9 @@ class AppModel extends BaseViewModel
 		_subscription.cancel();
 	}
 
-	void resume()
+	void resume() async
 	{
+		_onConnectivityChanged(await _connectivity.checkConnectivity());
 		_subscription = _connectivity.onConnectivityChanged.listen(_onConnectivityChanged);
 	}
 
