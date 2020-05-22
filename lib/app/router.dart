@@ -8,6 +8,7 @@ import 'package:mpm/ui/views/auth/login/login_view.dart';
 import 'package:mpm/ui/views/auth/register/register_view.dart';
 
 import 'package:mpm/ui/views/home/home_view.dart';
+import 'package:mpm/ui/views/team/create_team/create_team_view.dart';
 
 @MaterialAutoRouter()
 class $Router
@@ -20,4 +21,6 @@ class $Router
 	RegisterView registerViewRoute;
 
 	HomeView homeViewRoute;
+
+	CreateTeamView createTeamViewRoute;
 }

@@ -26,6 +26,7 @@ dependencies:
 
   # ui
   bot_toast: ^3.0.0
+  dynamic_theme: ^1.0.1
 
   # services
   flutter_secure_storage: ^3.3.3
@@ -45,7 +46,11 @@ dependencies:
   connectivity: ^0.4.8+6
   validators: ^2.0.0+1
   uuid: ^2.0.4
-  dynamic_theme: ^1.0.1
+  file_picker: ^1.9.0+1
+
+  # image
+  extended_image: ^0.8.0
+  flutter_image_compress: ^0.6.8
 
 dev_dependencies:
   flutter_test:
