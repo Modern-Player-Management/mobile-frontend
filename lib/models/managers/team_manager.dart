@@ -61,6 +61,11 @@ class TeamManager
 			team.save = true;
 			_teamDao.insertTeam(team);
 
+			for(var player in team.players)
+			{
+				_playerDao.insertPlayer(player);
+			}
+
 			int index = teamsKey.indexOf(team.id);
 			if(index != -1)
 			{
