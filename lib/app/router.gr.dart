@@ -12,6 +12,7 @@ import 'package:mpm/ui/views/auth/auth_view.dart';
 import 'package:mpm/ui/views/auth/login/login_view.dart';
 import 'package:mpm/ui/views/auth/register/register_view.dart';
 import 'package:mpm/ui/views/home/home_view.dart';
+import 'package:mpm/ui/views/team/create_team/create_team_view.dart';
 
 abstract class Routes {
   static const splashViewRoute = '/';
@@ -19,12 +20,14 @@ abstract class Routes {
   static const loginViewRoute = '/login-view-route';
   static const registerViewRoute = '/register-view-route';
   static const homeViewRoute = '/home-view-route';
+  static const createTeamViewRoute = '/create-team-view-route';
   static const all = {
     splashViewRoute,
     authViewRoute,
     loginViewRoute,
     registerViewRoute,
     homeViewRoute,
+    createTeamViewRoute,
   };
 }
 
@@ -62,6 +65,11 @@ class Router extends RouterBase {
       case Routes.homeViewRoute:
         return MaterialPageRoute<dynamic>(
           builder: (context) => HomeView(),
+          settings: settings,
+        );
+      case Routes.createTeamViewRoute:
+        return MaterialPageRoute<dynamic>(
+          builder: (context) => CreateTeamView(),
           settings: settings,
         );
       default:

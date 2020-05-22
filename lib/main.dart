@@ -98,11 +98,11 @@ class AppModel extends BaseViewModel
 		{
 			case ConnectivityResult.mobile:
 			case ConnectivityResult.wifi: 
-				_session.online = true; 
+				_session.online = true;
 				break;
 			case ConnectivityResult.none:
 			default: 
-				_session.online = true; 
+				_session.online = true;
 				break;
 		}
 	}
