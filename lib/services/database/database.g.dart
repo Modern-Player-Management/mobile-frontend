@@ -87,7 +87,7 @@ class _$AppDatabase extends AppDatabase {
       },
       onCreate: (database, version) async {
         await database.execute(
-            'CREATE TABLE IF NOT EXISTS `teams` (`id` TEXT, `player` TEXT, `name` TEXT, `managerId` TEXT, `save` INTEGER, `update` INTEGER, `delete` INTEGER, FOREIGN KEY (`managerId`) REFERENCES `players` (`id`) ON UPDATE NO ACTION ON DELETE NO ACTION, PRIMARY KEY (`id`))');
+            'CREATE TABLE IF NOT EXISTS `teams` (`id` TEXT, `player` TEXT, `name` TEXT, `description` TEXT, `image` TEXT, `managerId` TEXT, `created` TEXT, `save` INTEGER, `update` INTEGER, `delete` INTEGER, FOREIGN KEY (`managerId`) REFERENCES `players` (`id`) ON UPDATE NO ACTION ON DELETE NO ACTION, PRIMARY KEY (`id`))');
         await database.execute(
             'CREATE TABLE IF NOT EXISTS `players` (`id` TEXT, `username` TEXT, `email` TEXT, `created` TEXT, PRIMARY KEY (`id`))');
         await database.execute(
@@ -133,7 +133,10 @@ class _$TeamDao extends TeamDao {
                   'id': item.id,
                   'player': item.player,
                   'name': item.name,
+                  'description': item.description,
+                  'image': item.image,
                   'managerId': item.managerId,
+                  'created': item.created,
                   'save': item.save ? 1 : 0,
                   'update': item.update ? 1 : 0,
                   'delete': item.delete ? 1 : 0
@@ -147,7 +150,10 @@ class _$TeamDao extends TeamDao {
                   'id': item.id,
                   'player': item.player,
                   'name': item.name,
+                  'description': item.description,
+                  'image': item.image,
                   'managerId': item.managerId,
+                  'created': item.created,
                   'save': item.save ? 1 : 0,
                   'update': item.update ? 1 : 0,
                   'delete': item.delete ? 1 : 0
@@ -161,7 +167,10 @@ class _$TeamDao extends TeamDao {
                   'id': item.id,
                   'player': item.player,
                   'name': item.name,
+                  'description': item.description,
+                  'image': item.image,
                   'managerId': item.managerId,
+                  'created': item.created,
                   'save': item.save ? 1 : 0,
                   'update': item.update ? 1 : 0,
                   'delete': item.delete ? 1 : 0
@@ -177,6 +186,7 @@ class _$TeamDao extends TeamDao {
   static final _teamsMapper = (Map<String, dynamic> row) => Team(
       id: row['id'] as String,
       name: row['name'] as String,
+      description: row['description'] as String,
       player: row['player'] as String,
       managerId: row['managerId'] as String,
       save: (row['save'] as int) != 0,

@@ -10,6 +10,7 @@ Team _$TeamFromJson(Map<String, dynamic> json) {
   return Team(
     id: json['id'] as String,
     name: json['name'] as String,
+    description: json['description'] as String,
     player: json['player'] as String,
     managerId: json['managerId'] as String,
     isCurrentUserManager: json['isCurrentUserManager'] as bool,
@@ -23,17 +24,22 @@ Team _$TeamFromJson(Map<String, dynamic> json) {
     save: json['save'] as bool,
     update: json['update'] as bool,
     delete: json['delete'] as bool,
-  );
+  )
+    ..image = json['image'] as String
+    ..created = json['created'] as String;
 }
 
 Map<String, dynamic> _$TeamToJson(Team instance) => <String, dynamic>{
       'id': instance.id,
       'player': instance.player,
       'name': instance.name,
+      'description': instance.description,
+      'image': instance.image,
       'managerId': instance.managerId,
       'isCurrentUserManager': instance.isCurrentUserManager,
       'manager': instance.manager,
       'memberships': instance.players,
+      'created': instance.created,
       'save': instance.save,
       'update': instance.update,
       'delete': instance.delete,
