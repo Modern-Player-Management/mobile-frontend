@@ -45,8 +45,8 @@ abstract class PlayerApi extends ChopperService
 
 	// Players requests
 
-	@Get(path: "/api/users/search?search={username}")
-	Future<Response<List<Player>>> searchPlayers(@Path() String username);
+	@Get(path: "/api/users/search/")
+	Future<Response<List<Player>>> searchPlayers(@Query('search') String username);
 
 	@Get(path: "/api/users/{username}")
 	Future<Response<Player>> getPlayer(@Path() String username);
