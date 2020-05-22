@@ -44,6 +44,10 @@ class Team
 
 	bool save, update, delete;
 
+	@ignore
+	@JsonKey(ignore: true)
+	bool loaded = false;
+
   	Team({
 		this.id, 
 		this.name,
@@ -71,11 +75,11 @@ class Team
 		};
 	}
 
-	Future<void> load(String teamId) async
+	Future<void> load() async
 	{
 		var db = locator<AppDatabase>();
 
-		var teamPlayers = await db.teamPlayerDao.getTeamPlayers(teamId);
+		var teamPlayers = await db.teamPlayerDao.getTeamPlayers(id);
 		for(var teamPlayer in teamPlayers)
 		{
 			var player = await db.playerDao.getPlayer(teamPlayer.playerId);
@@ -88,5 +92,7 @@ class Team
 				players.add(player);
 			}
 		}
+
+		loaded = true;
 	}
 }
