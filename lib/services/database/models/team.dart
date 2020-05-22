@@ -30,7 +30,9 @@ class Team
 	// index
 	String player;
 
-	String name, managerId;
+	String name, description, image;
+
+	String managerId;
 
 	@ignore
 	bool isCurrentUserManager;
@@ -42,26 +44,26 @@ class Team
 	@JsonKey(name: "memberships")
 	List<Player> players;
 
-	bool save, update, delete;
+	String created;
 
-	@ignore
-	@JsonKey(ignore: true)
-	bool loaded = false;
+	bool save, update, delete;
 
   	Team({
 		this.id, 
 		this.name,
+		this.description,
 		this.player,
 		String managerId,
 		this.isCurrentUserManager,
 		Player manager,
-		this.players = const [],
+		List<Player> players,
 		bool save = false,
 		bool update = false,
 		bool delete = false,
 	}) : 
 		this.managerId = managerId ?? manager?.id,
 		this.manager = manager,
+		this.players = players ?? [],
 		this.save = save ?? false,
 		this.update = update ?? false,
 		this.delete = delete ?? false;
@@ -72,27 +74,8 @@ class Team
 	{
 		return {
 			"name": name,
+			"description": description,
+			"image": image
 		};
-	}
-
-	Future<void> load() async
-	{
-		var db = locator<AppDatabase>();
-
-		var teamPlayers = await db.teamPlayerDao.getTeamPlayers(id);
-		for(var teamPlayer in teamPlayers)
-		{
-			var player = await db.playerDao.getPlayer(teamPlayer.playerId);
-			if(teamPlayer.playerId == managerId)
-			{
-				manager = player;
-			}
-			else
-			{
-				players.add(player);
-			}
-		}
-
-		loaded = true;
 	}
 }
