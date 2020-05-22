@@ -11,6 +11,7 @@ class Session
 
 	TeamManager _teamManager;
 	bool redirect = false;
+	bool online = false;
 
 	Session()
 	{
