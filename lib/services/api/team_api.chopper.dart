@@ -32,11 +32,11 @@ class _$TeamApi extends TeamApi {
   }
 
   @override
-  Future<Response<Team>> updateTeam(String teamId, Team team) {
+  Future<Response<dynamic>> updateTeam(String teamId, Team team) {
     final $url = '/api/teams/$teamId';
     final $body = team;
     final $request = Request('PUT', $url, client.baseUrl, body: $body);
-    return client.send<Team, Team>($request);
+    return client.send<dynamic, dynamic>($request);
   }
 
   @override
@@ -48,9 +48,8 @@ class _$TeamApi extends TeamApi {
 
   @override
   Future<Response<Team>> addTeamPlayer(String teamId, String playerId) {
-    final $url = '/api/teams/{teamId}/player/{playerId}';
-    final $body = teamId;
-    final $request = Request('POST', $url, client.baseUrl, body: $body);
+    final $url = '/api/teams/$teamId/player/$playerId';
+    final $request = Request('POST', $url, client.baseUrl);
     return client.send<Team, Team>($request);
   }
 
@@ -63,7 +62,7 @@ class _$TeamApi extends TeamApi {
 
   @override
   Future<Response<Team>> addEvent(String teamId, Event event) {
-    final $url = '/api/teams/{teamId}/events';
+    final $url = '/api/teams/$teamId/events';
     final $body = event;
     final $request = Request('POST', $url, client.baseUrl, body: $body);
     return client.send<Team, Team>($request);
