@@ -101,7 +101,7 @@ class _$AppDatabase extends AppDatabase {
         await database.execute(
             'CREATE TABLE IF NOT EXISTS `discrepancies` (`id` TEXT, `type` INTEGER, `reason` TEXT, `delayLength` INTEGER, `event` TEXT, `save` INTEGER, `update` INTEGER, `delete` INTEGER, PRIMARY KEY (`id`))');
         await database.execute(
-            'CREATE TABLE IF NOT EXISTS `events_discrepancies` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `eventId` TEXT, `discrepancyId` TEXT, `save` INTEGER, `delete` INTEGER, FOREIGN KEY (`eventId`) REFERENCES `events` (`id`) ON UPDATE NO ACTION ON DELETE NO ACTION, FOREIGN KEY (`discrepancyId`) REFERENCES `discrepancies` (`id`) ON UPDATE NO ACTION ON DELETE NO ACTION)');
+            'CREATE TABLE IF NOT EXISTS `events_discrepancies` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `eventId` TEXT, `discrepancyId` TEXT, `confirmed` INTEGER, `save` INTEGER, `delete` INTEGER, FOREIGN KEY (`eventId`) REFERENCES `events` (`id`) ON UPDATE NO ACTION ON DELETE NO ACTION, FOREIGN KEY (`discrepancyId`) REFERENCES `discrepancies` (`id`) ON UPDATE NO ACTION ON DELETE NO ACTION)');
         await database
             .execute('CREATE INDEX `index_teams_player` ON `teams` (`player`)');
 
@@ -549,6 +549,7 @@ class _$EventDao extends EventDao {
       end: row['end'] as String,
       title: row['title'] as String,
       description: row['description'] as String,
+      type: row['type'] as int,
       save: (row['save'] as int) != 0,
       update: (row['update'] as int) != 0,
       delete: (row['delete'] as int) != 0);
@@ -737,6 +738,7 @@ class _$EventDiscrepancyDao extends EventDiscrepancyDao {
                   'id': item.id,
                   'eventId': item.eventId,
                   'discrepancyId': item.discrepancyId,
+                  'confirmed': item.confirmed,
                   'save': item.save ? 1 : 0,
                   'delete': item.delete ? 1 : 0
                 }),
@@ -748,6 +750,7 @@ class _$EventDiscrepancyDao extends EventDiscrepancyDao {
                   'id': item.id,
                   'eventId': item.eventId,
                   'discrepancyId': item.discrepancyId,
+                  'confirmed': item.confirmed,
                   'save': item.save ? 1 : 0,
                   'delete': item.delete ? 1 : 0
                 }),
@@ -759,6 +762,7 @@ class _$EventDiscrepancyDao extends EventDiscrepancyDao {
                   'id': item.id,
                   'eventId': item.eventId,
                   'discrepancyId': item.discrepancyId,
+                  'confirmed': item.confirmed,
                   'save': item.save ? 1 : 0,
                   'delete': item.delete ? 1 : 0
                 });
@@ -774,6 +778,7 @@ class _$EventDiscrepancyDao extends EventDiscrepancyDao {
           id: row['id'] as int,
           eventId: row['eventId'] as String,
           discrepancyId: row['discrepancyId'] as String,
+          confirmed: row['confirmed'] as int,
           save: (row['save'] as int) != 0,
           delete: (row['delete'] as int) != 0);
 
