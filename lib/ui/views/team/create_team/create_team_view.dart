@@ -29,6 +29,7 @@ class CreateTeamView extends ViewModelBuilderWidget<CreateTeamViewModel>
 							_ImagePicker(),
 							SizedBox(height: 8),
 							_NameTextField(),
+							_DescriptionTextField(),
 						],
 					),
 				),

@@ -10,6 +10,7 @@ import 'package:mpm/app/locator.dart';
 
 class CreateTeamViewModel extends BaseViewModel
 {
+	final _storage = locator<SecureStorage>();
 	final _teamManager = locator<TeamManager>();
 
 	final _minCharacters = 3;
@@ -60,6 +61,7 @@ class CreateTeamViewModel extends BaseViewModel
 		if(formKey.currentState.validate())
 		{
 			formKey.currentState.save();
+			team.managerId = _storage.player;
 			
 			_teamManager.insertTeam(team);
 		}
