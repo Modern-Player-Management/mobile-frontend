@@ -1,6 +1,6 @@
 import 'package:floor/floor.dart';
-import 'package:mpm/app/locator.dart';
 
+import 'package:mpm/app/locator.dart';
 import 'package:mpm/services/database/models/models.dart';
 
 @Entity(
