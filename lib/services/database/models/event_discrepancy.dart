@@ -26,12 +26,15 @@ class EventDiscrepancy
 	final String eventId;
 	final String discrepancyId;
 
+	int confirmed;
+
 	bool save, delete;
 
   	EventDiscrepancy({
 		this.id, 
 		this.eventId, 
 		this.discrepancyId,
+		this.confirmed,
 		bool save = false,
 		bool delete = false,
 	}) : 
