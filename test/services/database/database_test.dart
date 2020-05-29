@@ -35,14 +35,14 @@ void delete_team_with_two_events() async
 	final event1 = Event(
 		id: "1",
 		team: teamId,
-		title: "test",
+		name: "test",
 		description: "test"
 	);
 
 	final event2 = Event(
 		id: "2",
 		team: teamId,
-		title: "test",
+		name: "test",
 		description: "test"
 	);
 

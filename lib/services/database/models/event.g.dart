@@ -12,7 +12,7 @@ Event _$EventFromJson(Map<String, dynamic> json) {
     team: json['team'] as String,
     start: json['start'] as String,
     end: json['end'] as String,
-    title: json['title'] as String,
+    name: json['name'] as String,
     description: json['description'] as String,
     type: json['type'] as int,
     participations: (json['participations'] as List)
@@ -32,7 +32,7 @@ Map<String, dynamic> _$EventToJson(Event instance) => <String, dynamic>{
       'team': instance.team,
       'start': instance.start,
       'end': instance.end,
-      'title': instance.title,
+      'name': instance.name,
       'description': instance.description,
       'type': instance.type,
       'participations': instance.participations,

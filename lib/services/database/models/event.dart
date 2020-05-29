@@ -27,7 +27,7 @@ class Event
 	String team;
 
 	String start, end;
-	String title, description; 
+	String name, description; 
 
 	int type;
 
@@ -49,7 +49,7 @@ class Event
 		this.team,
 		this.start, 
 		this.end,
-		this.title, 
+		this.name, 
 		this.description,
 		this.type,
 		this.participations,
@@ -69,8 +69,9 @@ class Event
 		return {
 			"start": start,
 			"end": end,
-			"title": title,
-			"description": description
+			"name": name,
+			"description": description,
+			"type": type
 		};
 	}
 }
