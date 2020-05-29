@@ -18,6 +18,8 @@ part 'database.g.dart';
 	Player,
 	TeamPlayer,
 	Event,
+	Discrepancy,
+	EventDiscrepancy,
 ], version: 1)
 @singleton
 abstract class AppDatabase extends FloorDatabase 
@@ -26,6 +28,8 @@ abstract class AppDatabase extends FloorDatabase
 	PlayerDao get playerDao;
 	TeamPlayerDao get teamPlayerDao;
 	EventDao get eventDao;
+	DiscrepancyDao get discrepancyDao;
+	EventDiscrepancyDao get eventDiscrepancyDao;
 
 	@factoryMethod
 	static Future<AppDatabase> create() async 
