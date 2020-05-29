@@ -36,7 +36,7 @@ Future<Event> insert_event() async
 	final event = Event(
 		id: "id",
 		team: teamId,
-		title: "title",
+		name: "title",
 		description: "description"
 	);
 
@@ -60,14 +60,14 @@ void update_event() async
 {
 	final event = await insert_event();
 
-	event.title = "test";
+	event.name = "test";
 	int rows = await _db.eventDao.updateEvent(event);
 
 	expect(rows, equals(1));
 
 	final events = await _db.eventDao.getEvents(teamId).first;
 
-	expect(events[0].title, equals("test"));
+	expect(events[0].name, equals("test"));
 }
 
 void delete_event() async
