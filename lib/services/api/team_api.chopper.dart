@@ -60,4 +60,12 @@ class _$TeamApi extends TeamApi {
     final $request = Request('DELETE', $url, client.baseUrl);
     return client.send<dynamic, dynamic>($request);
   }
+
+  @override
+  Future<Response<Team>> addEvent(String teamId, Event event) {
+    final $url = '/api/teams/{teamId}/events';
+    final $body = event;
+    final $request = Request('POST', $url, client.baseUrl, body: $body);
+    return client.send<Team, Team>($request);
+  }
 }

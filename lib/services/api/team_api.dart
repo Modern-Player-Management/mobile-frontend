@@ -8,6 +8,7 @@ import 'package:injectable/injectable.dart';
 
 import 'package:mpm/app/locator.dart';
 import 'package:mpm/services/api/converters/json_serializable_converter.dart';
+import 'package:mpm/services/api/models/participation.dart';
 import 'package:mpm/utils/utils.dart';
 
 part 'team_api.chopper.dart';
@@ -20,24 +21,33 @@ abstract class TeamApi extends ChopperService
 	static TeamApi create() => createWith();
 
 	@factoryMethod
-	static TeamApi createWith([http.BaseClient client])
+	static TeamApi createWith([http.BaseClient client, bool test = false])
 	{
 		return _$TeamApi(ChopperClient(
-			client: IOClient(
+			client: client ?? IOClient(
 				HttpClient()..connectionTimeout = const Duration(seconds: 4),
 			),
 			baseUrl: serverUrl,
 			converter: JsonSerializableConverter({
 				Team: Team.fromJson,
 				Player: Player.fromJson,
-				Event: Event.fromJson
+				Event: Event.fromJson,
+				Participation: Participation.fromJson
 			}),
 			interceptors: [
-				(Request request) {
-					final headers = Map<String, String>.from(request.headers);
-					var token = GetIt.instance<SecureStorage>().token;
-					headers['Authorization'] = 'Bearer $token';
-					return request.copyWith(headers: headers);
+				(Request request) 
+				{
+					if(test)
+					{
+						return request;
+					}
+					else
+					{
+						final headers = Map<String, String>.from(request.headers);
+						var token = GetIt.instance<SecureStorage>().token;
+						headers['Authorization'] = 'Bearer $token';
+						return request.copyWith(headers: headers);
+					}
 				}
 			]
 		));
@@ -62,4 +72,7 @@ abstract class TeamApi extends ChopperService
 
 	@Delete(path: "/api/teams/{teamId}/player/{playerId}")
 	Future<Response> deleteTeamPlayer(@Path() String teamId, @Path() String playerId);
+
+	@Post(path: "/api/teams/{teamId}/events")
+	Future<Response<Team>> addEvent(String teamId, @Body() Event event);
 }
