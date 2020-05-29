@@ -14,10 +14,7 @@ Event _$EventFromJson(Map<String, dynamic> json) {
     end: json['end'] as String,
     title: json['title'] as String,
     description: json['description'] as String,
-    save: json['save'] as bool,
-    update: json['update'] as bool,
-    delete: json['delete'] as bool,
-  );
+  )..type = json['type'] as int;
 }
 
 Map<String, dynamic> _$EventToJson(Event instance) => <String, dynamic>{
@@ -27,7 +24,5 @@ Map<String, dynamic> _$EventToJson(Event instance) => <String, dynamic>{
       'end': instance.end,
       'title': instance.title,
       'description': instance.description,
-      'save': instance.save,
-      'update': instance.update,
-      'delete': instance.delete,
+      'type': instance.type,
     };
