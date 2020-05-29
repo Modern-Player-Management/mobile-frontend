@@ -12,7 +12,9 @@ part 'team.g.dart';
 		ForeignKey(
 			childColumns: ['managerId'],
 			parentColumns: ['id'],
-			entity: Player
+			entity: Player,
+			onDelete: ForeignKeyAction.cascade,
+			onUpdate: ForeignKeyAction.cascade,
 		)
 	],
 	indices: [

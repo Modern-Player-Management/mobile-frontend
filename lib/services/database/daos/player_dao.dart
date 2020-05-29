@@ -12,7 +12,7 @@ abstract class PlayerDao
 	Future<Player> getPlayer(String id);
 
 	@Insert(
-		onConflict: OnConflictStrategy.REPLACE
+		onConflict: OnConflictStrategy.replace
 	)
 	Future<int> insertPlayer(Player player);
 

@@ -21,7 +21,7 @@ abstract class TeamPlayerDao
 	Future<TeamPlayer> getTeamPlayer(String teamId, String playerId);
 
 	@Insert(
-		onConflict: OnConflictStrategy.REPLACE
+		onConflict: OnConflictStrategy.replace
 	)
 	Future<int> insertTeamPlayer(TeamPlayer teamPlayer);
 
