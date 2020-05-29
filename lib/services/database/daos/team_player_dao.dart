@@ -20,7 +20,9 @@ abstract class TeamPlayerDao
 	@Query('select * from teams_players where teamId = :teamId and playerId = :playerId')
 	Future<TeamPlayer> getTeamPlayer(String teamId, String playerId);
 
-	@insert
+	@Insert(
+		onConflict: OnConflictStrategy.REPLACE
+	)
 	Future<int> insertTeamPlayer(TeamPlayer teamPlayer);
 
 	@update
