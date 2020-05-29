@@ -18,7 +18,7 @@ abstract class EventDiscrepancyDao
 	Future<List<EventDiscrepancy>> getUndeletedEventDiscrepancies(String eventId);
 
 	@Insert(
-		onConflict: OnConflictStrategy.REPLACE
+		onConflict: OnConflictStrategy.replace
 	)
 	Future<int> insertEventDiscrepancy(EventDiscrepancy eventDiscrepancy);
 

@@ -18,7 +18,7 @@ abstract class TeamDao
 	Future<List<Team>> getUndeletedTeams(String player);
 
 	@Insert(
-		onConflict: OnConflictStrategy.REPLACE
+		onConflict: OnConflictStrategy.replace
 	)
 	Future<int> insertTeam(Team team);
 
