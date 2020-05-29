@@ -8,6 +8,7 @@ import 'package:injectable/injectable.dart';
 
 import 'package:mpm/app/locator.dart';
 import 'package:mpm/services/api/converters/json_serializable_converter.dart';
+import 'package:mpm/services/api/models/participation.dart';
 import 'package:mpm/utils/utils.dart';
 
 part 'player_api.chopper.dart';
@@ -30,7 +31,8 @@ abstract class PlayerApi extends ChopperService
 			converter: JsonSerializableConverter({
 				Team: Team.fromJson,
 				Player: Player.fromJson,
-				Event: Event.fromJson
+				Event: Event.fromJson,
+				Participation: Participation.fromJson
 			}),
 			interceptors: [
 				(Request request) {
