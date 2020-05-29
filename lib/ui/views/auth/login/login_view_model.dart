@@ -45,7 +45,7 @@ class LoginViewModel extends BaseViewModel
 				final res = await _authApi.authenticate(player.username, player.password);
 				if(res.isSuccessful)
 				{
-					_storage.player = res.body['username'];
+					_storage.player = res.body['id'];
 					_storage.token = res.body['token'];
 
 					_session.synchronize();
