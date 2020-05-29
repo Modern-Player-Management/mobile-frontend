@@ -42,12 +42,12 @@ class Session
 		if(isAuth)
 		{
 			_teamManager.syncTeams();
-			_navigation.replaceWith(Routes.homeViewRoute);
+			_navigation.pushNamedAndRemoveUntil(Routes.homeViewRoute, predicate: (route) => route == null);
 		}
 		else
 		{
 			await Future.delayed(Duration(seconds: 2));
-			_navigation.replaceWith(Routes.authViewRoute);
+			_navigation.pushNamedAndRemoveUntil(Routes.authViewRoute, predicate: (route) => route == null);
 		}
 	}
 
