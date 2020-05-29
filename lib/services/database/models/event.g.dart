@@ -14,7 +14,17 @@ Event _$EventFromJson(Map<String, dynamic> json) {
     end: json['end'] as String,
     title: json['title'] as String,
     description: json['description'] as String,
-  )..type = json['type'] as int;
+    type: json['type'] as int,
+    participations: (json['participations'] as List)
+        ?.map((e) => e == null
+            ? null
+            : Participation.fromJson(e as Map<String, dynamic>))
+        ?.toList(),
+    discrepancies: (json['discrepancies'] as List)
+        ?.map((e) =>
+            e == null ? null : Discrepancy.fromJson(e as Map<String, dynamic>))
+        ?.toList(),
+  );
 }
 
 Map<String, dynamic> _$EventToJson(Event instance) => <String, dynamic>{
@@ -25,4 +35,6 @@ Map<String, dynamic> _$EventToJson(Event instance) => <String, dynamic>{
       'title': instance.title,
       'description': instance.description,
       'type': instance.type,
+      'participations': instance.participations,
+      'discrepancies': instance.discrepancies,
     };

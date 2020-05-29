@@ -2,6 +2,8 @@ import 'package:floor/floor.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 import 'package:mpm/services/database/models/team.dart';
+import 'package:mpm/services/api/models/participation.dart';
+import 'package:mpm/services/database/models/discrepancy.dart';
 
 part 'event.g.dart';
 
@@ -29,6 +31,12 @@ class Event
 
 	int type;
 
+	@ignore
+	List<Participation> participations;
+
+	@ignore
+	List<Discrepancy> discrepancies;
+
 	@JsonKey(ignore: true)
 	bool save;
 	@JsonKey(ignore: true)
@@ -43,6 +51,9 @@ class Event
 		this.end,
 		this.title, 
 		this.description,
+		this.type,
+		this.participations,
+		this.discrepancies,
 		bool save = false,
 		bool update = false,
 		bool delete = false
