@@ -11,6 +11,7 @@ export 'package:mpm/services/api/auth_api.dart';
 export 'package:mpm/services/api/team_api.dart';
 export 'package:mpm/services/api/player_api.dart';
 export 'package:mpm/services/api/event_api.dart';
+export 'package:mpm/services/api/file_api.dart';
 
 export 'package:mpm/services/secure_storage.dart';
 export 'package:mpm/services/session.dart';
