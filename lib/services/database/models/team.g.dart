@@ -21,9 +21,6 @@ Team _$TeamFromJson(Map<String, dynamic> json) {
         ?.map((e) =>
             e == null ? null : Player.fromJson(e as Map<String, dynamic>))
         ?.toList(),
-    save: json['save'] as bool,
-    update: json['update'] as bool,
-    delete: json['delete'] as bool,
   )
     ..image = json['image'] as String
     ..created = json['created'] as String;
@@ -40,7 +37,4 @@ Map<String, dynamic> _$TeamToJson(Team instance) => <String, dynamic>{
       'manager': instance.manager,
       'memberships': instance.players,
       'created': instance.created,
-      'save': instance.save,
-      'update': instance.update,
-      'delete': instance.delete,
     };

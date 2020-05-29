@@ -27,7 +27,14 @@ class Event
 	String start, end;
 	String title, description; 
 
-	bool save, update, delete;
+	int type;
+
+	@JsonKey(ignore: true)
+	bool save;
+	@JsonKey(ignore: true)
+	bool update;
+	@JsonKey(ignore: true)
+	bool delete;
 
   	Event({
 		this.id, 

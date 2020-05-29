@@ -1,7 +1,7 @@
 import 'package:floor/floor.dart';
 import 'package:json_annotation/json_annotation.dart';
-import 'package:mpm/app/locator.dart';
 
+import 'package:mpm/app/locator.dart';
 import 'package:mpm/services/database/models/player.dart';
 
 part 'team.g.dart';
@@ -46,7 +46,12 @@ class Team
 
 	String created;
 
-	bool save, update, delete;
+	@JsonKey(ignore: true)
+	bool save;
+	@JsonKey(ignore: true)
+	bool update;
+	@JsonKey(ignore: true)
+	bool delete;
 
   	Team({
 		this.id, 
