@@ -18,7 +18,7 @@ abstract class EventDao
 	Future<List<Event>> getUndeletedEvents(String team);
 
 	@Insert(
-		onConflict: OnConflictStrategy.REPLACE
+		onConflict: OnConflictStrategy.replace
 	)
 	Future<int> insertEvent(Event event);
 

@@ -14,7 +14,8 @@ part 'event.g.dart';
 			childColumns: ['team'],
 			parentColumns: ['id'],
 			entity: Team,
-			onDelete: ForeignKeyAction.CASCADE
+			onDelete: ForeignKeyAction.cascade,
+			onUpdate: ForeignKeyAction.cascade,
 		)
 	]
 )

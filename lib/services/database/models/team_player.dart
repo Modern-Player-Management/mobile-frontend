@@ -9,12 +9,16 @@ import 'package:mpm/services/database/models/models.dart';
 		ForeignKey(
 			childColumns: ['teamId'],
 			parentColumns: ['id'],
-			entity: Team
+			entity: Team,
+			onDelete: ForeignKeyAction.cascade,
+			onUpdate: ForeignKeyAction.cascade,
 		),
 		ForeignKey(
 			childColumns: ['playerId'],
 			parentColumns: ['id'],
-			entity: Player
+			entity: Player,
+			onDelete: ForeignKeyAction.cascade,
+			onUpdate: ForeignKeyAction.cascade,
 		),
 	]
 )
