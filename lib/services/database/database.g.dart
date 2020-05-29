@@ -97,7 +97,7 @@ class _$AppDatabase extends AppDatabase {
         await database.execute(
             'CREATE TABLE IF NOT EXISTS `teams_players` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `teamId` TEXT, `playerId` TEXT, `save` INTEGER, `delete` INTEGER, FOREIGN KEY (`teamId`) REFERENCES `teams` (`id`) ON UPDATE NO ACTION ON DELETE NO ACTION, FOREIGN KEY (`playerId`) REFERENCES `players` (`id`) ON UPDATE NO ACTION ON DELETE NO ACTION)');
         await database.execute(
-            'CREATE TABLE IF NOT EXISTS `events` (`id` TEXT, `team` TEXT, `start` TEXT, `end` TEXT, `title` TEXT, `description` TEXT, `type` INTEGER, `save` INTEGER, `update` INTEGER, `delete` INTEGER, FOREIGN KEY (`team`) REFERENCES `teams` (`id`) ON UPDATE NO ACTION ON DELETE CASCADE, PRIMARY KEY (`id`))');
+            'CREATE TABLE IF NOT EXISTS `events` (`id` TEXT, `team` TEXT, `start` TEXT, `end` TEXT, `name` TEXT, `description` TEXT, `type` INTEGER, `save` INTEGER, `update` INTEGER, `delete` INTEGER, FOREIGN KEY (`team`) REFERENCES `teams` (`id`) ON UPDATE NO ACTION ON DELETE CASCADE, PRIMARY KEY (`id`))');
         await database.execute(
             'CREATE TABLE IF NOT EXISTS `discrepancies` (`id` TEXT, `type` INTEGER, `reason` TEXT, `delayLength` INTEGER, `event` TEXT, `save` INTEGER, `update` INTEGER, `delete` INTEGER, PRIMARY KEY (`id`))');
         await database.execute(
@@ -207,6 +207,7 @@ class _$TeamDao extends TeamDao {
       id: row['id'] as String,
       name: row['name'] as String,
       description: row['description'] as String,
+      image: row['image'] as String,
       player: row['player'] as String,
       managerId: row['managerId'] as String,
       save: (row['save'] as int) != 0,
@@ -493,7 +494,7 @@ class _$EventDao extends EventDao {
                   'team': item.team,
                   'start': item.start,
                   'end': item.end,
-                  'title': item.title,
+                  'name': item.name,
                   'description': item.description,
                   'type': item.type,
                   'save': item.save ? 1 : 0,
@@ -510,7 +511,7 @@ class _$EventDao extends EventDao {
                   'team': item.team,
                   'start': item.start,
                   'end': item.end,
-                  'title': item.title,
+                  'name': item.name,
                   'description': item.description,
                   'type': item.type,
                   'save': item.save ? 1 : 0,
@@ -527,7 +528,7 @@ class _$EventDao extends EventDao {
                   'team': item.team,
                   'start': item.start,
                   'end': item.end,
-                  'title': item.title,
+                  'name': item.name,
                   'description': item.description,
                   'type': item.type,
                   'save': item.save ? 1 : 0,
@@ -547,7 +548,7 @@ class _$EventDao extends EventDao {
       team: row['team'] as String,
       start: row['start'] as String,
       end: row['end'] as String,
-      title: row['title'] as String,
+      name: row['name'] as String,
       description: row['description'] as String,
       type: row['type'] as int,
       save: (row['save'] as int) != 0,
