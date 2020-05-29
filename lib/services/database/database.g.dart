@@ -68,6 +68,10 @@ class _$AppDatabase extends AppDatabase {
 
   EventDao _eventDaoInstance;
 
+  DiscrepancyDao _discrepancyDaoInstance;
+
+  EventDiscrepancyDao _eventDiscrepancyDaoInstance;
+
   Future<sqflite.Database> open(String path, List<Migration> migrations,
       [Callback callback]) async {
     return sqflite.openDatabase(
@@ -93,7 +97,11 @@ class _$AppDatabase extends AppDatabase {
         await database.execute(
             'CREATE TABLE IF NOT EXISTS `teams_players` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `teamId` TEXT, `playerId` TEXT, `save` INTEGER, `delete` INTEGER, FOREIGN KEY (`teamId`) REFERENCES `teams` (`id`) ON UPDATE NO ACTION ON DELETE NO ACTION, FOREIGN KEY (`playerId`) REFERENCES `players` (`id`) ON UPDATE NO ACTION ON DELETE NO ACTION)');
         await database.execute(
-            'CREATE TABLE IF NOT EXISTS `events` (`id` TEXT, `team` TEXT, `start` TEXT, `end` TEXT, `title` TEXT, `description` TEXT, `save` INTEGER, `update` INTEGER, `delete` INTEGER, FOREIGN KEY (`team`) REFERENCES `teams` (`id`) ON UPDATE NO ACTION ON DELETE CASCADE, PRIMARY KEY (`id`))');
+            'CREATE TABLE IF NOT EXISTS `events` (`id` TEXT, `team` TEXT, `start` TEXT, `end` TEXT, `title` TEXT, `description` TEXT, `type` INTEGER, `save` INTEGER, `update` INTEGER, `delete` INTEGER, FOREIGN KEY (`team`) REFERENCES `teams` (`id`) ON UPDATE NO ACTION ON DELETE CASCADE, PRIMARY KEY (`id`))');
+        await database.execute(
+            'CREATE TABLE IF NOT EXISTS `discrepancies` (`id` TEXT, `type` INTEGER, `reason` TEXT, `delayLength` INTEGER, `event` TEXT, `save` INTEGER, `update` INTEGER, `delete` INTEGER, PRIMARY KEY (`id`))');
+        await database.execute(
+            'CREATE TABLE IF NOT EXISTS `events_discrepancies` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `eventId` TEXT, `discrepancyId` TEXT, `save` INTEGER, `delete` INTEGER, FOREIGN KEY (`eventId`) REFERENCES `events` (`id`) ON UPDATE NO ACTION ON DELETE NO ACTION, FOREIGN KEY (`discrepancyId`) REFERENCES `discrepancies` (`id`) ON UPDATE NO ACTION ON DELETE NO ACTION)');
         await database
             .execute('CREATE INDEX `index_teams_player` ON `teams` (`player`)');
 
@@ -120,6 +128,18 @@ class _$AppDatabase extends AppDatabase {
   @override
   EventDao get eventDao {
     return _eventDaoInstance ??= _$EventDao(database, changeListener);
+  }
+
+  @override
+  DiscrepancyDao get discrepancyDao {
+    return _discrepancyDaoInstance ??=
+        _$DiscrepancyDao(database, changeListener);
+  }
+
+  @override
+  EventDiscrepancyDao get eventDiscrepancyDao {
+    return _eventDiscrepancyDaoInstance ??=
+        _$EventDiscrepancyDao(database, changeListener);
   }
 }
 
@@ -447,7 +467,7 @@ class _$TeamPlayerDao extends TeamPlayerDao {
   @override
   Future<int> insertTeamPlayer(TeamPlayer teamPlayer) {
     return _teamPlayerInsertionAdapter.insertAndReturnId(
-        teamPlayer, sqflite.ConflictAlgorithm.abort);
+        teamPlayer, sqflite.ConflictAlgorithm.replace);
   }
 
   @override
@@ -475,6 +495,7 @@ class _$EventDao extends EventDao {
                   'end': item.end,
                   'title': item.title,
                   'description': item.description,
+                  'type': item.type,
                   'save': item.save ? 1 : 0,
                   'update': item.update ? 1 : 0,
                   'delete': item.delete ? 1 : 0
@@ -491,6 +512,7 @@ class _$EventDao extends EventDao {
                   'end': item.end,
                   'title': item.title,
                   'description': item.description,
+                  'type': item.type,
                   'save': item.save ? 1 : 0,
                   'update': item.update ? 1 : 0,
                   'delete': item.delete ? 1 : 0
@@ -507,6 +529,7 @@ class _$EventDao extends EventDao {
                   'end': item.end,
                   'title': item.title,
                   'description': item.description,
+                  'type': item.type,
                   'save': item.save ? 1 : 0,
                   'update': item.update ? 1 : 0,
                   'delete': item.delete ? 1 : 0
@@ -584,5 +607,233 @@ class _$EventDao extends EventDao {
   @override
   Future<int> deleteEvent(Event event) {
     return _eventDeletionAdapter.deleteAndReturnChangedRows(event);
+  }
+}
+
+class _$DiscrepancyDao extends DiscrepancyDao {
+  _$DiscrepancyDao(this.database, this.changeListener)
+      : _queryAdapter = QueryAdapter(database, changeListener),
+        _discrepancyInsertionAdapter = InsertionAdapter(
+            database,
+            'discrepancies',
+            (Discrepancy item) => <String, dynamic>{
+                  'id': item.id,
+                  'type': item.type,
+                  'reason': item.reason,
+                  'delayLength': item.delayLength,
+                  'event': item.event,
+                  'save': item.save ? 1 : 0,
+                  'update': item.update ? 1 : 0,
+                  'delete': item.delete ? 1 : 0
+                },
+            changeListener),
+        _discrepancyUpdateAdapter = UpdateAdapter(
+            database,
+            'discrepancies',
+            ['id'],
+            (Discrepancy item) => <String, dynamic>{
+                  'id': item.id,
+                  'type': item.type,
+                  'reason': item.reason,
+                  'delayLength': item.delayLength,
+                  'event': item.event,
+                  'save': item.save ? 1 : 0,
+                  'update': item.update ? 1 : 0,
+                  'delete': item.delete ? 1 : 0
+                },
+            changeListener),
+        _discrepancyDeletionAdapter = DeletionAdapter(
+            database,
+            'discrepancies',
+            ['id'],
+            (Discrepancy item) => <String, dynamic>{
+                  'id': item.id,
+                  'type': item.type,
+                  'reason': item.reason,
+                  'delayLength': item.delayLength,
+                  'event': item.event,
+                  'save': item.save ? 1 : 0,
+                  'update': item.update ? 1 : 0,
+                  'delete': item.delete ? 1 : 0
+                },
+            changeListener);
+
+  final sqflite.DatabaseExecutor database;
+
+  final StreamController<String> changeListener;
+
+  final QueryAdapter _queryAdapter;
+
+  static final _discrepanciesMapper = (Map<String, dynamic> row) => Discrepancy(
+      id: row['id'] as String,
+      save: (row['save'] as int) != 0,
+      update: (row['update'] as int) != 0,
+      delete: (row['delete'] as int) != 0);
+
+  final InsertionAdapter<Discrepancy> _discrepancyInsertionAdapter;
+
+  final UpdateAdapter<Discrepancy> _discrepancyUpdateAdapter;
+
+  final DeletionAdapter<Discrepancy> _discrepancyDeletionAdapter;
+
+  @override
+  Stream<List<Discrepancy>> getDiscrepancies(String eventId) {
+    return _queryAdapter.queryListStream(
+        'select * from discrepancies where eventId = ? and `delete` = 0',
+        arguments: <dynamic>[eventId],
+        tableName: 'discrepancies',
+        mapper: _discrepanciesMapper);
+  }
+
+  @override
+  Future<List<Discrepancy>> getSavedDiscrepancies(String eventId) async {
+    return _queryAdapter.queryList(
+        'select * from discrepancies where eventId = ? and save = 1 and `delete` = 0',
+        arguments: <dynamic>[eventId],
+        mapper: _discrepanciesMapper);
+  }
+
+  @override
+  Future<List<Discrepancy>> getUnsavedDiscrepancies(String eventId) async {
+    return _queryAdapter.queryList(
+        'select * from discrepancies where eventId = ? and save = 0 and `delete` = 0',
+        arguments: <dynamic>[eventId],
+        mapper: _discrepanciesMapper);
+  }
+
+  @override
+  Future<List<Discrepancy>> getUndeletedDiscrepancies(String eventId) async {
+    return _queryAdapter.queryList(
+        'select * from discrepancies where eventId = ? and `delete` = 1',
+        arguments: <dynamic>[eventId],
+        mapper: _discrepanciesMapper);
+  }
+
+  @override
+  Future<int> insertDiscrepancy(Discrepancy discrepancy) {
+    return _discrepancyInsertionAdapter.insertAndReturnId(
+        discrepancy, sqflite.ConflictAlgorithm.replace);
+  }
+
+  @override
+  Future<int> updateDiscrepancy(Discrepancy discrepancy) {
+    return _discrepancyUpdateAdapter.updateAndReturnChangedRows(
+        discrepancy, sqflite.ConflictAlgorithm.abort);
+  }
+
+  @override
+  Future<int> deleteDiscrepancy(Discrepancy discrepancy) {
+    return _discrepancyDeletionAdapter.deleteAndReturnChangedRows(discrepancy);
+  }
+}
+
+class _$EventDiscrepancyDao extends EventDiscrepancyDao {
+  _$EventDiscrepancyDao(this.database, this.changeListener)
+      : _queryAdapter = QueryAdapter(database),
+        _eventDiscrepancyInsertionAdapter = InsertionAdapter(
+            database,
+            'events_discrepancies',
+            (EventDiscrepancy item) => <String, dynamic>{
+                  'id': item.id,
+                  'eventId': item.eventId,
+                  'discrepancyId': item.discrepancyId,
+                  'save': item.save ? 1 : 0,
+                  'delete': item.delete ? 1 : 0
+                }),
+        _eventDiscrepancyUpdateAdapter = UpdateAdapter(
+            database,
+            'events_discrepancies',
+            ['id'],
+            (EventDiscrepancy item) => <String, dynamic>{
+                  'id': item.id,
+                  'eventId': item.eventId,
+                  'discrepancyId': item.discrepancyId,
+                  'save': item.save ? 1 : 0,
+                  'delete': item.delete ? 1 : 0
+                }),
+        _eventDiscrepancyDeletionAdapter = DeletionAdapter(
+            database,
+            'events_discrepancies',
+            ['id'],
+            (EventDiscrepancy item) => <String, dynamic>{
+                  'id': item.id,
+                  'eventId': item.eventId,
+                  'discrepancyId': item.discrepancyId,
+                  'save': item.save ? 1 : 0,
+                  'delete': item.delete ? 1 : 0
+                });
+
+  final sqflite.DatabaseExecutor database;
+
+  final StreamController<String> changeListener;
+
+  final QueryAdapter _queryAdapter;
+
+  static final _events_discrepanciesMapper = (Map<String, dynamic> row) =>
+      EventDiscrepancy(
+          id: row['id'] as int,
+          eventId: row['eventId'] as String,
+          discrepancyId: row['discrepancyId'] as String,
+          save: (row['save'] as int) != 0,
+          delete: (row['delete'] as int) != 0);
+
+  final InsertionAdapter<EventDiscrepancy> _eventDiscrepancyInsertionAdapter;
+
+  final UpdateAdapter<EventDiscrepancy> _eventDiscrepancyUpdateAdapter;
+
+  final DeletionAdapter<EventDiscrepancy> _eventDiscrepancyDeletionAdapter;
+
+  @override
+  Future<EventDiscrepancy> getEventDiscrepancy(
+      String eventId, String playerId) async {
+    return _queryAdapter.query(
+        'select * from events_discrepancies where eventId = ? and playerId = ?',
+        arguments: <dynamic>[eventId, playerId],
+        mapper: _events_discrepanciesMapper);
+  }
+
+  @override
+  Future<List<EventDiscrepancy>> getSavedEventDiscrepancies(
+      String eventId) async {
+    return _queryAdapter.queryList(
+        'select * from events_discrepancies where eventId = ? and save = 1 and `delete` = 0',
+        arguments: <dynamic>[eventId],
+        mapper: _events_discrepanciesMapper);
+  }
+
+  @override
+  Future<List<EventDiscrepancy>> getUnsavedEventDiscrepancies(
+      String eventId) async {
+    return _queryAdapter.queryList(
+        'select * from events_discrepancies where eventId = ? and save = 0 and `delete` = 0',
+        arguments: <dynamic>[eventId],
+        mapper: _events_discrepanciesMapper);
+  }
+
+  @override
+  Future<List<EventDiscrepancy>> getUndeletedEventDiscrepancies(
+      String eventId) async {
+    return _queryAdapter.queryList(
+        'select * from events_discrepancies where eventId = ? and `delete` = 1',
+        arguments: <dynamic>[eventId],
+        mapper: _events_discrepanciesMapper);
+  }
+
+  @override
+  Future<int> insertEventDiscrepancy(EventDiscrepancy eventDiscrepancy) {
+    return _eventDiscrepancyInsertionAdapter.insertAndReturnId(
+        eventDiscrepancy, sqflite.ConflictAlgorithm.replace);
+  }
+
+  @override
+  Future<int> updateEventDiscrepancy(EventDiscrepancy eventDiscrepancy) {
+    return _eventDiscrepancyUpdateAdapter.updateAndReturnChangedRows(
+        eventDiscrepancy, sqflite.ConflictAlgorithm.abort);
+  }
+
+  @override
+  Future<int> deleteEventDiscrepancy(EventDiscrepancy eventDiscrepancy) {
+    return _eventDiscrepancyDeletionAdapter
+        .deleteAndReturnChangedRows(eventDiscrepancy);
   }
 }
