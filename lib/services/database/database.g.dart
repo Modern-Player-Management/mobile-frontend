@@ -43,7 +43,7 @@ class _$AppDatabaseBuilder {
   /// Creates the database and initializes it.
   Future<AppDatabase> build() async {
     final path = name != null
-        ? join(await sqflite.getDatabasesPath(), name)
+        ? await sqfliteDatabaseFactory.getDatabasePath(name)
         : ':memory:';
     final database = _$AppDatabase();
     database.database = await database.open(
@@ -74,8 +74,7 @@ class _$AppDatabase extends AppDatabase {
 
   Future<sqflite.Database> open(String path, List<Migration> migrations,
       [Callback callback]) async {
-    return sqflite.openDatabase(
-      path,
+    final databaseOptions = sqflite.OpenDatabaseOptions(
       version: 1,
       onConfigure: (database) async {
         await database.execute('PRAGMA foreign_keys = ON');
@@ -91,23 +90,24 @@ class _$AppDatabase extends AppDatabase {
       },
       onCreate: (database, version) async {
         await database.execute(
-            'CREATE TABLE IF NOT EXISTS `teams` (`id` TEXT, `player` TEXT, `name` TEXT, `description` TEXT, `image` TEXT, `managerId` TEXT, `created` TEXT, `save` INTEGER, `update` INTEGER, `delete` INTEGER, FOREIGN KEY (`managerId`) REFERENCES `players` (`id`) ON UPDATE NO ACTION ON DELETE NO ACTION, PRIMARY KEY (`id`))');
+            'CREATE TABLE IF NOT EXISTS `teams` (`id` TEXT, `player` TEXT, `name` TEXT, `description` TEXT, `image` TEXT, `managerId` TEXT, `created` TEXT, `save` INTEGER, `update` INTEGER, `delete` INTEGER, FOREIGN KEY (`managerId`) REFERENCES `players` (`id`) ON UPDATE CASCADE ON DELETE CASCADE, PRIMARY KEY (`id`))');
         await database.execute(
             'CREATE TABLE IF NOT EXISTS `players` (`id` TEXT, `username` TEXT, `email` TEXT, `created` TEXT, PRIMARY KEY (`id`))');
         await database.execute(
-            'CREATE TABLE IF NOT EXISTS `teams_players` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `teamId` TEXT, `playerId` TEXT, `save` INTEGER, `delete` INTEGER, FOREIGN KEY (`teamId`) REFERENCES `teams` (`id`) ON UPDATE NO ACTION ON DELETE NO ACTION, FOREIGN KEY (`playerId`) REFERENCES `players` (`id`) ON UPDATE NO ACTION ON DELETE NO ACTION)');
+            'CREATE TABLE IF NOT EXISTS `teams_players` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `teamId` TEXT, `playerId` TEXT, `save` INTEGER, `delete` INTEGER, FOREIGN KEY (`teamId`) REFERENCES `teams` (`id`) ON UPDATE CASCADE ON DELETE CASCADE, FOREIGN KEY (`playerId`) REFERENCES `players` (`id`) ON UPDATE CASCADE ON DELETE CASCADE)');
         await database.execute(
-            'CREATE TABLE IF NOT EXISTS `events` (`id` TEXT, `team` TEXT, `start` TEXT, `end` TEXT, `name` TEXT, `description` TEXT, `type` INTEGER, `save` INTEGER, `update` INTEGER, `delete` INTEGER, FOREIGN KEY (`team`) REFERENCES `teams` (`id`) ON UPDATE NO ACTION ON DELETE CASCADE, PRIMARY KEY (`id`))');
+            'CREATE TABLE IF NOT EXISTS `events` (`id` TEXT, `team` TEXT, `start` TEXT, `end` TEXT, `name` TEXT, `description` TEXT, `type` INTEGER, `save` INTEGER, `update` INTEGER, `delete` INTEGER, FOREIGN KEY (`team`) REFERENCES `teams` (`id`) ON UPDATE CASCADE ON DELETE CASCADE, PRIMARY KEY (`id`))');
         await database.execute(
             'CREATE TABLE IF NOT EXISTS `discrepancies` (`id` TEXT, `type` INTEGER, `reason` TEXT, `delayLength` INTEGER, `event` TEXT, `save` INTEGER, `update` INTEGER, `delete` INTEGER, PRIMARY KEY (`id`))');
         await database.execute(
-            'CREATE TABLE IF NOT EXISTS `events_discrepancies` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `eventId` TEXT, `discrepancyId` TEXT, `confirmed` INTEGER, `save` INTEGER, `delete` INTEGER, FOREIGN KEY (`eventId`) REFERENCES `events` (`id`) ON UPDATE NO ACTION ON DELETE NO ACTION, FOREIGN KEY (`discrepancyId`) REFERENCES `discrepancies` (`id`) ON UPDATE NO ACTION ON DELETE NO ACTION)');
+            'CREATE TABLE IF NOT EXISTS `events_discrepancies` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `eventId` TEXT, `discrepancyId` TEXT, `confirmed` INTEGER, `save` INTEGER, `delete` INTEGER, FOREIGN KEY (`eventId`) REFERENCES `events` (`id`) ON UPDATE CASCADE ON DELETE CASCADE, FOREIGN KEY (`discrepancyId`) REFERENCES `discrepancies` (`id`) ON UPDATE CASCADE ON DELETE CASCADE)');
         await database
             .execute('CREATE INDEX `index_teams_player` ON `teams` (`player`)');
 
         await callback?.onCreate?.call(database, version);
       },
     );
+    return sqfliteDatabaseFactory.openDatabase(path, options: databaseOptions);
   }
 
   @override
@@ -157,9 +157,9 @@ class _$TeamDao extends TeamDao {
                   'image': item.image,
                   'managerId': item.managerId,
                   'created': item.created,
-                  'save': item.save ? 1 : 0,
-                  'update': item.update ? 1 : 0,
-                  'delete': item.delete ? 1 : 0
+                  'save': item.save == null ? null : (item.save ? 1 : 0),
+                  'update': item.update == null ? null : (item.update ? 1 : 0),
+                  'delete': item.delete == null ? null : (item.delete ? 1 : 0)
                 },
             changeListener),
         _teamUpdateAdapter = UpdateAdapter(
@@ -174,9 +174,9 @@ class _$TeamDao extends TeamDao {
                   'image': item.image,
                   'managerId': item.managerId,
                   'created': item.created,
-                  'save': item.save ? 1 : 0,
-                  'update': item.update ? 1 : 0,
-                  'delete': item.delete ? 1 : 0
+                  'save': item.save == null ? null : (item.save ? 1 : 0),
+                  'update': item.update == null ? null : (item.update ? 1 : 0),
+                  'delete': item.delete == null ? null : (item.delete ? 1 : 0)
                 },
             changeListener),
         _teamDeletionAdapter = DeletionAdapter(
@@ -191,9 +191,9 @@ class _$TeamDao extends TeamDao {
                   'image': item.image,
                   'managerId': item.managerId,
                   'created': item.created,
-                  'save': item.save ? 1 : 0,
-                  'update': item.update ? 1 : 0,
-                  'delete': item.delete ? 1 : 0
+                  'save': item.save == null ? null : (item.save ? 1 : 0),
+                  'update': item.update == null ? null : (item.update ? 1 : 0),
+                  'delete': item.delete == null ? null : (item.delete ? 1 : 0)
                 },
             changeListener);
 
@@ -210,9 +210,9 @@ class _$TeamDao extends TeamDao {
       image: row['image'] as String,
       player: row['player'] as String,
       managerId: row['managerId'] as String,
-      save: (row['save'] as int) != 0,
-      update: (row['update'] as int) != 0,
-      delete: (row['delete'] as int) != 0);
+      save: row['save'] == null ? null : (row['save'] as int) != 0,
+      update: row['update'] == null ? null : (row['update'] as int) != 0,
+      delete: row['delete'] == null ? null : (row['delete'] as int) != 0);
 
   final InsertionAdapter<Team> _teamInsertionAdapter;
 
@@ -225,7 +225,8 @@ class _$TeamDao extends TeamDao {
     return _queryAdapter.queryListStream(
         'select * from teams where player = ? and `delete` = 0',
         arguments: <dynamic>[player],
-        tableName: 'teams',
+        queryableName: 'teams',
+        isView: false,
         mapper: _teamsMapper);
   }
 
@@ -256,20 +257,20 @@ class _$TeamDao extends TeamDao {
   @override
   Future<void> updateTeamId(String oldId, String newId, int save) async {
     await _queryAdapter.queryNoReturn(
-        'update teams set id = ? save = ? where id = ?',
+        'update teams set id = ?, save = ? where id = ?',
         arguments: <dynamic>[oldId, newId, save]);
   }
 
   @override
   Future<int> insertTeam(Team team) {
     return _teamInsertionAdapter.insertAndReturnId(
-        team, sqflite.ConflictAlgorithm.replace);
+        team, OnConflictStrategy.replace);
   }
 
   @override
   Future<int> updateTeam(Team team) {
     return _teamUpdateAdapter.updateAndReturnChangedRows(
-        team, sqflite.ConflictAlgorithm.abort);
+        team, OnConflictStrategy.abort);
   }
 
   @override
@@ -336,7 +337,8 @@ class _$PlayerDao extends PlayerDao {
     final valueList1 = ids.map((value) => "'$value'").join(', ');
     return _queryAdapter.queryListStream(
         'select * from players where id in ($valueList1)',
-        tableName: 'players',
+        queryableName: 'players',
+        isView: false,
         mapper: _playersMapper);
   }
 
@@ -355,13 +357,13 @@ class _$PlayerDao extends PlayerDao {
   @override
   Future<int> insertPlayer(Player player) {
     return _playerInsertionAdapter.insertAndReturnId(
-        player, sqflite.ConflictAlgorithm.replace);
+        player, OnConflictStrategy.replace);
   }
 
   @override
   Future<int> updatePlayer(Player player) {
     return _playerUpdateAdapter.updateAndReturnChangedRows(
-        player, sqflite.ConflictAlgorithm.abort);
+        player, OnConflictStrategy.abort);
   }
 
   @override
@@ -380,8 +382,8 @@ class _$TeamPlayerDao extends TeamPlayerDao {
                   'id': item.id,
                   'teamId': item.teamId,
                   'playerId': item.playerId,
-                  'save': item.save ? 1 : 0,
-                  'delete': item.delete ? 1 : 0
+                  'save': item.save == null ? null : (item.save ? 1 : 0),
+                  'delete': item.delete == null ? null : (item.delete ? 1 : 0)
                 }),
         _teamPlayerUpdateAdapter = UpdateAdapter(
             database,
@@ -391,8 +393,8 @@ class _$TeamPlayerDao extends TeamPlayerDao {
                   'id': item.id,
                   'teamId': item.teamId,
                   'playerId': item.playerId,
-                  'save': item.save ? 1 : 0,
-                  'delete': item.delete ? 1 : 0
+                  'save': item.save == null ? null : (item.save ? 1 : 0),
+                  'delete': item.delete == null ? null : (item.delete ? 1 : 0)
                 }),
         _teamPlayerDeletionAdapter = DeletionAdapter(
             database,
@@ -402,8 +404,8 @@ class _$TeamPlayerDao extends TeamPlayerDao {
                   'id': item.id,
                   'teamId': item.teamId,
                   'playerId': item.playerId,
-                  'save': item.save ? 1 : 0,
-                  'delete': item.delete ? 1 : 0
+                  'save': item.save == null ? null : (item.save ? 1 : 0),
+                  'delete': item.delete == null ? null : (item.delete ? 1 : 0)
                 });
 
   final sqflite.DatabaseExecutor database;
@@ -416,8 +418,8 @@ class _$TeamPlayerDao extends TeamPlayerDao {
       id: row['id'] as int,
       teamId: row['teamId'] as String,
       playerId: row['playerId'] as String,
-      save: (row['save'] as int) != 0,
-      delete: (row['delete'] as int) != 0);
+      save: row['save'] == null ? null : (row['save'] as int) != 0,
+      delete: row['delete'] == null ? null : (row['delete'] as int) != 0);
 
   final InsertionAdapter<TeamPlayer> _teamPlayerInsertionAdapter;
 
@@ -468,13 +470,13 @@ class _$TeamPlayerDao extends TeamPlayerDao {
   @override
   Future<int> insertTeamPlayer(TeamPlayer teamPlayer) {
     return _teamPlayerInsertionAdapter.insertAndReturnId(
-        teamPlayer, sqflite.ConflictAlgorithm.replace);
+        teamPlayer, OnConflictStrategy.replace);
   }
 
   @override
   Future<int> updateTeamPlayer(TeamPlayer teamPlayer) {
     return _teamPlayerUpdateAdapter.updateAndReturnChangedRows(
-        teamPlayer, sqflite.ConflictAlgorithm.abort);
+        teamPlayer, OnConflictStrategy.abort);
   }
 
   @override
@@ -497,9 +499,9 @@ class _$EventDao extends EventDao {
                   'name': item.name,
                   'description': item.description,
                   'type': item.type,
-                  'save': item.save ? 1 : 0,
-                  'update': item.update ? 1 : 0,
-                  'delete': item.delete ? 1 : 0
+                  'save': item.save == null ? null : (item.save ? 1 : 0),
+                  'update': item.update == null ? null : (item.update ? 1 : 0),
+                  'delete': item.delete == null ? null : (item.delete ? 1 : 0)
                 },
             changeListener),
         _eventUpdateAdapter = UpdateAdapter(
@@ -514,9 +516,9 @@ class _$EventDao extends EventDao {
                   'name': item.name,
                   'description': item.description,
                   'type': item.type,
-                  'save': item.save ? 1 : 0,
-                  'update': item.update ? 1 : 0,
-                  'delete': item.delete ? 1 : 0
+                  'save': item.save == null ? null : (item.save ? 1 : 0),
+                  'update': item.update == null ? null : (item.update ? 1 : 0),
+                  'delete': item.delete == null ? null : (item.delete ? 1 : 0)
                 },
             changeListener),
         _eventDeletionAdapter = DeletionAdapter(
@@ -531,9 +533,9 @@ class _$EventDao extends EventDao {
                   'name': item.name,
                   'description': item.description,
                   'type': item.type,
-                  'save': item.save ? 1 : 0,
-                  'update': item.update ? 1 : 0,
-                  'delete': item.delete ? 1 : 0
+                  'save': item.save == null ? null : (item.save ? 1 : 0),
+                  'update': item.update == null ? null : (item.update ? 1 : 0),
+                  'delete': item.delete == null ? null : (item.delete ? 1 : 0)
                 },
             changeListener);
 
@@ -551,9 +553,9 @@ class _$EventDao extends EventDao {
       name: row['name'] as String,
       description: row['description'] as String,
       type: row['type'] as int,
-      save: (row['save'] as int) != 0,
-      update: (row['update'] as int) != 0,
-      delete: (row['delete'] as int) != 0);
+      save: row['save'] == null ? null : (row['save'] as int) != 0,
+      update: row['update'] == null ? null : (row['update'] as int) != 0,
+      delete: row['delete'] == null ? null : (row['delete'] as int) != 0);
 
   final InsertionAdapter<Event> _eventInsertionAdapter;
 
@@ -566,7 +568,8 @@ class _$EventDao extends EventDao {
     return _queryAdapter.queryListStream(
         'select * from events where team = ? and `delete` = 0',
         arguments: <dynamic>[team],
-        tableName: 'events',
+        queryableName: 'events',
+        isView: false,
         mapper: _eventsMapper);
   }
 
@@ -597,13 +600,13 @@ class _$EventDao extends EventDao {
   @override
   Future<int> insertEvent(Event event) {
     return _eventInsertionAdapter.insertAndReturnId(
-        event, sqflite.ConflictAlgorithm.replace);
+        event, OnConflictStrategy.replace);
   }
 
   @override
   Future<int> updateEvent(Event event) {
     return _eventUpdateAdapter.updateAndReturnChangedRows(
-        event, sqflite.ConflictAlgorithm.abort);
+        event, OnConflictStrategy.abort);
   }
 
   @override
@@ -624,9 +627,9 @@ class _$DiscrepancyDao extends DiscrepancyDao {
                   'reason': item.reason,
                   'delayLength': item.delayLength,
                   'event': item.event,
-                  'save': item.save ? 1 : 0,
-                  'update': item.update ? 1 : 0,
-                  'delete': item.delete ? 1 : 0
+                  'save': item.save == null ? null : (item.save ? 1 : 0),
+                  'update': item.update == null ? null : (item.update ? 1 : 0),
+                  'delete': item.delete == null ? null : (item.delete ? 1 : 0)
                 },
             changeListener),
         _discrepancyUpdateAdapter = UpdateAdapter(
@@ -639,9 +642,9 @@ class _$DiscrepancyDao extends DiscrepancyDao {
                   'reason': item.reason,
                   'delayLength': item.delayLength,
                   'event': item.event,
-                  'save': item.save ? 1 : 0,
-                  'update': item.update ? 1 : 0,
-                  'delete': item.delete ? 1 : 0
+                  'save': item.save == null ? null : (item.save ? 1 : 0),
+                  'update': item.update == null ? null : (item.update ? 1 : 0),
+                  'delete': item.delete == null ? null : (item.delete ? 1 : 0)
                 },
             changeListener),
         _discrepancyDeletionAdapter = DeletionAdapter(
@@ -654,9 +657,9 @@ class _$DiscrepancyDao extends DiscrepancyDao {
                   'reason': item.reason,
                   'delayLength': item.delayLength,
                   'event': item.event,
-                  'save': item.save ? 1 : 0,
-                  'update': item.update ? 1 : 0,
-                  'delete': item.delete ? 1 : 0
+                  'save': item.save == null ? null : (item.save ? 1 : 0),
+                  'update': item.update == null ? null : (item.update ? 1 : 0),
+                  'delete': item.delete == null ? null : (item.delete ? 1 : 0)
                 },
             changeListener);
 
@@ -668,9 +671,9 @@ class _$DiscrepancyDao extends DiscrepancyDao {
 
   static final _discrepanciesMapper = (Map<String, dynamic> row) => Discrepancy(
       id: row['id'] as String,
-      save: (row['save'] as int) != 0,
-      update: (row['update'] as int) != 0,
-      delete: (row['delete'] as int) != 0);
+      save: row['save'] == null ? null : (row['save'] as int) != 0,
+      update: row['update'] == null ? null : (row['update'] as int) != 0,
+      delete: row['delete'] == null ? null : (row['delete'] as int) != 0);
 
   final InsertionAdapter<Discrepancy> _discrepancyInsertionAdapter;
 
@@ -683,7 +686,8 @@ class _$DiscrepancyDao extends DiscrepancyDao {
     return _queryAdapter.queryListStream(
         'select * from discrepancies where eventId = ? and `delete` = 0',
         arguments: <dynamic>[eventId],
-        tableName: 'discrepancies',
+        queryableName: 'discrepancies',
+        isView: false,
         mapper: _discrepanciesMapper);
   }
 
@@ -714,13 +718,13 @@ class _$DiscrepancyDao extends DiscrepancyDao {
   @override
   Future<int> insertDiscrepancy(Discrepancy discrepancy) {
     return _discrepancyInsertionAdapter.insertAndReturnId(
-        discrepancy, sqflite.ConflictAlgorithm.replace);
+        discrepancy, OnConflictStrategy.replace);
   }
 
   @override
   Future<int> updateDiscrepancy(Discrepancy discrepancy) {
     return _discrepancyUpdateAdapter.updateAndReturnChangedRows(
-        discrepancy, sqflite.ConflictAlgorithm.abort);
+        discrepancy, OnConflictStrategy.abort);
   }
 
   @override
@@ -740,8 +744,8 @@ class _$EventDiscrepancyDao extends EventDiscrepancyDao {
                   'eventId': item.eventId,
                   'discrepancyId': item.discrepancyId,
                   'confirmed': item.confirmed,
-                  'save': item.save ? 1 : 0,
-                  'delete': item.delete ? 1 : 0
+                  'save': item.save == null ? null : (item.save ? 1 : 0),
+                  'delete': item.delete == null ? null : (item.delete ? 1 : 0)
                 }),
         _eventDiscrepancyUpdateAdapter = UpdateAdapter(
             database,
@@ -752,8 +756,8 @@ class _$EventDiscrepancyDao extends EventDiscrepancyDao {
                   'eventId': item.eventId,
                   'discrepancyId': item.discrepancyId,
                   'confirmed': item.confirmed,
-                  'save': item.save ? 1 : 0,
-                  'delete': item.delete ? 1 : 0
+                  'save': item.save == null ? null : (item.save ? 1 : 0),
+                  'delete': item.delete == null ? null : (item.delete ? 1 : 0)
                 }),
         _eventDiscrepancyDeletionAdapter = DeletionAdapter(
             database,
@@ -764,8 +768,8 @@ class _$EventDiscrepancyDao extends EventDiscrepancyDao {
                   'eventId': item.eventId,
                   'discrepancyId': item.discrepancyId,
                   'confirmed': item.confirmed,
-                  'save': item.save ? 1 : 0,
-                  'delete': item.delete ? 1 : 0
+                  'save': item.save == null ? null : (item.save ? 1 : 0),
+                  'delete': item.delete == null ? null : (item.delete ? 1 : 0)
                 });
 
   final sqflite.DatabaseExecutor database;
@@ -780,8 +784,8 @@ class _$EventDiscrepancyDao extends EventDiscrepancyDao {
           eventId: row['eventId'] as String,
           discrepancyId: row['discrepancyId'] as String,
           confirmed: row['confirmed'] as int,
-          save: (row['save'] as int) != 0,
-          delete: (row['delete'] as int) != 0);
+          save: row['save'] == null ? null : (row['save'] as int) != 0,
+          delete: row['delete'] == null ? null : (row['delete'] as int) != 0);
 
   final InsertionAdapter<EventDiscrepancy> _eventDiscrepancyInsertionAdapter;
 
@@ -828,13 +832,13 @@ class _$EventDiscrepancyDao extends EventDiscrepancyDao {
   @override
   Future<int> insertEventDiscrepancy(EventDiscrepancy eventDiscrepancy) {
     return _eventDiscrepancyInsertionAdapter.insertAndReturnId(
-        eventDiscrepancy, sqflite.ConflictAlgorithm.replace);
+        eventDiscrepancy, OnConflictStrategy.replace);
   }
 
   @override
   Future<int> updateEventDiscrepancy(EventDiscrepancy eventDiscrepancy) {
     return _eventDiscrepancyUpdateAdapter.updateAndReturnChangedRows(
-        eventDiscrepancy, sqflite.ConflictAlgorithm.abort);
+        eventDiscrepancy, OnConflictStrategy.abort);
   }
 
   @override
