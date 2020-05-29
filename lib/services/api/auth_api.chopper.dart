@@ -39,10 +39,10 @@ class _$AuthApi extends AuthApi {
   }
 
   @override
-  Future<Response<String>> available(String username) {
+  Future<Response<Map<String, dynamic>>> available(String username) {
     final $url = '/available';
     final $body = <String, dynamic>{'username': username};
     final $request = Request('POST', $url, client.baseUrl, body: $body);
-    return client.send<String, String>($request);
+    return client.send<Map<String, dynamic>, Map<String, dynamic>>($request);
   }
 }

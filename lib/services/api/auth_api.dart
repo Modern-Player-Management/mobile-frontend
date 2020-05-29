@@ -32,5 +32,5 @@ abstract class AuthApi extends ChopperService
 	Future<Response<Map<String, dynamic>>> authenticate(@Field() String username, @Field() String password);
 
 	@Post(path: "/available")
-	Future<Response<String>> available(@Field() String username);
+	Future<Response<Map<String, dynamic>>> available(@Field() String username);
 }
