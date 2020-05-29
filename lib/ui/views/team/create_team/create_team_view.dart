@@ -107,9 +107,9 @@ class _DescriptionTextField extends HookViewModelWidget<CreateTeamViewModel>
 		return TextFormField(
 			initialValue: model.team.description,
 			decoration: InputDecoration(
-				labelText: "Name",
+				labelText: "Description",
 				prefixIcon: Icon(
-					Icons.title,
+					Icons.description,
 					size: 32,
 				),
 			),
