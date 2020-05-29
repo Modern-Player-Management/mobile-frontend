@@ -57,6 +57,7 @@ class Team
 		this.id, 
 		this.name,
 		this.description,
+		this.image,
 		this.player,
 		String managerId,
 		this.isCurrentUserManager,
