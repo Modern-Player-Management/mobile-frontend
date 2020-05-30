@@ -17,7 +17,7 @@ class HomeViewModel extends BaseViewModel
 
 	void createTeam()
 	{
-		_navigation.navigateTo(Routes.createTeamViewRoute);
+		_navigation.navigateTo(Routes.manageTeamViewRoute);
 	}
 }
 
