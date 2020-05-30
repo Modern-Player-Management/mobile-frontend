@@ -9,12 +9,6 @@ class HomeViewModel extends BaseViewModel
 	final _teamManager = locator<TeamManager>();
 	final _navigation = locator<NavigationService>();
 
-	final BuildContext context;
-
-	HomeViewModel({
-		@required this.context
-	});
-
 	Future<void> onRefresh() async
 	{
 		await _teamManager.syncTeams();
@@ -36,6 +30,7 @@ class TeamsViewModel extends StreamViewModel<List<Team>>
 class TeamViewModel extends FutureViewModel<void>
 {
 	final _db = locator<AppDatabase>();
+	final _navigation = locator<NavigationService>();
 
 	final Team team;
 	final List<Player> players = [];
@@ -56,9 +51,17 @@ class TeamViewModel extends FutureViewModel<void>
 		for(var teamPlayer in teamPlayers)
 		{
 			var player = await _db.playerDao.getPlayer(teamPlayer.playerId);
-			players.add(player);
+			if(player.id != manager.id)
+			{
+				players.add(player);
+			}
 		}
 
 		loaded = true;
+	}
+
+	void onTap()
+	{
+		//_navigation.navigateTo();
 	}
 }
