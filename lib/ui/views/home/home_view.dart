@@ -34,9 +34,7 @@ class HomeView extends ViewModelBuilderWidget<HomeViewModel>
 	@override
 	HomeViewModel viewModelBuilder(context)
 	{
-		return HomeViewModel(
-			context: context
-		);
+		return HomeViewModel();
 	}
 }
 
@@ -75,6 +73,12 @@ class _TeamView extends ViewModelBuilderWidget<TeamViewModel>
 	{
 		return Card(
 			child: ListTile(
+				leading: CircleAvatar(
+					child: Icon(
+						Icons.group,
+						size: 32,
+					),
+				),
 				title: Text(
 					team.name
 				),
@@ -86,6 +90,7 @@ class _TeamView extends ViewModelBuilderWidget<TeamViewModel>
 				Text(
 					"Players : ${model.players.length}"
 				) : null,
+				onTap: model.onTap,
 			),
 		);
 	}
