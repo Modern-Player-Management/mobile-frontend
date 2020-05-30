@@ -174,8 +174,22 @@ class TeamManager
 		}
 	}
 
-	Future<void> removeTeamPlayer(Team team, Player player) async
+	Future<void> removeTeamPlayer(TeamPlayer teamPlayer) async
 	{
-		
+		teamPlayer.delete = true;
+		await _teamPlayerDao.updateTeamPlayer(teamPlayer);
+
+		try
+		{
+			var res = await _api.deleteTeamPlayer(teamPlayer.teamId, teamPlayer.playerId);
+			if(validResponse(res))
+			{
+				await _teamPlayerDao.deleteTeamPlayer(teamPlayer);
+			}
+		}
+		catch(e)
+		{
+			print(e);
+		}
 	}
 }
