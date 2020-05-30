@@ -3,10 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked_hooks/stacked_hooks.dart';
 
-import 'package:mpm/ui/views/team/create_team/create_team_view_model.dart';
+import 'package:mpm/ui/views/team/manage/manage_team_view_model.dart';
 import 'package:mpm/ui/widgets/button.dart';
 
-class CreateTeamView extends ViewModelBuilderWidget<CreateTeamViewModel>
+class ManageTeamView extends ViewModelBuilderWidget<ManageTeamViewModel>
 {
 	@override
   	bool get reactive => false;
@@ -17,7 +17,7 @@ class CreateTeamView extends ViewModelBuilderWidget<CreateTeamViewModel>
 		return Scaffold(
 			appBar: AppBar(
 				title: Text(
-					"Create a team"
+					"Manage a team"
 				),
 			),
 			body: Padding(
@@ -37,22 +37,22 @@ class CreateTeamView extends ViewModelBuilderWidget<CreateTeamViewModel>
 			floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
 			floatingActionButton: Button(
 				child: Text(
-					"Create a team"
+					"Manage a team"
 				),
 				color: Colors.green,
-				onPressed: model.createTeam,
+				onPressed: model.manageTeam,
 			),
 		);
 	}
   
 	@override
-	CreateTeamViewModel viewModelBuilder(context)
+	ManageTeamViewModel viewModelBuilder(context)
 	{
-		return CreateTeamViewModel();
+		return ManageTeamViewModel();
 	}
 }
 
-class _ImagePicker extends HookViewModelWidget<CreateTeamViewModel>
+class _ImagePicker extends HookViewModelWidget<ManageTeamViewModel>
 {
 	@override
   	bool get reactive => false;
@@ -72,7 +72,7 @@ class _ImagePicker extends HookViewModelWidget<CreateTeamViewModel>
 	}
 }
 
-class _NameTextField extends HookViewModelWidget<CreateTeamViewModel>
+class _NameTextField extends HookViewModelWidget<ManageTeamViewModel>
 {
 	@override
   	bool get reactive => false;
@@ -96,7 +96,7 @@ class _NameTextField extends HookViewModelWidget<CreateTeamViewModel>
 	}
 }
 
-class _DescriptionTextField extends HookViewModelWidget<CreateTeamViewModel>
+class _DescriptionTextField extends HookViewModelWidget<ManageTeamViewModel>
 {
 	@override
   	bool get reactive => false;

@@ -12,7 +12,10 @@ import 'package:mpm/ui/views/auth/auth_view.dart';
 import 'package:mpm/ui/views/auth/login/login_view.dart';
 import 'package:mpm/ui/views/auth/register/register_view.dart';
 import 'package:mpm/ui/views/home/home_view.dart';
-import 'package:mpm/ui/views/team/create_team/create_team_view.dart';
+import 'package:mpm/ui/views/team/manage/manage_team_view.dart';
+import 'package:mpm/ui/views/player/player_view.dart';
+import 'package:mpm/services/database/models/player.dart';
+import 'package:mpm/ui/views/player/manage/manage_player_view.dart';
 
 abstract class Routes {
   static const splashViewRoute = '/';
@@ -20,14 +23,18 @@ abstract class Routes {
   static const loginViewRoute = '/login-view-route';
   static const registerViewRoute = '/register-view-route';
   static const homeViewRoute = '/home-view-route';
-  static const createTeamViewRoute = '/create-team-view-route';
+  static const manageTeamViewRoute = '/manage-team-view-route';
+  static const playerViewRoute = '/player-view-route';
+  static const managePlayerViewRoute = '/manage-player-view-route';
   static const all = {
     splashViewRoute,
     authViewRoute,
     loginViewRoute,
     registerViewRoute,
     homeViewRoute,
-    createTeamViewRoute,
+    manageTeamViewRoute,
+    playerViewRoute,
+    managePlayerViewRoute,
   };
 }
 
@@ -41,6 +48,7 @@ class Router extends RouterBase {
 
   @override
   Route<dynamic> onGenerateRoute(RouteSettings settings) {
+    final args = settings.arguments;
     switch (settings.name) {
       case Routes.splashViewRoute:
         return MaterialPageRoute<dynamic>(
@@ -67,13 +75,37 @@ class Router extends RouterBase {
           builder: (context) => HomeView(),
           settings: settings,
         );
-      case Routes.createTeamViewRoute:
+      case Routes.manageTeamViewRoute:
         return MaterialPageRoute<dynamic>(
-          builder: (context) => CreateTeamView(),
+          builder: (context) => ManageTeamView(),
+          settings: settings,
+        );
+      case Routes.playerViewRoute:
+        if (hasInvalidArgs<PlayerViewArguments>(args)) {
+          return misTypedArgsRoute<PlayerViewArguments>(args);
+        }
+        final typedArgs = args as PlayerViewArguments ?? PlayerViewArguments();
+        return MaterialPageRoute<dynamic>(
+          builder: (context) => PlayerView(player: typedArgs.player),
+          settings: settings,
+        );
+      case Routes.managePlayerViewRoute:
+        return MaterialPageRoute<dynamic>(
+          builder: (context) => ManagePlayerView(),
           settings: settings,
         );
       default:
         return unknownRoutePage(settings.name);
     }
   }
+}
+
+// *************************************************************************
+// Arguments holder classes
+// **************************************************************************
+
+//PlayerView arguments holder class
+class PlayerViewArguments {
+  final Player player;
+  PlayerViewArguments({this.player});
 }
