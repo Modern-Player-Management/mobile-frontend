@@ -1,22 +1,22 @@
 import 'dart:io';
 
-import 'package:flutter/material.dart';
-
-import 'package:permission_handler/permission_handler.dart';
 import 'package:file_picker/file_picker.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:stacked/stacked.dart';
 
 import 'package:mpm/app/locator.dart';
 
-class CreateTeamViewModel extends BaseViewModel
+class ManagePlayerViewModel extends BaseViewModel
 {
-	final _storage = locator<SecureStorage>();
-	final _teamManager = locator<TeamManager>();
+	final Player player;
+
+	ManagePlayerViewModel({
+		this.player
+	});
 
 	final _minCharacters = 3;
 	final formKey = GlobalKey<FormState>();
-
-	Team team = Team();
 
 	String nameValidator(String str)
 	{
@@ -56,14 +56,8 @@ class CreateTeamViewModel extends BaseViewModel
 		);
 	}
 
-	void createTeam()
+	void managePlayer()
 	{
-		if(formKey.currentState.validate())
-		{
-			formKey.currentState.save();
-			team.managerId = _storage.player;
-			
-			_teamManager.insertTeam(team);
-		}
+
 	}
 }
