@@ -38,7 +38,7 @@ class HomeView extends ViewModelBuilderWidget<HomeViewModel>
 	}
 }
 
-class _TeamsView extends ViewModelBuilderWidget<TeamsViewModel>
+class _TeamsView extends ViewModelBuilderWidget<HomeTeamsViewModel>
 {
 	@override
 	Widget builder(context, model, child)
@@ -54,13 +54,13 @@ class _TeamsView extends ViewModelBuilderWidget<TeamsViewModel>
 	}
 
 	@override
-	TeamsViewModel viewModelBuilder(context)
+	HomeTeamsViewModel viewModelBuilder(context)
 	{
-		return TeamsViewModel();
+		return HomeTeamsViewModel();
 	}
 }
 
-class _TeamView extends ViewModelBuilderWidget<TeamViewModel>
+class _TeamView extends ViewModelBuilderWidget<HomeTeamViewModel>
 {
 	final Team team;
 
@@ -96,9 +96,9 @@ class _TeamView extends ViewModelBuilderWidget<TeamViewModel>
 	}
 
 	@override
-	TeamViewModel viewModelBuilder(context)
+	HomeTeamViewModel viewModelBuilder(context)
 	{
-		return TeamViewModel(
+		return HomeTeamViewModel(
 			team: team
 		);
 	}
