@@ -7,20 +7,20 @@ import 'package:file_picker/file_picker.dart';
 import 'package:stacked/stacked.dart';
 
 import 'package:mpm/app/locator.dart';
+import 'package:mpm/utils/utils.dart';
 
 class ManageTeamViewModel extends BaseViewModel
 {
 	final _storage = locator<SecureStorage>();
 	final _teamManager = locator<TeamManager>();
 
-	final _minCharacters = 3;
 	final formKey = GlobalKey<FormState>();
 
 	Team team = Team();
 
 	String nameValidator(String str)
 	{
-		if(str.isEmpty || str.length < _minCharacters)
+		if(str.isEmpty || str.length < minCharacters)
 		{
 			return "You must enter a name with at least 3 characters";
 		}
@@ -30,7 +30,7 @@ class ManageTeamViewModel extends BaseViewModel
 
 	String descriptionValidator(String str)
 	{
-		if(str.isEmpty || str.length < _minCharacters)
+		if(str.isEmpty || str.length < minCharacters)
 		{
 			return "You must enter a description with at least 3 characters";
 		}
