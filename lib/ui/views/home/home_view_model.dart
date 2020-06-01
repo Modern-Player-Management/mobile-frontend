@@ -24,7 +24,7 @@ class HomeViewModel extends BaseViewModel
 class HomeTeamsViewModel extends StreamViewModel<List<Team>>
 {
 	@override
-	Stream<List<Team>> get stream => locator<TeamManager>().getTeams();
+	get stream => locator<TeamManager>().getTeams();
 }
 
 class HomeTeamViewModel extends FutureViewModel<void>
@@ -47,7 +47,7 @@ class HomeTeamViewModel extends FutureViewModel<void>
 	{
 		manager = await _db.playerDao.getPlayer(team.managerId);
 
-		var teamPlayers = await _db.teamPlayerDao.getTeamPlayers(team.id);
+		var teamPlayers = await _db.teamPlayerDao.getAllTeamPlayers(team.id);
 		for(var teamPlayer in teamPlayers)
 		{
 			var player = await _db.playerDao.getPlayer(teamPlayer.playerId);
