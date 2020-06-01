@@ -21,15 +21,7 @@ class ManagePlayerView extends ViewModelBuilderWidget<ManagePlayerViewModel>
   	Widget builder(context, model, child)
 	{
 		return Scaffold(
-			appBar: AppBar(
-				title: Text(
-					"Add a player"
-				),
-			),
-			body: Padding(
-				padding: const EdgeInsets.all(8.0),
-				child: Container()
-			),
+			body: Container(),
 			floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
 			floatingActionButton: Button(
 				child: Text(
@@ -49,3 +41,4 @@ class ManagePlayerView extends ViewModelBuilderWidget<ManagePlayerViewModel>
 		);
 	}
 }
+
