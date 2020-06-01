@@ -21,13 +21,13 @@ class HomeViewModel extends BaseViewModel
 	}
 }
 
-class TeamsViewModel extends StreamViewModel<List<Team>>
+class HomeTeamsViewModel extends StreamViewModel<List<Team>>
 {
 	@override
 	Stream<List<Team>> get stream => locator<TeamManager>().getTeams();
 }
 
-class TeamViewModel extends FutureViewModel<void>
+class HomeTeamViewModel extends FutureViewModel<void>
 {
 	final _db = locator<AppDatabase>();
 	final _navigation = locator<NavigationService>();
@@ -38,7 +38,7 @@ class TeamViewModel extends FutureViewModel<void>
 
 	bool loaded = false;
 
-	TeamViewModel({
+	HomeTeamViewModel({
 		@required this.team
 	});
 
