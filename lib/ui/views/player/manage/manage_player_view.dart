@@ -1,13 +1,19 @@
 import 'package:flutter/material.dart';
 
 import 'package:stacked/stacked.dart';
-import 'package:stacked_hooks/stacked_hooks.dart';
 
+import 'package:mpm/services/database/models/team.dart';
 import 'package:mpm/ui/views/player/manage/manage_player_view_model.dart';
 import 'package:mpm/ui/widgets/button.dart';
 
 class ManagePlayerView extends ViewModelBuilderWidget<ManagePlayerViewModel>
 {
+	final Team team;
+
+	ManagePlayerView({
+		this.team
+	});
+
 	@override
   	bool get reactive => false;
 
@@ -17,23 +23,17 @@ class ManagePlayerView extends ViewModelBuilderWidget<ManagePlayerViewModel>
 		return Scaffold(
 			appBar: AppBar(
 				title: Text(
-					"Manage a player"
+					"Add a player"
 				),
 			),
 			body: Padding(
 				padding: const EdgeInsets.all(8.0),
-				child: Form(
-					key: model.formKey,
-					child: Column(
-						children: <Widget>[
-						],
-					),
-				),
+				child: Container()
 			),
 			floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
 			floatingActionButton: Button(
 				child: Text(
-					"Manage a player"
+					"Add a player"
 				),
 				color: Colors.green,
 				onPressed: model.managePlayer
@@ -44,6 +44,8 @@ class ManagePlayerView extends ViewModelBuilderWidget<ManagePlayerViewModel>
 	@override
 	ManagePlayerViewModel viewModelBuilder(context)
 	{
-		return ManagePlayerViewModel();
+		return ManagePlayerViewModel(
+			team: team
+		);
 	}
 }
