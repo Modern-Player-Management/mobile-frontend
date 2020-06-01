@@ -62,6 +62,11 @@ class TeamViewModel extends FutureViewModel<void>
 
 	void onTap()
 	{
-		//_navigation.navigateTo();
+		_navigation.navigateTo(
+			Routes.teamViewRoute,
+			arguments: TeamViewArguments(
+				team: team
+			)
+		);
 	}
 }
