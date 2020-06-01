@@ -103,8 +103,13 @@ class Router extends RouterBase {
           settings: settings,
         );
       case Routes.managePlayerViewRoute:
+        if (hasInvalidArgs<ManagePlayerViewArguments>(args)) {
+          return misTypedArgsRoute<ManagePlayerViewArguments>(args);
+        }
+        final typedArgs =
+            args as ManagePlayerViewArguments ?? ManagePlayerViewArguments();
         return MaterialPageRoute<dynamic>(
-          builder: (context) => ManagePlayerView(),
+          builder: (context) => ManagePlayerView(team: typedArgs.team),
           settings: settings,
         );
       default:
@@ -127,4 +132,10 @@ class TeamViewArguments {
 class PlayerViewArguments {
   final Player player;
   PlayerViewArguments({this.player});
+}
+
+//ManagePlayerView arguments holder class
+class ManagePlayerViewArguments {
+  final Team team;
+  ManagePlayerViewArguments({this.team});
 }
