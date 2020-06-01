@@ -374,7 +374,7 @@ class _$PlayerDao extends PlayerDao {
 
 class _$TeamPlayerDao extends TeamPlayerDao {
   _$TeamPlayerDao(this.database, this.changeListener)
-      : _queryAdapter = QueryAdapter(database),
+      : _queryAdapter = QueryAdapter(database, changeListener),
         _teamPlayerInsertionAdapter = InsertionAdapter(
             database,
             'teams_players',
@@ -384,7 +384,8 @@ class _$TeamPlayerDao extends TeamPlayerDao {
                   'playerId': item.playerId,
                   'save': item.save == null ? null : (item.save ? 1 : 0),
                   'delete': item.delete == null ? null : (item.delete ? 1 : 0)
-                }),
+                },
+            changeListener),
         _teamPlayerUpdateAdapter = UpdateAdapter(
             database,
             'teams_players',
@@ -395,7 +396,8 @@ class _$TeamPlayerDao extends TeamPlayerDao {
                   'playerId': item.playerId,
                   'save': item.save == null ? null : (item.save ? 1 : 0),
                   'delete': item.delete == null ? null : (item.delete ? 1 : 0)
-                }),
+                },
+            changeListener),
         _teamPlayerDeletionAdapter = DeletionAdapter(
             database,
             'teams_players',
@@ -406,7 +408,8 @@ class _$TeamPlayerDao extends TeamPlayerDao {
                   'playerId': item.playerId,
                   'save': item.save == null ? null : (item.save ? 1 : 0),
                   'delete': item.delete == null ? null : (item.delete ? 1 : 0)
-                });
+                },
+            changeListener);
 
   final sqflite.DatabaseExecutor database;
 
@@ -428,7 +431,17 @@ class _$TeamPlayerDao extends TeamPlayerDao {
   final DeletionAdapter<TeamPlayer> _teamPlayerDeletionAdapter;
 
   @override
-  Future<List<TeamPlayer>> getTeamPlayers(String teamId) async {
+  Stream<List<TeamPlayer>> getTeamPlayers(String teamId) {
+    return _queryAdapter.queryListStream(
+        'select * from teams_players where teamId = ? and `delete` = 0',
+        arguments: <dynamic>[teamId],
+        queryableName: 'teams_players',
+        isView: false,
+        mapper: _teams_playersMapper);
+  }
+
+  @override
+  Future<List<TeamPlayer>> getAllTeamPlayers(String teamId) async {
     return _queryAdapter.queryList(
         'select * from teams_players where teamId = ? and `delete` = 0',
         arguments: <dynamic>[teamId],
