@@ -12,6 +12,8 @@ import 'package:mpm/ui/views/auth/auth_view.dart';
 import 'package:mpm/ui/views/auth/login/login_view.dart';
 import 'package:mpm/ui/views/auth/register/register_view.dart';
 import 'package:mpm/ui/views/home/home_view.dart';
+import 'package:mpm/ui/views/team/team_view.dart';
+import 'package:mpm/services/database/models/team.dart';
 import 'package:mpm/ui/views/team/manage/manage_team_view.dart';
 import 'package:mpm/ui/views/player/player_view.dart';
 import 'package:mpm/services/database/models/player.dart';
@@ -23,6 +25,7 @@ abstract class Routes {
   static const loginViewRoute = '/login-view-route';
   static const registerViewRoute = '/register-view-route';
   static const homeViewRoute = '/home-view-route';
+  static const teamViewRoute = '/team-view-route';
   static const manageTeamViewRoute = '/manage-team-view-route';
   static const playerViewRoute = '/player-view-route';
   static const managePlayerViewRoute = '/manage-player-view-route';
@@ -32,6 +35,7 @@ abstract class Routes {
     loginViewRoute,
     registerViewRoute,
     homeViewRoute,
+    teamViewRoute,
     manageTeamViewRoute,
     playerViewRoute,
     managePlayerViewRoute,
@@ -75,6 +79,15 @@ class Router extends RouterBase {
           builder: (context) => HomeView(),
           settings: settings,
         );
+      case Routes.teamViewRoute:
+        if (hasInvalidArgs<TeamViewArguments>(args)) {
+          return misTypedArgsRoute<TeamViewArguments>(args);
+        }
+        final typedArgs = args as TeamViewArguments ?? TeamViewArguments();
+        return MaterialPageRoute<dynamic>(
+          builder: (context) => TeamView(team: typedArgs.team),
+          settings: settings,
+        );
       case Routes.manageTeamViewRoute:
         return MaterialPageRoute<dynamic>(
           builder: (context) => ManageTeamView(),
@@ -103,6 +116,12 @@ class Router extends RouterBase {
 // *************************************************************************
 // Arguments holder classes
 // **************************************************************************
+
+//TeamView arguments holder class
+class TeamViewArguments {
+  final Team team;
+  TeamViewArguments({this.team});
+}
 
 //PlayerView arguments holder class
 class PlayerViewArguments {

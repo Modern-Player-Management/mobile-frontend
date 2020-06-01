@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:floor/floor.dart';
 import 'package:injectable/injectable.dart';
-import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart' as sqflite;
 
 import 'package:mpm/services/database/models/models.dart';
