@@ -92,7 +92,7 @@ class _$AppDatabase extends AppDatabase {
         await database.execute(
             'CREATE TABLE IF NOT EXISTS `teams` (`id` TEXT, `player` TEXT, `name` TEXT, `description` TEXT, `image` TEXT, `managerId` TEXT, `created` TEXT, `save` INTEGER, `update` INTEGER, `delete` INTEGER, FOREIGN KEY (`managerId`) REFERENCES `players` (`id`) ON UPDATE CASCADE ON DELETE CASCADE, PRIMARY KEY (`id`))');
         await database.execute(
-            'CREATE TABLE IF NOT EXISTS `players` (`id` TEXT, `username` TEXT, `email` TEXT, `created` TEXT, PRIMARY KEY (`id`))');
+            'CREATE TABLE IF NOT EXISTS `players` (`id` TEXT, `username` TEXT, `email` TEXT, `created` TEXT, `calendarSecret` TEXT, PRIMARY KEY (`id`))');
         await database.execute(
             'CREATE TABLE IF NOT EXISTS `teams_players` (`teamId` TEXT, `playerId` TEXT, `save` INTEGER, `delete` INTEGER, FOREIGN KEY (`teamId`) REFERENCES `teams` (`id`) ON UPDATE CASCADE ON DELETE CASCADE, FOREIGN KEY (`playerId`) REFERENCES `players` (`id`) ON UPDATE CASCADE ON DELETE CASCADE, PRIMARY KEY (`teamId`, `playerId`))');
         await database.execute(
@@ -289,7 +289,8 @@ class _$PlayerDao extends PlayerDao {
                   'id': item.id,
                   'username': item.username,
                   'email': item.email,
-                  'created': item.created
+                  'created': item.created,
+                  'calendarSecret': item.calendarSecret
                 },
             changeListener),
         _playerUpdateAdapter = UpdateAdapter(
@@ -300,7 +301,8 @@ class _$PlayerDao extends PlayerDao {
                   'id': item.id,
                   'username': item.username,
                   'email': item.email,
-                  'created': item.created
+                  'created': item.created,
+                  'calendarSecret': item.calendarSecret
                 },
             changeListener),
         _playerDeletionAdapter = DeletionAdapter(
@@ -311,7 +313,8 @@ class _$PlayerDao extends PlayerDao {
                   'id': item.id,
                   'username': item.username,
                   'email': item.email,
-                  'created': item.created
+                  'created': item.created,
+                  'calendarSecret': item.calendarSecret
                 },
             changeListener);
 

@@ -11,7 +11,9 @@ Player _$PlayerFromJson(Map<String, dynamic> json) {
     id: json['id'] as String,
     username: json['username'] as String,
     email: json['email'] as String,
-  )..created = json['created'] as String;
+  )
+    ..created = json['created'] as String
+    ..calendarSecret = json['calendarSecret'] as String;
 }
 
 Map<String, dynamic> _$PlayerToJson(Player instance) => <String, dynamic>{
@@ -19,4 +21,5 @@ Map<String, dynamic> _$PlayerToJson(Player instance) => <String, dynamic>{
       'username': instance.username,
       'email': instance.email,
       'created': instance.created,
+      'calendarSecret': instance.calendarSecret,
     };
