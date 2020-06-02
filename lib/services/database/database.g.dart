@@ -94,7 +94,7 @@ class _$AppDatabase extends AppDatabase {
         await database.execute(
             'CREATE TABLE IF NOT EXISTS `players` (`id` TEXT, `username` TEXT, `email` TEXT, `created` TEXT, PRIMARY KEY (`id`))');
         await database.execute(
-            'CREATE TABLE IF NOT EXISTS `teams_players` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `teamId` TEXT, `playerId` TEXT, `save` INTEGER, `delete` INTEGER, FOREIGN KEY (`teamId`) REFERENCES `teams` (`id`) ON UPDATE CASCADE ON DELETE CASCADE, FOREIGN KEY (`playerId`) REFERENCES `players` (`id`) ON UPDATE CASCADE ON DELETE CASCADE)');
+            'CREATE TABLE IF NOT EXISTS `teams_players` (`teamId` TEXT, `playerId` TEXT, `save` INTEGER, `delete` INTEGER, FOREIGN KEY (`teamId`) REFERENCES `teams` (`id`) ON UPDATE CASCADE ON DELETE CASCADE, FOREIGN KEY (`playerId`) REFERENCES `players` (`id`) ON UPDATE CASCADE ON DELETE CASCADE, PRIMARY KEY (`teamId`, `playerId`))');
         await database.execute(
             'CREATE TABLE IF NOT EXISTS `events` (`id` TEXT, `team` TEXT, `start` TEXT, `end` TEXT, `name` TEXT, `description` TEXT, `type` INTEGER, `save` INTEGER, `update` INTEGER, `delete` INTEGER, FOREIGN KEY (`team`) REFERENCES `teams` (`id`) ON UPDATE CASCADE ON DELETE CASCADE, PRIMARY KEY (`id`))');
         await database.execute(
@@ -379,7 +379,6 @@ class _$TeamPlayerDao extends TeamPlayerDao {
             database,
             'teams_players',
             (TeamPlayer item) => <String, dynamic>{
-                  'id': item.id,
                   'teamId': item.teamId,
                   'playerId': item.playerId,
                   'save': item.save == null ? null : (item.save ? 1 : 0),
@@ -389,9 +388,8 @@ class _$TeamPlayerDao extends TeamPlayerDao {
         _teamPlayerUpdateAdapter = UpdateAdapter(
             database,
             'teams_players',
-            ['id'],
+            ['teamId', 'playerId'],
             (TeamPlayer item) => <String, dynamic>{
-                  'id': item.id,
                   'teamId': item.teamId,
                   'playerId': item.playerId,
                   'save': item.save == null ? null : (item.save ? 1 : 0),
@@ -401,9 +399,8 @@ class _$TeamPlayerDao extends TeamPlayerDao {
         _teamPlayerDeletionAdapter = DeletionAdapter(
             database,
             'teams_players',
-            ['id'],
+            ['teamId', 'playerId'],
             (TeamPlayer item) => <String, dynamic>{
-                  'id': item.id,
                   'teamId': item.teamId,
                   'playerId': item.playerId,
                   'save': item.save == null ? null : (item.save ? 1 : 0),
@@ -418,7 +415,6 @@ class _$TeamPlayerDao extends TeamPlayerDao {
   final QueryAdapter _queryAdapter;
 
   static final _teams_playersMapper = (Map<String, dynamic> row) => TeamPlayer(
-      id: row['id'] as int,
       teamId: row['teamId'] as String,
       playerId: row['playerId'] as String,
       save: row['save'] == null ? null : (row['save'] as int) != 0,
