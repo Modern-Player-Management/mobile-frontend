@@ -5,22 +5,26 @@ import 'package:injectable/injectable.dart';
 
 import 'package:mpm/app/locator.dart';
 
+
 @injectable
 class TeamManager
 {
 	final _api = locator<TeamApi>();
 	final _teamDao = locator<AppDatabase>().teamDao;
-	final _playerDao = locator<AppDatabase>().playerDao;
-	final _teamPlayerDao = locator<AppDatabase>().teamPlayerDao;
 
 	final _storage = locator<SecureStorage>();
 	final _uuid = locator<Uuid>();
+
+	PlayerManager _playerManager;
 
 	final bool Function(Response) validResponse;
 
 	TeamManager({
 		@required @factoryParam Function validResponse
-	}) : this.validResponse = validResponse;
+	}) : this.validResponse = validResponse
+	{
+		_playerManager = locator<PlayerManager>(param1: validResponse);
+	}
 
 	Future<void> syncTeams() async
 	{
@@ -56,15 +60,9 @@ class TeamManager
 
 		for(var team in teams)
 		{
-			_playerDao.insertPlayer(team.manager);
 			team.player = _storage.player;
 			team.save = true;
 			_teamDao.insertTeam(team);
-
-			for(var player in team.players)
-			{
-				_playerDao.insertPlayer(player);
-			}
 
 			int index = teamsKey.indexOf(team.id);
 			if(index != -1)
@@ -72,6 +70,8 @@ class TeamManager
 				savedTeams.removeAt(index);
 				teamsKey.removeAt(index);
 			}
+
+			_playerManager.syncPlayers(team);
 		}
 
 		for(var team in savedTeams) 
@@ -143,51 +143,6 @@ class TeamManager
 			}
 		}
 		catch(e) 
-		{
-			print(e);
-		}
-	}
-
-	Future<void> addTeamPlayer(Team team, Player player) async
-	{
-		_playerDao.insertPlayer(player);
-
-		var teamPlayer = TeamPlayer(
-			teamId: team.id,
-			playerId: player.id
-		);
-
-		await _teamPlayerDao.insertTeamPlayer(teamPlayer);
-
-		try
-		{
-			var res = await _api.addTeamPlayer(team.id, player.id);
-			if(validResponse(res))
-			{
-				teamPlayer.save = true;
-				await _teamPlayerDao.updateTeamPlayer(teamPlayer);
-			}
-		}
-		catch(e) 
-		{
-			print(e);
-		}
-	}
-
-	Future<void> removeTeamPlayer(TeamPlayer teamPlayer) async
-	{
-		teamPlayer.delete = true;
-		await _teamPlayerDao.updateTeamPlayer(teamPlayer);
-
-		try
-		{
-			var res = await _api.deleteTeamPlayer(teamPlayer.teamId, teamPlayer.playerId);
-			if(validResponse(res))
-			{
-				await _teamPlayerDao.deleteTeamPlayer(teamPlayer);
-			}
-		}
-		catch(e)
 		{
 			print(e);
 		}
