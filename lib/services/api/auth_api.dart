@@ -24,12 +24,12 @@ abstract class AuthApi extends ChopperService
 		converter: JsonConverter(),
 	));
 
+	@Post(path: "/authenticate")
+	Future<Response<Map<String, dynamic>>> authenticate(@Field() String username, @Field() String password);
+
 	@Post(path: "/register")
 	Future<Response<String>> register(@Field() String username, @Field() String email, 
 		@Field() String password);
-
-	@Post(path: "/authenticate")
-	Future<Response<Map<String, dynamic>>> authenticate(@Field() String username, @Field() String password);
 
 	@Post(path: "/available")
 	Future<Response<Map<String, dynamic>>> available(@Field() String username);

@@ -55,4 +55,7 @@ abstract class PlayerApi extends ChopperService
 
 	@Put(path: "/api/users/{playerId}")
 	Future<Response> updatePlayer(@Path() String playerId, @Body() Player player);
+
+	@Get(path: "/api/users/profil")
+	Future<Response<Player>> getProfile();
 }

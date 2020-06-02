@@ -17,6 +17,14 @@ class _$TeamApi extends TeamApi {
   final definitionType = TeamApi;
 
   @override
+  Future<Response<Team>> createTeam(Team team) {
+    final $url = '/api/teams';
+    final $body = team;
+    final $request = Request('POST', $url, client.baseUrl, body: $body);
+    return client.send<Team, Team>($request);
+  }
+
+  @override
   Future<Response<List<Team>>> getTeams() {
     final $url = '/api/teams';
     final $request = Request('GET', $url, client.baseUrl);
@@ -24,11 +32,17 @@ class _$TeamApi extends TeamApi {
   }
 
   @override
-  Future<Response<Team>> createTeam(Team team) {
-    final $url = '/api/teams';
-    final $body = team;
-    final $request = Request('POST', $url, client.baseUrl, body: $body);
+  Future<Response<Team>> addTeamPlayer(String teamId, String playerId) {
+    final $url = '/api/teams/$teamId/player/$playerId';
+    final $request = Request('POST', $url, client.baseUrl);
     return client.send<Team, Team>($request);
+  }
+
+  @override
+  Future<Response<dynamic>> deleteTeamPlayer(String teamId, String playerId) {
+    final $url = '/api/teams/$teamId/player/$playerId';
+    final $request = Request('DELETE', $url, client.baseUrl);
+    return client.send<dynamic, dynamic>($request);
   }
 
   @override
@@ -42,20 +56,6 @@ class _$TeamApi extends TeamApi {
   @override
   Future<Response<dynamic>> deleteTeam(String teamId) {
     final $url = '/api/teams/$teamId';
-    final $request = Request('DELETE', $url, client.baseUrl);
-    return client.send<dynamic, dynamic>($request);
-  }
-
-  @override
-  Future<Response<Team>> addTeamPlayer(String teamId, String playerId) {
-    final $url = '/api/teams/$teamId/player/$playerId';
-    final $request = Request('POST', $url, client.baseUrl);
-    return client.send<Team, Team>($request);
-  }
-
-  @override
-  Future<Response<dynamic>> deleteTeamPlayer(String teamId, String playerId) {
-    final $url = '/api/teams/$teamId/player/$playerId';
     final $request = Request('DELETE', $url, client.baseUrl);
     return client.send<dynamic, dynamic>($request);
   }
