@@ -58,4 +58,7 @@ abstract class EventApi extends ChopperService
 
 	@Delete(path: "/api/events/{eventId}")
 	Future<Response> deleteEvent(@Path() String eventId);
+
+	@Get(path: "/api/events/ical/{icalSecret}")
+	Future<Response> getIcal(@Path() String icalSecret);
 }

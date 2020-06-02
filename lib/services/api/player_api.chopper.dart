@@ -38,4 +38,11 @@ class _$PlayerApi extends PlayerApi {
     final $request = Request('PUT', $url, client.baseUrl, body: $body);
     return client.send<dynamic, dynamic>($request);
   }
+
+  @override
+  Future<Response<Player>> getProfile() {
+    final $url = '/api/users/profil';
+    final $request = Request('GET', $url, client.baseUrl);
+    return client.send<Player, Player>($request);
+  }
 }
