@@ -6,6 +6,7 @@ export 'package:mpm/app/router.gr.dart';
 
 export 'package:mpm/services/database/database.dart';
 export 'package:mpm/models/managers/team_manager.dart';
+export 'package:mpm/models/managers/player_manager.dart';
 
 export 'package:mpm/services/api/auth_api.dart';
 export 'package:mpm/services/api/team_api.dart';
