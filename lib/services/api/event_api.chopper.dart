@@ -46,4 +46,11 @@ class _$EventApi extends EventApi {
     final $request = Request('DELETE', $url, client.baseUrl);
     return client.send<dynamic, dynamic>($request);
   }
+
+  @override
+  Future<Response<dynamic>> getIcal(String icalSecret) {
+    final $url = '/api/events/ical/$icalSecret';
+    final $request = Request('GET', $url, client.baseUrl);
+    return client.send<dynamic, dynamic>($request);
+  }
 }

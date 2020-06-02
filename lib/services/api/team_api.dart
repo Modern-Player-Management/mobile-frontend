@@ -55,23 +55,23 @@ abstract class TeamApi extends ChopperService
 
 	// Teams requests
 
-	@Get(path: "/api/teams")
-	Future<Response<List<Team>>> getTeams();
-
 	@Post(path: "/api/teams")
 	Future<Response<Team>> createTeam(@Body() Team team);
 
-	@Put(path: "/api/teams/{teamId}")
-	Future<Response> updateTeam(@Path() String teamId, @Body() Team team);
-
-	@Delete(path: "/api/teams/{teamId}")
-	Future<Response> deleteTeam(@Path() String teamId);
+	@Get(path: "/api/teams")
+	Future<Response<List<Team>>> getTeams();
 
 	@Post(path: "/api/teams/{teamId}/player/{playerId}")
 	Future<Response<Team>> addTeamPlayer(@Path() String teamId, @Path() String playerId);
 
 	@Delete(path: "/api/teams/{teamId}/player/{playerId}")
 	Future<Response> deleteTeamPlayer(@Path() String teamId, @Path() String playerId);
+
+	@Put(path: "/api/teams/{teamId}")
+	Future<Response> updateTeam(@Path() String teamId, @Body() Team team);
+
+	@Delete(path: "/api/teams/{teamId}")
+	Future<Response> deleteTeam(@Path() String teamId);
 
 	@Post(path: "/api/teams/{teamId}/events")
 	Future<Response<Team>> addEvent(@Path() String teamId, @Body() Event event);
