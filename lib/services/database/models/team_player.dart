@@ -5,6 +5,7 @@ import 'package:mpm/services/database/models/models.dart';
 
 @Entity(
 	tableName: 'teams_players',
+	primaryKeys: ['teamId', 'playerId'],
 	foreignKeys: [
 		ForeignKey(
 			childColumns: ['teamId'],
@@ -20,20 +21,16 @@ import 'package:mpm/services/database/models/models.dart';
 			onDelete: ForeignKeyAction.cascade,
 			onUpdate: ForeignKeyAction.cascade,
 		),
-	]
+	],
 )
 class TeamPlayer
 {	
-	@PrimaryKey(autoGenerate: true)
-	final int id;
-	
 	final String teamId;
 	final String playerId;
 
 	bool save, delete;
 
   	TeamPlayer({
-		this.id, 
 		this.teamId, 
 		this.playerId,
 		bool save = false,
