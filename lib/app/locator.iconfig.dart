@@ -12,6 +12,7 @@ import 'package:stacked_services/stacked_services.dart';
 import 'package:mpm/services/api/event_api.dart';
 import 'package:mpm/services/api/file_api.dart';
 import 'package:mpm/services/api/player_api.dart';
+import 'package:mpm/models/managers/player_manager.dart';
 import 'package:mpm/services/secure_storage.dart';
 import 'package:mpm/services/session.dart';
 import 'package:mpm/services/api/team_api.dart';
@@ -30,6 +31,8 @@ void $initGetIt(GetIt g, {String environment}) {
   g.registerLazySingleton<NavigationService>(
       () => thirdPartyServices.navigationService);
   g.registerLazySingleton<PlayerApi>(() => PlayerApi.create());
+  g.registerFactoryParam<PlayerManager, Function, dynamic>(
+      (validResponse, _) => PlayerManager(validResponse: validResponse));
   g.registerLazySingleton<Session>(() => Session());
   g.registerLazySingleton<SnackbarService>(
       () => thirdPartyServices.snackBarService);
