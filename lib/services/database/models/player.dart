@@ -12,7 +12,7 @@ class Player
 	@primaryKey
 	String id;
 
-	String username, email, created;
+	String username, email, created, calendarSecret;
 
 	@ignore
 	@JsonKey(ignore: true)
