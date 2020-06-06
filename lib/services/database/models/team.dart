@@ -43,7 +43,6 @@ class Team
 	Player manager;
 
 	@ignore
-	@JsonKey(name: "memberships")
 	List<Player> players;
 
 	String created;
