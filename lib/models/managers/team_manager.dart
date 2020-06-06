@@ -10,6 +10,7 @@ import 'package:mpm/app/locator.dart';
 class TeamManager
 {
 	final _api = locator<TeamApi>();
+	final _playerDao = locator<AppDatabase>().playerDao;
 	final _teamDao = locator<AppDatabase>().teamDao;
 
 	final _storage = locator<SecureStorage>();
@@ -48,6 +49,7 @@ class TeamManager
 
 				for(var team in teams)
 				{
+					_playerDao.insertPlayer(team.manager);
 					team.player = _storage.player;
 					team.save = true;
 					_teamDao.insertTeam(team);
