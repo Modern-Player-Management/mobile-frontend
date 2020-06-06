@@ -29,8 +29,6 @@ class PlayerManager
 			return;
 		}
 
-		_playerDao.insertPlayer(team.manager);
-
 		for(var player in team.players)
 		{
 			_playerDao.insertPlayer(player);
