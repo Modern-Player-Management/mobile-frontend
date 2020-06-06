@@ -33,8 +33,6 @@ class HomeTeamViewModel extends FutureViewModel<void>
 	final _navigation = locator<NavigationService>();
 
 	final Team team;
-	final List<Player> players = [];
-	Player manager;
 
 	bool loaded = false;
 
@@ -45,15 +43,15 @@ class HomeTeamViewModel extends FutureViewModel<void>
 	@override
 	Future<void> futureToRun() async
 	{
-		manager = await _db.playerDao.getPlayer(team.managerId);
+		team.manager = await _db.playerDao.getPlayer(team.managerId);
 
 		var teamPlayers = await _db.teamPlayerDao.getAllTeamPlayers(team.id);
 		for(var teamPlayer in teamPlayers)
 		{
 			var player = await _db.playerDao.getPlayer(teamPlayer.playerId);
-			if(player.id != manager.id)
+			if(player.id != team.manager.id)
 			{
-				players.add(player);
+				team.players.add(player);
 			}
 		}
 
