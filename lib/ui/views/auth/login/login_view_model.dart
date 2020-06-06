@@ -58,7 +58,7 @@ class LoginViewModel extends BaseViewModel
 			}
 			catch(e)
 			{
-				print(e);
+				print("login: $e");
 			}
 		}
 	}
