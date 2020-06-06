@@ -34,13 +34,11 @@ class PlayerManager
 			_playerDao.insertPlayer(player);
 			if(player.id != team.manager.id)
 			{
-				var id = await _teamPlayerDao.insertTeamPlayer(TeamPlayer(
+				await _teamPlayerDao.insertTeamPlayer(TeamPlayer(
 					teamId: team.id,
 					playerId: player.id,
 					save: true
 				));
-
-				print("insert team player : ${team.id} / ${player.id} : $id");
 			}
 		}
 	}
