@@ -69,7 +69,7 @@ class PlayerManager
 		}
 		catch(e) 
 		{
-			print(e);
+			print("addTeamPlayer: $e");
 		}
 	}
 
@@ -88,7 +88,7 @@ class PlayerManager
 		}
 		catch(e)
 		{
-			print(e);
+			print("removeTeamPlayer: $e");
 		}
 	}
 }

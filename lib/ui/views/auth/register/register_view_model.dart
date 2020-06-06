@@ -104,7 +104,7 @@ class RegisterViewModel extends BaseViewModel
 			}
 			catch(e)
 			{
-				print(e);
+				print("register: $e");
 			}
 		}
 	}
