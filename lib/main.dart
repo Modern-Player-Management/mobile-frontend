@@ -102,7 +102,7 @@ class AppModel extends BaseViewModel
 				break;
 			case ConnectivityResult.none:
 			default: 
-				_session.online = true;
+				_session.online = false;
 				break;
 		}
 	}
