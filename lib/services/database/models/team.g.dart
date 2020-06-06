@@ -18,7 +18,7 @@ Team _$TeamFromJson(Map<String, dynamic> json) {
     manager: json['manager'] == null
         ? null
         : Player.fromJson(json['manager'] as Map<String, dynamic>),
-    players: (json['memberships'] as List)
+    players: (json['players'] as List)
         ?.map((e) =>
             e == null ? null : Player.fromJson(e as Map<String, dynamic>))
         ?.toList(),
