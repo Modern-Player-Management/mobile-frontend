@@ -33,50 +33,44 @@ class TeamManager
 			return;
 		}
 
-		List<Team> teams = [];
-
 		try
 		{
 			var res = await _api.getTeams();
 			if(validResponse(res))
 			{
-				teams = res.body;
-			}
-			else
-			{
-				return;
+				List<Team> teams = res.body;
+
+				var savedTeams = await _teamDao.getSavedTeams(_storage.player);
+				var teamsKey = [
+					for(var team in savedTeams)
+						team.id
+				];
+
+				for(var team in teams)
+				{
+					team.player = _storage.player;
+					team.save = true;
+					_teamDao.insertTeam(team);
+
+					int index = teamsKey.indexOf(team.id);
+					if(index != -1)
+					{
+						savedTeams.removeAt(index);
+						teamsKey.removeAt(index);
+					}
+
+					_playerManager.syncPlayers(team);
+				}
+
+				for(var team in savedTeams) 
+				{
+					_teamDao.deleteTeam(team);
+				}
 			}
 		}
 		catch(e)
 		{
-			return;
-		}
-
-		var savedTeams = await _teamDao.getSavedTeams(_storage.player);
-		var teamsKey = [
-			for(var team in savedTeams)
-				team.id
-		];
-
-		for(var team in teams)
-		{
-			team.player = _storage.player;
-			team.save = true;
-			_teamDao.insertTeam(team);
-
-			int index = teamsKey.indexOf(team.id);
-			if(index != -1)
-			{
-				savedTeams.removeAt(index);
-				teamsKey.removeAt(index);
-			}
-
-			_playerManager.syncPlayers(team);
-		}
-
-		for(var team in savedTeams) 
-		{
-			_teamDao.deleteTeam(team);
+			print("SyncTeams: $e");
 		}
 	}
 
@@ -106,7 +100,7 @@ class TeamManager
 		}
 		catch(e) 
 		{
-			print(e);
+			print("insertTeam: $e");
 		}
 	}
 
@@ -125,7 +119,7 @@ class TeamManager
 		}
 		catch(e) 
 		{
-			print(e);
+			print("updateTeam: $e");
 		}
 	}
 
@@ -144,7 +138,7 @@ class TeamManager
 		}
 		catch(e) 
 		{
-			print(e);
+			print("deleteTeam: $e");
 		}
 	}
 }
