@@ -34,7 +34,7 @@ class PlayerManager
 			_playerDao.insertPlayer(player);
 			if(player.id != team.manager.id)
 			{
-				var id = _teamPlayerDao.insertTeamPlayer(TeamPlayer(
+				var id = await _teamPlayerDao.insertTeamPlayer(TeamPlayer(
 					teamId: team.id,
 					playerId: player.id,
 					save: true
