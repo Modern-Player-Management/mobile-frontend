@@ -55,17 +55,21 @@ class ManageTeamView extends ViewModelBuilderWidget<ManageTeamViewModel>
 class _ImagePicker extends HookViewModelWidget<ManageTeamViewModel>
 {
 	@override
-  	bool get reactive => false;
+  	bool get reactive => true;
 
 	@override
 	Widget buildViewModelWidget(context, model) 
 	{
 		return InkWell(
 			child: CircleAvatar(
+				backgroundColor: model.image == null ?
+				null : Colors.transparent,
 				radius: 32,
-				child: Icon(
+				child: model.image == null ?
+				Icon(
 					Icons.star
-				),
+				) :
+				Image.file(model.image)
 			),
 			onTap: model.selectImage,
 		);
