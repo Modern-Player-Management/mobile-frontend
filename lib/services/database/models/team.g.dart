@@ -34,6 +34,6 @@ Map<String, dynamic> _$TeamToJson(Team instance) => <String, dynamic>{
       'managerId': instance.managerId,
       'isCurrentUserManager': instance.isCurrentUserManager,
       'manager': instance.manager,
-      'memberships': instance.players,
+      'players': instance.players,
       'created': instance.created,
     };
