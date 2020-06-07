@@ -74,7 +74,9 @@ void delete_event() async
 {
 	final event = await insert_event();
 
-	await _db.eventDao.deleteEvent(event);
+	var rows = await _db.eventDao.deleteEvent(event);
+
+	expect(rows, equals(1));
 
 	final events = await _db.eventDao.getEvents(teamId).first;
 
