@@ -85,7 +85,7 @@ class _TeamView extends ViewModelBuilderWidget<HomeTeamViewModel>
 					child: Icon(
 						Icons.group,
 						size: 32,
-					),
+					) 
 				),
 				title: Text(
 					team.name
