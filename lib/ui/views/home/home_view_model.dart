@@ -6,6 +6,7 @@ import 'package:mpm/app/locator.dart';
 
 class HomeViewModel extends BaseViewModel
 {
+	final _session = locator<Session>();
 	final _teamManager = locator<TeamManager>();
 	final _navigation = locator<NavigationService>();
 
@@ -13,6 +14,11 @@ class HomeViewModel extends BaseViewModel
 	{
 		await _teamManager.syncTeams();
 		Future.delayed(Duration(seconds: 2));
+	}
+
+	void disconnect()
+	{
+		_session.disconnect();
 	}
 
 	void createTeam()
