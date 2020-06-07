@@ -50,11 +50,24 @@ class Session
 		else
 		{
 			await Future.delayed(Duration(seconds: 2));
-			_navigation.pushNamedAndRemoveUntil(
-				Routes.authViewRoute, 
-				predicate: (route) => route == null
-			);
+			_goToAuthView();
 		}
+	}
+
+	void disconnect()
+	{
+		_storage.player = null;
+		_storage.token = null;
+
+		_goToAuthView();
+	}
+
+	void _goToAuthView()
+	{
+		_navigation.pushNamedAndRemoveUntil(
+			Routes.authViewRoute, 
+			predicate: (route) => route == null
+		);
 	}
 
 	bool get isAuth => _storage.token != null;
