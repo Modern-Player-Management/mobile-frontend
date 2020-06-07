@@ -6,9 +6,6 @@ import 'package:mpm/services/database/database.dart';
 
 import 'team_test.dart';
 
-String teamId = "team";
-String player = "player";
-
 String playerId = "player";
 String email = "test@test.fr";
 String username = "username";
@@ -37,9 +34,12 @@ void main()
 	});
 }
 
-Future<Player> insert_player([AppDatabase db]) async
+Future<Player> insert_player([AppDatabase db, Team team]) async
 {
-	await insert_team(_db);
+	if(team == null) 
+	{
+		await insert_team(_db);
+	}
 
 	final player = Player(
 		id: playerId,
