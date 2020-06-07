@@ -27,6 +27,7 @@ dependencies:
   # ui
   bot_toast: ^3.0.0
   dynamic_theme: ^1.0.1
+  flappy_search_bar: ^1.7.2
 
   # services
   flutter_secure_storage: ^3.3.3
