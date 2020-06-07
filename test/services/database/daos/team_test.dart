@@ -73,7 +73,9 @@ void delete_team() async
 {
 	final team = await insert_team();
 
-	await _db.teamDao.deleteTeam(team);
+	var rows = await _db.teamDao.deleteTeam(team);
+
+	expect(rows, equals(1));
 
 	final teams = await _db.teamDao.getTeams(player).first;
 
