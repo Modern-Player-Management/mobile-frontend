@@ -26,8 +26,27 @@ class ManagePlayerView extends ViewModelBuilderWidget<ManagePlayerViewModel>
 			body: Padding(
 				padding: const EdgeInsets.all(8.0),
 				child: SearchBar<Player>(
-					searchBarPadding: EdgeInsets.only(top: 16),
+					searchBarPadding: const EdgeInsets.only(top: 16),
 					onSearch: model.onSearch,
+					placeHolder: Center(
+						child: Text(
+							"Search for a player",
+							style: Theme.of(context).textTheme.headline6,
+							textAlign: TextAlign.center,
+						),
+					),
+					hintText: "Player username",
+					cancellationWidget: Icon(
+						Icons.cancel,
+						color: Colors.grey,
+					),
+					emptyWidget: Center(
+						child: Icon(
+							Icons.error,
+							size: 64,
+							color: Colors.red,
+						),
+					),
 					onItemFound: (player, index) {
 						return ListTile(
 							leading: CircleAvatar(
