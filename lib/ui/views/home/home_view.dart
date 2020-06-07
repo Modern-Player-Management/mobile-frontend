@@ -17,6 +17,14 @@ class HomeView extends ViewModelBuilderWidget<HomeViewModel>
 				title: Text(
 					"MPM"
 				),
+				actions: <Widget>[
+					IconButton(
+						icon: Icon(
+							Icons.exit_to_app
+						),
+						onPressed: model.disconnect,
+					)
+				],
 			),
 			body: RefreshIndicator(
 				onRefresh: model.onRefresh,
