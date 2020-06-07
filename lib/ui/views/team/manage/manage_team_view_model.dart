@@ -17,6 +17,7 @@ class ManageTeamViewModel extends BaseViewModel
 	final formKey = GlobalKey<FormState>();
 
 	Team team = Team();
+	File image;
 
 	String nameValidator(String str)
 	{
@@ -51,9 +52,11 @@ class ManageTeamViewModel extends BaseViewModel
 			return;
 		}
 
-		File file = await FilePicker.getFile(
+		image = await FilePicker.getFile(
 			type: FileType.image
 		);
+
+		notifyListeners();
 	}
 
 	void manageTeam()
