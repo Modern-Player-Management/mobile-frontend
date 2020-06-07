@@ -37,6 +37,7 @@ class HomeTeamViewModel extends FutureViewModel<void>
 {
 	final _db = locator<AppDatabase>();
 	final _navigation = locator<NavigationService>();
+	final _fileApi = locator<FileApi>();
 
 	final Team team;
 
@@ -59,6 +60,13 @@ class HomeTeamViewModel extends FutureViewModel<void>
 			{
 				team.players.add(player);
 			}
+		}
+
+		var res = await _fileApi.getFile(team.image);
+		if(res.isSuccessful)
+		{
+			team.imageUrl = res.body;
+			print(res.body);
 		}
 
 		loaded = true;

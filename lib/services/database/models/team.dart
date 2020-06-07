@@ -54,6 +54,10 @@ class Team
 	@JsonKey(ignore: true)
 	bool delete;
 
+	@ignore
+	@JsonKey(ignore: true)
+	String imageUrl;
+
   	Team({
 		this.id, 
 		this.name,
