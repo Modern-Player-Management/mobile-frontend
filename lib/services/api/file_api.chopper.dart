@@ -17,18 +17,18 @@ class _$FileApi extends FileApi {
   final definitionType = FileApi;
 
   @override
-  Future<Response<Map<String, String>>> uploadFile(MultipartFile file) {
+  Future<Response<Map<String, dynamic>>> uploadFile(MultipartFile file) {
     final $url = '/api/files';
     final $parts = <PartValue>[PartValueFile<MultipartFile>('file', file)];
     final $request =
         Request('POST', $url, client.baseUrl, parts: $parts, multipart: true);
-    return client.send<Map<String, String>, Map<String, String>>($request);
+    return client.send<Map<String, dynamic>, Map<String, dynamic>>($request);
   }
 
   @override
-  Future<Response<dynamic>> getFile(String fileId) {
+  Future<Response<String>> getFile(String fileId) {
     final $url = '/api/files/$fileId';
     final $request = Request('GET', $url, client.baseUrl);
-    return client.send<dynamic, dynamic>($request);
+    return client.send<String, String>($request);
   }
 }

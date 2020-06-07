@@ -46,8 +46,8 @@ abstract class FileApi extends ChopperService
 
 	@Post(path: "/api/files")
 	@multipart
-	Future<Response<Map<String , String>>> uploadFile(@PartFile() MultipartFile file);
+	Future<Response<Map<String , dynamic>>> uploadFile(@PartFile() MultipartFile file);
 
 	@Get(path: "/api/files/{fileId}")
-	Future<Response> getFile(@Path() String fileId);
+	Future<Response<String>> getFile(@Path() String fileId);
 }
