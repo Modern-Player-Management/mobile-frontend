@@ -5,7 +5,12 @@ import 'package:sqflite_ffi_test/sqflite_ffi_test.dart';
 import 'package:mpm/services/database/database.dart';
 
 String teamId = "team";
+String teamName = "name";
 String player = "player";
+
+String managerId = "manager";
+String managerEmail = "manager@manager.fr";
+String managerUsername = "manager";
 
 AppDatabase _db;
 
@@ -26,6 +31,10 @@ void main()
 		test('delete team', delete_team);
 	});
 
+	group('more database team tests', (){
+		test('team with manager', team_with_manager);
+	});
+
 	tearDown((){
 		_db.close();
 	});
@@ -36,7 +45,7 @@ Future<Team> insert_team([AppDatabase db]) async
 	final team = Team(
 		id: teamId,
 		player: player,
-		name: "name"
+		name: teamName
 	);
 
 	int id = await (_db ?? db).teamDao.insertTeam(team);
@@ -80,4 +89,28 @@ void delete_team() async
 	final teams = await _db.teamDao.getTeams(player).first;
 
 	expect(teams.length, equals(0));
+}
+
+void team_with_manager() async
+{
+	final manager = Player(
+		id: managerId,
+		email: managerEmail,
+		username: managerUsername
+	);
+
+	var id = await _db.playerDao.insertPlayer(manager);
+
+	expect(id, equals(1));
+
+	final team = Team(
+		id: teamId,
+		player: player,
+		name: teamName,
+		managerId: managerId
+	);
+
+	id = await _db.teamDao.insertTeam(team);
+
+	expect(id, equals(1));
 }
