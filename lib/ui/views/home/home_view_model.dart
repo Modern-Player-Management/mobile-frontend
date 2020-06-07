@@ -62,12 +62,12 @@ class HomeTeamViewModel extends FutureViewModel<void>
 			}
 		}
 
-		var res = await _fileApi.getFile(team.image);
+		/*var res = await _fileApi.getFile(team.image);
 		if(res.isSuccessful)
 		{
 			team.imageUrl = res.body;
 			print(res.body);
-		}
+		}*/
 
 		loaded = true;
 	}
