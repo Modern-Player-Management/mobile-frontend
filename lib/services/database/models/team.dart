@@ -8,18 +8,12 @@ part 'team.g.dart';
 
 @Entity(
 	tableName: 'teams',
-	foreignKeys: [
-		ForeignKey(
-			childColumns: ['managerId'],
-			parentColumns: ['id'],
-			entity: Player,
-			onDelete: ForeignKeyAction.cascade,
-			onUpdate: ForeignKeyAction.cascade,
-		)
-	],
 	indices: [
 		Index(
 			value: ['player']
+		),
+		Index(
+			value: ['managerId']
 		)
 	]
 )
@@ -33,7 +27,7 @@ class Team
 	String player;
 
 	String name, description, image;
-
+	
 	String managerId;
 
 	@ignore

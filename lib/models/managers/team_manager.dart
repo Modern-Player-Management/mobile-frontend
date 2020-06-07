@@ -49,10 +49,12 @@ class TeamManager
 
 				for(var team in teams)
 				{
+					print("Team: ${team.id} / ${team.name} / ${team.managerId}");
 					_playerDao.insertPlayer(team.manager);
 					team.player = _storage.player;
 					team.save = true;
-					_teamDao.insertTeam(team);
+					var id = await _teamDao.insertTeam(team);
+					print(id);
 
 					int index = teamsKey.indexOf(team.id);
 					if(index != -1)
@@ -61,12 +63,12 @@ class TeamManager
 						teamsKey.removeAt(index);
 					}
 
-					_playerManager.syncPlayers(team);
+					await _playerManager.syncPlayers(team);
 				}
 
 				for(var team in savedTeams) 
 				{
-					_teamDao.deleteTeam(team);
+					await _teamDao.deleteTeam(team);
 				}
 			}
 		}

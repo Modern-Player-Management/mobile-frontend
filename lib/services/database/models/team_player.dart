@@ -24,7 +24,7 @@ import 'package:mpm/services/database/models/models.dart';
 	],
 )
 class TeamPlayer
-{	
+{
 	final String teamId;
 	final String playerId;
 
