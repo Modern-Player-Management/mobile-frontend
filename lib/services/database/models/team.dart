@@ -11,9 +11,6 @@ part 'team.g.dart';
 	indices: [
 		Index(
 			value: ['player']
-		),
-		Index(
-			value: ['managerId']
 		)
 	]
 )
@@ -47,10 +44,6 @@ class Team
 	bool update;
 	@JsonKey(ignore: true)
 	bool delete;
-
-	@ignore
-	@JsonKey(ignore: true)
-	String imageUrl;
 
   	Team({
 		this.id, 
