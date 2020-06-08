@@ -84,7 +84,7 @@ class PlayerManager
 		return [];
 	}
 
-	Future<void> addTeamPlayer(Team team, Player player) async
+	Future<bool> addTeamPlayer(Team team, Player player) async
 	{
 		_checkValidResponse();
 		
@@ -105,14 +105,21 @@ class PlayerManager
 				teamPlayer.save = true;
 				await _teamPlayerDao.updateTeamPlayer(teamPlayer);
 			}
+			else
+			{
+				return false;
+			}
 		}
 		catch(e) 
 		{
 			print("addTeamPlayer: $e");
+			return false;
 		}
+
+		return true;
 	}
 
-	Future<void> removeTeamPlayer(TeamPlayer teamPlayer) async
+	Future<bool> removeTeamPlayer(TeamPlayer teamPlayer) async
 	{
 		_checkValidResponse();
 		
@@ -126,10 +133,17 @@ class PlayerManager
 			{
 				await _teamPlayerDao.deleteTeamPlayer(teamPlayer);
 			}
+			else
+			{
+				return false;
+			}
 		}
 		catch(e)
 		{
 			print("removeTeamPlayer: $e");
+			return false;
 		}
+
+		return true;
 	}
 }
