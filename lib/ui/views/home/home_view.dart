@@ -22,9 +22,9 @@ class HomeView extends ViewModelBuilderWidget<HomeViewModel>
 				actions: <Widget>[
 					IconButton(
 						icon: Icon(
-							Icons.exit_to_app
+							Icons.person
 						),
-						onPressed: model.disconnect,
+						onPressed: model.playerInfo,
 					)
 				],
 			),
