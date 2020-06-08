@@ -83,4 +83,6 @@ class HomeTeamViewModel extends FutureViewModel<void>
 			)
 		);
 	}
+
+	bool get hasImage => team.image != null;
 }
