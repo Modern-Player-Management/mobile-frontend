@@ -20,7 +20,10 @@ class SearchPlayerViewModel extends BaseViewModel
 
 	void addPlayer(Player player) async
 	{
-		await _playerManager.addTeamPlayer(team, player);
-		_navigation.back();
+		var res = await _playerManager.addTeamPlayer(team, player);
+		if(res)
+		{
+			_navigation.back();
+		}
 	}
 }
