@@ -26,6 +26,14 @@ class TeamManager
 		_playerManager = locator<PlayerManager>(param1: validResponse);
 	}
 
+	void _checkValidResponse()
+	{
+		if(validResponse == null)
+		{
+			validResponse = locator<Session>().validResponse;
+		}
+	}
+
 	Future<void> syncTeams() async
 	{
 		if(_storage.token == null)
@@ -33,10 +41,7 @@ class TeamManager
 			return;
 		}
 
-		if(validResponse == null)
-		{
-			validResponse = locator<Session>().validResponse;
-		}
+		_checkValidResponse();
 
 		try
 		{
@@ -86,6 +91,8 @@ class TeamManager
 
 	Future<void> insertTeam(Team team, [bool add = true]) async
 	{
+		_checkValidResponse();
+
 		if(add) 
 		{
 			team.id = _uuid.v1();
@@ -111,6 +118,8 @@ class TeamManager
 
 	Future<void> updateTeam(Team team) async
 	{
+		_checkValidResponse();
+
 		await _teamDao.updateTeam(team);
 
 		try
@@ -130,6 +139,8 @@ class TeamManager
 
 	Future<void> deleteTeam(Team team) async
 	{
+		_checkValidResponse();
+		
 		team.delete = true;
 		await _teamDao.updateTeam(team);
 
