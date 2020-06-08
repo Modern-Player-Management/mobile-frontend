@@ -6,7 +6,6 @@ import 'package:flappy_search_bar/flappy_search_bar.dart';
 import 'package:mpm/services/database/models/team.dart';
 import 'package:mpm/ui/views/player/search/search_player_view_model.dart';
 import 'package:mpm/services/database/models/player.dart';
-import 'package:mpm/ui/widgets/button.dart';
 
 class SearchPlayerView extends ViewModelBuilderWidget<SearchPlayerViewModel>
 {
@@ -57,17 +56,10 @@ class SearchPlayerView extends ViewModelBuilderWidget<SearchPlayerViewModel>
 							title: Text(
 								player.username
 							),
+							onTap: () => model.addPlayer(player),
 						);
 					},
 				),
-			),
-			floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-			floatingActionButton: Button(
-				child: Text(
-					"Add a player"
-				),
-				color: Colors.green,
-				onPressed: model.managePlayer
 			),
 		);
 	}
