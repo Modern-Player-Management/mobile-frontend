@@ -95,9 +95,12 @@ class ManageTeamViewModel extends BaseViewModel
 			}
 
 			team.image = fileId;
-			_teamManager.insertTeam(team);
+			var res = await _teamManager.insertTeam(team);
 
-			_navigation.back();
+			if(res)
+			{
+				_navigation.back();
+			}
 		}
 	}
 }

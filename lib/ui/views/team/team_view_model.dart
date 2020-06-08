@@ -72,7 +72,7 @@ class TeamPlayersViewModel extends StreamViewModel<List<Player>>
 			playerId: player.id
 		);
 
-		await _playerManager.removeTeamPlayer(teamPlayer);
+		var res = await _playerManager.removeTeamPlayer(teamPlayer);
 	}
 
 	void onTap(Player player)
