@@ -63,6 +63,11 @@ class TeamPlayersViewModel extends StreamViewModel<List<Player>>
 	@override
 	get stream => _controller.stream;
 
+	void onPressed(Player player) async
+	{
+
+	}
+
 	void onTap(Player player)
 	{
 		_navigation.navigateTo(
@@ -72,4 +77,6 @@ class TeamPlayersViewModel extends StreamViewModel<List<Player>>
 			)
 		);
 	}
+
+	bool get isManager => _teamViewModel.isManager;
 }

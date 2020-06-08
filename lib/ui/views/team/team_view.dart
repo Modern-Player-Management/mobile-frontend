@@ -81,6 +81,14 @@ class _TeamPlayersView extends ViewModelBuilderWidget<TeamPlayersViewModel>
 							title: Text(
 								player.username
 							),
+							trailing: model.isManager ?
+							IconButton(
+								icon: Icon(
+									Icons.delete,
+									color: Colors.red,
+								),
+								onPressed: () => model.onPressed(player),
+							) : null,
 							onTap: () => model.onTap(player),
 						)
 					);
