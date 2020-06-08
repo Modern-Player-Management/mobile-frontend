@@ -32,6 +32,8 @@ class TeamViewModel extends BaseViewModel
 
 class TeamPlayersViewModel extends StreamViewModel<List<Player>>
 {
+	final _playerManager = locator<PlayerManager>();
+
 	final _db = locator<AppDatabase>();
 	final _navigation = locator<NavigationService>();
 
@@ -65,7 +67,12 @@ class TeamPlayersViewModel extends StreamViewModel<List<Player>>
 
 	void onPressed(Player player) async
 	{
+		final teamPlayer = TeamPlayer(
+			teamId: _teamViewModel.team.id,
+			playerId: player.id
+		);
 
+		await _playerManager.removeTeamPlayer(teamPlayer);
 	}
 
 	void onTap(Player player)
