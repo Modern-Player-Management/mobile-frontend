@@ -4,6 +4,7 @@ import 'package:stacked/stacked.dart';
 
 import 'package:mpm/services/database/models/team.dart';
 import 'package:mpm/ui/views/team/team_view_model.dart';
+import 'package:mpm/ui/widgets/circle_avatar_image.dart';
 
 class TeamView extends ViewModelBuilderWidget<TeamViewModel>
 {
@@ -70,11 +71,11 @@ class _TeamPlayersView extends ViewModelBuilderWidget<TeamPlayersViewModel>
 					var player = model.data[index];
 					return Card(
 						child: ListTile(
-							leading: CircleAvatar(
-								child: Icon(
-									Icons.person,
-									size: 32,
-								),
+							leading: CircleAvatarImage(
+								url: null,
+								headers: null,
+								hasImage: false,
+								icon: Icons.person,
 							),
 							title: Text(
 								player.username
