@@ -1,16 +1,19 @@
-import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
+
+import 'package:extended_image/extended_image.dart';
 
 class CircleAvatarImage extends StatelessWidget
 {
 	final String url;
 	final Map<String, String> headers;
 	final bool hasImage;
+	final IconData icon;
 
 	CircleAvatarImage({
 		@required this.url,
 		@required this.headers,
-		@required this.hasImage
+		@required this.hasImage,
+		this.icon
 	});
 
 	@override
@@ -44,6 +47,7 @@ class CircleAvatarImage extends StatelessWidget
 				},
 			) :
 			Icon(
+				icon ??
 				Icons.group,
 				size: 32,
 			)
