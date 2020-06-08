@@ -113,7 +113,6 @@ class PlayerManager
 		catch(e) 
 		{
 			print("addTeamPlayer: $e");
-			return false;
 		}
 
 		return true;
@@ -141,7 +140,6 @@ class PlayerManager
 		catch(e)
 		{
 			print("removeTeamPlayer: $e");
-			return false;
 		}
 
 		return true;
