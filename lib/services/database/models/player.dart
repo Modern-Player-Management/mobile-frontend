@@ -12,7 +12,7 @@ class Player
 	@primaryKey
 	String id;
 
-	String username, email, created, calendarSecret;
+	String username, email, image, created, calendarSecret;
 
 	@ignore
 	@JsonKey(ignore: true)
@@ -26,6 +26,9 @@ class Player
 		this.id,
 		this.username,
 		this.email,
+		this.image,
+		this.created,
+		this.calendarSecret
 	});
 
 	static const fromJson = _$PlayerFromJson;
@@ -33,9 +36,9 @@ class Player
 	Map<String, dynamic> toJson() 
 	{
 		return {
-			"id": id,
 			"username": username,
-			"email": email
+			"email": email,
+			"image": image,
 		};
 	}
 
