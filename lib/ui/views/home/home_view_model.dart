@@ -66,6 +66,7 @@ class HomeTeamViewModel extends FutureViewModel<void>
 	@override
 	Future<void> futureToRun() async
 	{
+		team.players = [];
 		team.manager = await _db.playerDao.getPlayer(team.managerId);
 
 		var teamPlayers = await _db.teamPlayerDao.getAllTeamPlayers(team.id);
@@ -81,14 +82,16 @@ class HomeTeamViewModel extends FutureViewModel<void>
 		loaded = true;
 	}
 
-	void onTap()
+	void onTap() async
 	{
-		_navigation.navigateTo(
+		await _navigation.navigateTo(
 			Routes.teamViewRoute,
 			arguments: TeamViewArguments(
 				team: team
 			)
 		);
+
+		runFuture();
 	}
 
 	bool get hasImage => team.image != null;
