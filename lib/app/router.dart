@@ -13,7 +13,7 @@ import 'package:mpm/ui/views/team/team_view.dart';
 import 'package:mpm/ui/views/team/manage/manage_team_view.dart';
 
 import 'package:mpm/ui/views/player/player_view.dart';
-import 'package:mpm/ui/views/player/manage/manage_player_view.dart';
+import 'package:mpm/ui/views/player/search/search_player_view.dart';
 
 @MaterialAutoRouter()
 class $Router
@@ -31,5 +31,5 @@ class $Router
 	ManageTeamView manageTeamViewRoute;
 
 	PlayerView playerViewRoute;
-	ManagePlayerView managePlayerViewRoute;
+	SearchPlayerView searchPlayerViewRoute;
 }

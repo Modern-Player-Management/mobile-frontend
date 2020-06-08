@@ -17,7 +17,7 @@ import 'package:mpm/services/database/models/team.dart';
 import 'package:mpm/ui/views/team/manage/manage_team_view.dart';
 import 'package:mpm/ui/views/player/player_view.dart';
 import 'package:mpm/services/database/models/player.dart';
-import 'package:mpm/ui/views/player/manage/manage_player_view.dart';
+import 'package:mpm/ui/views/player/search/search_player_view.dart';
 
 abstract class Routes {
   static const splashViewRoute = '/';
@@ -28,7 +28,7 @@ abstract class Routes {
   static const teamViewRoute = '/team-view-route';
   static const manageTeamViewRoute = '/manage-team-view-route';
   static const playerViewRoute = '/player-view-route';
-  static const managePlayerViewRoute = '/manage-player-view-route';
+  static const searchPlayerViewRoute = '/search-player-view-route';
   static const all = {
     splashViewRoute,
     authViewRoute,
@@ -38,7 +38,7 @@ abstract class Routes {
     teamViewRoute,
     manageTeamViewRoute,
     playerViewRoute,
-    managePlayerViewRoute,
+    searchPlayerViewRoute,
   };
 }
 
@@ -102,14 +102,14 @@ class Router extends RouterBase {
           builder: (context) => PlayerView(player: typedArgs.player),
           settings: settings,
         );
-      case Routes.managePlayerViewRoute:
-        if (hasInvalidArgs<ManagePlayerViewArguments>(args)) {
-          return misTypedArgsRoute<ManagePlayerViewArguments>(args);
+      case Routes.searchPlayerViewRoute:
+        if (hasInvalidArgs<SearchPlayerViewArguments>(args)) {
+          return misTypedArgsRoute<SearchPlayerViewArguments>(args);
         }
         final typedArgs =
-            args as ManagePlayerViewArguments ?? ManagePlayerViewArguments();
+            args as SearchPlayerViewArguments ?? SearchPlayerViewArguments();
         return MaterialPageRoute<dynamic>(
-          builder: (context) => ManagePlayerView(team: typedArgs.team),
+          builder: (context) => SearchPlayerView(team: typedArgs.team),
           settings: settings,
         );
       default:
@@ -134,8 +134,8 @@ class PlayerViewArguments {
   PlayerViewArguments({this.player});
 }
 
-//ManagePlayerView arguments holder class
-class ManagePlayerViewArguments {
+//SearchPlayerView arguments holder class
+class SearchPlayerViewArguments {
   final Team team;
-  ManagePlayerViewArguments({this.team});
+  SearchPlayerViewArguments({this.team});
 }
