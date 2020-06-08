@@ -4,6 +4,7 @@ import 'package:chopper/chopper.dart';
 import 'package:injectable/injectable.dart';
 
 import 'package:mpm/app/locator.dart';
+import 'package:mpm/utils/utils.dart';
 
 @injectable
 class PlayerManager
@@ -16,11 +17,19 @@ class PlayerManager
 
 	final _storage = locator<SecureStorage>();
 
-	final bool Function(Response) validResponse;
+	bool Function(Response) validResponse;
 
 	PlayerManager({
 		@required @factoryParam Function validResponse
 	}) : this.validResponse = validResponse;
+
+	void _checkValidResponse()
+	{
+		if(validResponse == null)
+		{
+			validResponse = locator<Session>().validResponse;
+		}
+	}
 
 	Future<void> syncPlayers(Team team) async
 	{
@@ -29,7 +38,9 @@ class PlayerManager
 			return;
 		}
 
-		_playerDao.insertPlayer(team.manager);
+		_checkValidResponse();
+
+		await _playerDao.insertPlayer(team.manager);
 		await _teamPlayerDao.insertTeamPlayer(TeamPlayer(
 			teamId: team.id,
 			playerId: team.manager.id,
@@ -38,7 +49,7 @@ class PlayerManager
 
 		for(var player in team.players)
 		{
-			_playerDao.insertPlayer(player);
+			await _playerDao.insertPlayer(player);
 			if(player.id != team.manager.id)
 			{
 				await _teamPlayerDao.insertTeamPlayer(TeamPlayer(
@@ -50,9 +61,34 @@ class PlayerManager
 		}
 	}
 
+	Future<List<Player>> search(String str) async
+	{
+		if(str.length > minCharacters)
+		{
+			_checkValidResponse();
+
+			try
+			{
+				var res = await _playerApi.searchPlayers(str);
+				if(validResponse(res)) 
+				{
+					return res.body;
+				}
+			}
+			catch(e)
+			{
+				print(e);
+			}
+		}
+
+		return [];
+	}
+
 	Future<void> addTeamPlayer(Team team, Player player) async
 	{
-		_playerDao.insertPlayer(player);
+		_checkValidResponse();
+		
+		await _playerDao.insertPlayer(player);
 
 		var teamPlayer = TeamPlayer(
 			teamId: team.id,
@@ -78,6 +114,8 @@ class PlayerManager
 
 	Future<void> removeTeamPlayer(TeamPlayer teamPlayer) async
 	{
+		_checkValidResponse();
+		
 		teamPlayer.delete = true;
 		await _teamPlayerDao.updateTeamPlayer(teamPlayer);
 
