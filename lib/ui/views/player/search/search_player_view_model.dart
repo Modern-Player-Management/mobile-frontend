@@ -5,12 +5,12 @@ import 'package:stacked/stacked.dart';
 import 'package:mpm/app/locator.dart';
 import 'package:mpm/utils/utils.dart';
 
-class ManagePlayerViewModel extends BaseViewModel
+class SearchPlayerViewModel extends BaseViewModel
 {
 	final Team team;
 	final _playerApi = locator<PlayerApi>();
 
-	ManagePlayerViewModel({
+	SearchPlayerViewModel({
 		@required this.team
 	});
 

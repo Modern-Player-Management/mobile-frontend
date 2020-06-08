@@ -18,8 +18,8 @@ class TeamViewModel extends BaseViewModel
 	void addPlayer()
 	{
 		_navigator.navigateTo(
-			Routes.managePlayerViewRoute,
-			arguments: ManagePlayerViewArguments(
+			Routes.searchPlayerViewRoute,
+			arguments: SearchPlayerViewArguments(
 				team: team
 			)
 		);
