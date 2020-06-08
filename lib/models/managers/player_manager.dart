@@ -29,6 +29,13 @@ class PlayerManager
 			return;
 		}
 
+		_playerDao.insertPlayer(team.manager);
+		await _teamPlayerDao.insertTeamPlayer(TeamPlayer(
+			teamId: team.id,
+			playerId: team.manager.id,
+			save: true
+		));
+
 		for(var player in team.players)
 		{
 			_playerDao.insertPlayer(player);

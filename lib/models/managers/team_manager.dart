@@ -49,12 +49,9 @@ class TeamManager
 
 				for(var team in teams)
 				{
-					print("Team: ${team.id} / ${team.name} / ${team.managerId}");
-					_playerDao.insertPlayer(team.manager);
 					team.player = _storage.player;
 					team.save = true;
-					var id = await _teamDao.insertTeam(team);
-					print(id);
+					await _teamDao.insertTeam(team);
 
 					int index = teamsKey.indexOf(team.id);
 					if(index != -1)
