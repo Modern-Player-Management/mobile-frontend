@@ -4,7 +4,7 @@ import 'package:stacked/stacked.dart';
 
 import 'package:mpm/services/database/models/team.dart';
 import 'package:mpm/ui/views/home/home_view_model.dart';
-import 'package:mpm/ui/widgets/avatar_image.dart';
+import 'package:mpm/ui/widgets/circle_avatar_image.dart';
 
 class HomeView extends ViewModelBuilderWidget<HomeViewModel>
 {
