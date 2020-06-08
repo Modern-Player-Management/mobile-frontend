@@ -62,7 +62,7 @@ abstract class TeamApi extends ChopperService
 	Future<Response<List<Team>>> getTeams();
 
 	@Post(path: "/api/teams/{teamId}/player/{playerId}")
-	Future<Response<Team>> addTeamPlayer(@Path() String teamId, @Path() String playerId);
+	Future<Response> addTeamPlayer(@Path() String teamId, @Path() String playerId);
 
 	@Delete(path: "/api/teams/{teamId}/player/{playerId}")
 	Future<Response> deleteTeamPlayer(@Path() String teamId, @Path() String playerId);
@@ -74,5 +74,5 @@ abstract class TeamApi extends ChopperService
 	Future<Response> deleteTeam(@Path() String teamId);
 
 	@Post(path: "/api/teams/{teamId}/events")
-	Future<Response<Team>> addEvent(@Path() String teamId, @Body() Event event);
+	Future<Response<Event>> addEvent(@Path() String teamId, @Body() Event event);
 }
