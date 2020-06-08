@@ -79,6 +79,7 @@ class _TeamPlayersView extends ViewModelBuilderWidget<TeamPlayersViewModel>
 							title: Text(
 								player.username
 							),
+							onTap: () => model.onTap(player),
 						)
 					);
 				},

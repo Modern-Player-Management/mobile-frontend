@@ -28,8 +28,10 @@ class TeamViewModel extends BaseViewModel
 
 class TeamPlayersViewModel extends StreamViewModel<List<Player>>
 {
-	final BuildContext context;
 	final _db = locator<AppDatabase>();
+	final _navigation = locator<NavigationService>();
+
+	final BuildContext context;
 	final _controller = StreamController<List<Player>>.broadcast();
 
 	TeamViewModel _teamViewModel;
@@ -56,4 +58,14 @@ class TeamPlayersViewModel extends StreamViewModel<List<Player>>
 
 	@override
 	get stream => _controller.stream;
+
+	void onTap(Player player)
+	{
+		_navigation.navigateTo(
+			Routes.playerViewRoute,
+			arguments: PlayerViewArguments(
+				player: player
+			)
+		);
+	}
 }
