@@ -92,7 +92,7 @@ class _$AppDatabase extends AppDatabase {
         await database.execute(
             'CREATE TABLE IF NOT EXISTS `teams` (`id` TEXT, `player` TEXT, `name` TEXT, `description` TEXT, `image` TEXT, `managerId` TEXT, `created` TEXT, `save` INTEGER, `update` INTEGER, `delete` INTEGER, PRIMARY KEY (`id`))');
         await database.execute(
-            'CREATE TABLE IF NOT EXISTS `players` (`id` TEXT, `username` TEXT, `email` TEXT, `created` TEXT, `calendarSecret` TEXT, PRIMARY KEY (`id`))');
+            'CREATE TABLE IF NOT EXISTS `players` (`id` TEXT, `username` TEXT, `email` TEXT, `image` TEXT, `created` TEXT, `calendarSecret` TEXT, PRIMARY KEY (`id`))');
         await database.execute(
             'CREATE TABLE IF NOT EXISTS `teams_players` (`teamId` TEXT, `playerId` TEXT, `save` INTEGER, `delete` INTEGER, FOREIGN KEY (`teamId`) REFERENCES `teams` (`id`) ON UPDATE CASCADE ON DELETE CASCADE, FOREIGN KEY (`playerId`) REFERENCES `players` (`id`) ON UPDATE CASCADE ON DELETE CASCADE, PRIMARY KEY (`teamId`, `playerId`))');
         await database.execute(
@@ -103,8 +103,6 @@ class _$AppDatabase extends AppDatabase {
             'CREATE TABLE IF NOT EXISTS `events_discrepancies` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `eventId` TEXT, `discrepancyId` TEXT, `confirmed` INTEGER, `save` INTEGER, `delete` INTEGER, FOREIGN KEY (`eventId`) REFERENCES `events` (`id`) ON UPDATE CASCADE ON DELETE CASCADE, FOREIGN KEY (`discrepancyId`) REFERENCES `discrepancies` (`id`) ON UPDATE CASCADE ON DELETE CASCADE)');
         await database
             .execute('CREATE INDEX `index_teams_player` ON `teams` (`player`)');
-        await database.execute(
-            'CREATE INDEX `index_teams_managerId` ON `teams` (`managerId`)');
 
         await callback?.onCreate?.call(database, version);
       },
@@ -291,6 +289,7 @@ class _$PlayerDao extends PlayerDao {
                   'id': item.id,
                   'username': item.username,
                   'email': item.email,
+                  'image': item.image,
                   'created': item.created,
                   'calendarSecret': item.calendarSecret
                 },
@@ -303,6 +302,7 @@ class _$PlayerDao extends PlayerDao {
                   'id': item.id,
                   'username': item.username,
                   'email': item.email,
+                  'image': item.image,
                   'created': item.created,
                   'calendarSecret': item.calendarSecret
                 },
@@ -315,6 +315,7 @@ class _$PlayerDao extends PlayerDao {
                   'id': item.id,
                   'username': item.username,
                   'email': item.email,
+                  'image': item.image,
                   'created': item.created,
                   'calendarSecret': item.calendarSecret
                 },
@@ -329,7 +330,10 @@ class _$PlayerDao extends PlayerDao {
   static final _playersMapper = (Map<String, dynamic> row) => Player(
       id: row['id'] as String,
       username: row['username'] as String,
-      email: row['email'] as String);
+      email: row['email'] as String,
+      image: row['image'] as String,
+      created: row['created'] as String,
+      calendarSecret: row['calendarSecret'] as String);
 
   final InsertionAdapter<Player> _playerInsertionAdapter;
 
