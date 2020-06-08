@@ -48,7 +48,7 @@ class App extends ViewModelBuilderWidget<AppModel> with WidgetsBindingObserver
 	}
 
   	@override
-	Widget builder(context, model, child) 
+	Widget builder(context, model, child)
 	{
 		return DynamicTheme(
 			defaultBrightness: Brightness.light,

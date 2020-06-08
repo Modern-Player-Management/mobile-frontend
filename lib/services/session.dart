@@ -10,7 +10,6 @@ class Session
 	final _navigation = locator<NavigationService>();
 
 	TeamManager _teamManager;
-	bool redirect = false;
 	bool online = false;
 
 	Session()
@@ -25,13 +24,10 @@ class Session
 			_storage.token = null;
 			_storage.player = null;
 
-			if(redirect) 
-			{
-				_navigation.pushNamedAndRemoveUntil(
-					Routes.authViewRoute, 
-					predicate: (route) => route == null
-				);
-			}
+			_navigation.pushNamedAndRemoveUntil(
+				Routes.authViewRoute, 
+				predicate: (route) => route == null
+			);
 		}
 
 		return response != null && response.isSuccessful;
