@@ -27,12 +27,13 @@ class TeamView extends ViewModelBuilderWidget<TeamViewModel>
 					_TeamPlayersView()
 				],
 			),
-			floatingActionButton: FloatingActionButton(
+			floatingActionButton: model.isManager ?
+			FloatingActionButton(
 				child: Icon(
 					Icons.add
 				),
 				onPressed: model.addPlayer,
-			),
+			) : null
 		);
 	}
   
