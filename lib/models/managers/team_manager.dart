@@ -10,7 +10,6 @@ import 'package:mpm/app/locator.dart';
 class TeamManager
 {
 	final _api = locator<TeamApi>();
-	final _playerDao = locator<AppDatabase>().playerDao;
 	final _teamDao = locator<AppDatabase>().teamDao;
 
 	final _storage = locator<SecureStorage>();
@@ -18,7 +17,7 @@ class TeamManager
 
 	PlayerManager _playerManager;
 
-	final bool Function(Response) validResponse;
+	bool Function(Response) validResponse;
 
 	TeamManager({
 		@required @factoryParam Function validResponse
@@ -32,6 +31,11 @@ class TeamManager
 		if(_storage.token == null)
 		{
 			return;
+		}
+
+		if(validResponse == null)
+		{
+			validResponse = locator<Session>().validResponse;
 		}
 
 		try
