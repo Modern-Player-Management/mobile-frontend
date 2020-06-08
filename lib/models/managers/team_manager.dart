@@ -34,11 +34,11 @@ class TeamManager
 		}
 	}
 
-	Future<void> syncTeams() async
+	Future<bool> syncTeams() async
 	{
 		if(_storage.token == null)
 		{
-			return;
+			return false;
 		}
 
 		_checkValidResponse();
@@ -77,11 +77,18 @@ class TeamManager
 					await _teamDao.deleteTeam(team);
 				}
 			}
+			else
+			{
+				return false;
+			}
 		}
 		catch(e)
 		{
 			print("SyncTeams: $e");
+			return false;
 		}
+
+		return true;
 	}
 
 	Stream<List<Team>> getTeams()
@@ -89,7 +96,7 @@ class TeamManager
 		return _teamDao.getTeams(_storage.player);
 	}
 
-	Future<void> insertTeam(Team team, [bool add = true]) async
+	Future<bool> insertTeam(Team team, [bool add = true]) async
 	{
 		_checkValidResponse();
 
@@ -109,14 +116,21 @@ class TeamManager
 			{
 				await _teamDao.updateTeamId(team.id, response.body.id, 1);
 			}
+			else
+			{
+				return false;
+			}
 		}
 		catch(e) 
 		{
 			print("insertTeam: $e");
+			return false;
 		}
+
+		return true;
 	}
 
-	Future<void> updateTeam(Team team) async
+	Future<bool> updateTeam(Team team) async
 	{
 		_checkValidResponse();
 
@@ -130,14 +144,21 @@ class TeamManager
 				team.save = true;
 				await _teamDao.updateTeam(team);
 			}
+			else
+			{
+				return false;
+			}
 		}
 		catch(e) 
 		{
 			print("updateTeam: $e");
+			return false;
 		}
+
+		return true;
 	}
 
-	Future<void> deleteTeam(Team team) async
+	Future<bool> deleteTeam(Team team) async
 	{
 		_checkValidResponse();
 		
@@ -151,10 +172,17 @@ class TeamManager
 			{
 				await _teamDao.deleteTeam(team);
 			}
+			else
+			{
+				return false;
+			}
 		}
 		catch(e) 
 		{
 			print("deleteTeam: $e");
+			return false;
 		}
+
+		return true;
 	}
 }
