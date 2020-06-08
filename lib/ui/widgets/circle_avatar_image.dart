@@ -8,18 +8,21 @@ class CircleAvatarImage extends StatelessWidget
 	final Map<String, String> headers;
 	final bool hasImage;
 	final IconData icon;
+	final double size;
 
 	CircleAvatarImage({
 		@required this.url,
 		@required this.headers,
 		@required this.hasImage,
-		this.icon
+		this.icon,
+		this.size = 32
 	});
 
 	@override
 	Widget build(BuildContext context)
 	{
 		return CircleAvatar(
+			radius: size - 8,
 			backgroundColor: hasImage ?
 			Colors.transparent : null,
 			child: hasImage ?
@@ -41,7 +44,7 @@ class CircleAvatarImage extends StatelessWidget
 						default:
 							return Icon(
 								Icons.error,
-								size: 32,
+								size: size,
 							);
 					}
 				},
@@ -49,7 +52,7 @@ class CircleAvatarImage extends StatelessWidget
 			Icon(
 				icon ??
 				Icons.group,
-				size: 32,
+				size: size,
 			)
 		);
 	}
