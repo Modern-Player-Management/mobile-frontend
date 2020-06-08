@@ -4,15 +4,15 @@ import 'package:stacked/stacked.dart';
 import 'package:flappy_search_bar/flappy_search_bar.dart';
 
 import 'package:mpm/services/database/models/team.dart';
-import 'package:mpm/ui/views/player/manage/manage_player_view_model.dart';
+import 'package:mpm/ui/views/player/search/search_player_view_model.dart';
 import 'package:mpm/services/database/models/player.dart';
 import 'package:mpm/ui/widgets/button.dart';
 
-class ManagePlayerView extends ViewModelBuilderWidget<ManagePlayerViewModel>
+class SearchPlayerView extends ViewModelBuilderWidget<SearchPlayerViewModel>
 {
 	final Team team;
 
-	ManagePlayerView({
+	SearchPlayerView({
 		this.team
 	});
 
@@ -73,9 +73,9 @@ class ManagePlayerView extends ViewModelBuilderWidget<ManagePlayerViewModel>
 	}
   
 	@override
-	ManagePlayerViewModel viewModelBuilder(context)
+	SearchPlayerViewModel viewModelBuilder(context)
 	{
-		return ManagePlayerViewModel(
+		return SearchPlayerViewModel(
 			team: team
 		);
 	}
