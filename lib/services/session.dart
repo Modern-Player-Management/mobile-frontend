@@ -15,10 +15,10 @@ class Session
 
 	Session()
 	{
-		_teamManager = locator<TeamManager>(param1: _validResponse);
+		_teamManager = locator<TeamManager>(param1: validResponse);
 	}
 
-	bool _validResponse(Response response)
+	bool validResponse(Response response)
 	{
 		if(response != null && response.statusCode == 401)
 		{
