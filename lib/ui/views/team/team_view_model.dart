@@ -8,8 +8,10 @@ import 'package:mpm/app/locator.dart';
 
 class TeamViewModel extends BaseViewModel
 {
-	final Team team;
+	final _storage = locator<SecureStorage>();
 	final _navigator = locator<NavigationService>();
+
+	final Team team;
 
 	TeamViewModel({
 		@required this.team
@@ -24,6 +26,8 @@ class TeamViewModel extends BaseViewModel
 			)
 		);
 	}
+
+	bool get isManager => team.managerId == _storage.player;
 }
 
 class TeamPlayersViewModel extends StreamViewModel<List<Player>>
