@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+
 import 'package:stacked/stacked.dart';
+import 'package:extended_image/extended_image.dart';
 
 import 'package:mpm/services/database/models/team.dart';
 import 'package:mpm/ui/views/home/home_view_model.dart';
@@ -82,10 +84,36 @@ class _TeamView extends ViewModelBuilderWidget<HomeTeamViewModel>
 		return Card(
 			child: ListTile(
 				leading: CircleAvatar(
-					child: Icon(
+					backgroundColor: model.team.image == null ?
+					null : Colors.transparent,
+					child: model.team.image == null ?
+					Icon(
 						Icons.group,
 						size: 32,
-					) 
+					) :
+					ExtendedImage.network(
+						model.url,
+						headers: model.headers,
+						enableLoadState: true,
+						loadStateChanged: (state) {
+							switch(state.extendedImageLoadState)
+							{
+								case LoadState.completed:
+									return ExtendedRawImage(
+										image: state.extendedImageInfo.image,
+									);
+								case LoadState.loading:
+									return Center(
+										child: CircularProgressIndicator(),
+									);
+								default:
+									return Icon(
+										Icons.error,
+										size: 32,
+									);
+							}
+						},
+					)
 				),
 				title: Text(
 					team.name

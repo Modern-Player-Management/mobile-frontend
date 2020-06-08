@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:stacked/stacked.dart';
 
 import 'package:mpm/app/locator.dart';
+import 'package:mpm/utils/utils.dart';
 
 class HomeViewModel extends BaseViewModel
 {
@@ -37,15 +38,24 @@ class HomeTeamViewModel extends FutureViewModel<void>
 {
 	final _db = locator<AppDatabase>();
 	final _navigation = locator<NavigationService>();
-	final _fileApi = locator<FileApi>();
+	final _storage = locator<SecureStorage>();
 
 	final Team team;
 
 	bool loaded = false;
 
+	String url;
+	Map<String, String> headers;
+
 	HomeTeamViewModel({
 		@required this.team
-	});
+	})
+	{
+		url = "$serverUrl/api/files/${team.image}";
+		headers = {
+			"Authorization": "Bearer ${_storage.token}"
+		};
+	}
 
 	@override
 	Future<void> futureToRun() async
@@ -61,13 +71,6 @@ class HomeTeamViewModel extends FutureViewModel<void>
 				team.players.add(player);
 			}
 		}
-
-		/*var res = await _fileApi.getFile(team.image);
-		if(res.isSuccessful)
-		{
-			team.imageUrl = res.body;
-			print(res.body);
-		}*/
 
 		loaded = true;
 	}
