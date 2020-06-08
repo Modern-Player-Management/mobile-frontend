@@ -7,6 +7,8 @@ import 'package:mpm/utils/utils.dart';
 
 class HomeViewModel extends BaseViewModel
 {
+	final _playerDao = locator<AppDatabase>().playerDao;
+	final _storage = locator<SecureStorage>();
 	final _teamManager = locator<TeamManager>();
 	final _navigation = locator<NavigationService>();
 
@@ -16,9 +18,14 @@ class HomeViewModel extends BaseViewModel
 		Future.delayed(Duration(seconds: 2));
 	}
 
-	void playerInfo()
+	void playerInfo() async
 	{
-		_navigation.navigateTo(Routes.playerViewRoute);
+		_navigation.navigateTo(
+			Routes.playerViewRoute,
+			arguments: PlayerViewArguments(
+				player: await _playerDao.getPlayer(_storage.player)
+			)
+		);
 	}
 
 	void createTeam()
