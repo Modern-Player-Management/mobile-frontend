@@ -7,7 +7,6 @@ import 'package:mpm/utils/utils.dart';
 
 class HomeViewModel extends BaseViewModel
 {
-	final _session = locator<Session>();
 	final _teamManager = locator<TeamManager>();
 	final _navigation = locator<NavigationService>();
 
@@ -17,9 +16,9 @@ class HomeViewModel extends BaseViewModel
 		Future.delayed(Duration(seconds: 2));
 	}
 
-	void disconnect()
+	void playerInfo()
 	{
-		_session.disconnect();
+		_navigation.navigateTo(Routes.playerViewRoute);
 	}
 
 	void createTeam()
