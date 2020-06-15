@@ -5,6 +5,7 @@ import 'package:stacked/stacked.dart';
 import 'package:mpm/services/database/models/team.dart';
 import 'package:mpm/ui/views/team/team_view_model.dart';
 import 'package:mpm/ui/widgets/circle_avatar_image.dart';
+import 'package:mpm/ui/widgets/icon_text.dart';
 
 class TeamView extends ViewModelBuilderWidget<TeamViewModel>
 {
@@ -23,7 +24,13 @@ class TeamView extends ViewModelBuilderWidget<TeamViewModel>
 		return Scaffold(
 			body: CustomScrollView(
 				slivers: <Widget>[
-					_AppBar(),
+					SliverAppBar(
+						title: Text(
+							"${model.team.name}"
+						),
+						floating: true,
+					),
+					_Header(),
 					_TeamPlayersView()
 				],
 			),
@@ -46,16 +53,40 @@ class TeamView extends ViewModelBuilderWidget<TeamViewModel>
 	}
 }
 
-class _AppBar extends ViewModelWidget<TeamViewModel>
+class _Header extends ViewModelWidget<TeamViewModel>
 {
 	@override
 	Widget build(context, model)
 	{
-		return SliverAppBar(
-			title: Text(
-				"${model.team.name}"
+		return SliverToBoxAdapter(
+			child: Card(
+				child: Padding(
+					padding: const EdgeInsets.all(8.0),
+					child: Row(
+						children: <Widget>[
+							CircleAvatarImage(
+								image: model.team.image,
+							),
+							SizedBox(
+								width: 16,
+							),
+							Column(
+								crossAxisAlignment: CrossAxisAlignment.start,
+								children: <Widget>[
+									IconText(
+										icon: Icons.description,
+										text: "${model.team.description}",
+									),
+									IconText(
+										icon: Icons.group,
+										text: "${model.team.players.length}",
+									)
+								],
+							)
+						],
+					),
+				),
 			),
-			floating: true,
 		);
 	}
 }
@@ -73,9 +104,7 @@ class _TeamPlayersView extends ViewModelBuilderWidget<TeamPlayersViewModel>
 					return Card(
 						child: ListTile(
 							leading: CircleAvatarImage(
-								url: null,
-								headers: null,
-								hasImage: false,
+								image: player.image,
 								icon: Icons.person,
 							),
 							title: Text(
