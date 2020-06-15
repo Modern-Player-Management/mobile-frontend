@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:chopper/chopper.dart';
 import 'package:http/http.dart' as http;
+import 'package:http/http.dart' show MultipartFile;
 import 'package:get_it/get_it.dart';
 import 'package:http/io_client.dart';
 import 'package:injectable/injectable.dart';
@@ -75,4 +76,7 @@ abstract class TeamApi extends ChopperService
 
 	@Post(path: "/api/teams/{teamId}/events")
 	Future<Response<Event>> addEvent(@Path() String teamId, @Body() Event event);
+
+	@Post(path: "/api/teams/{teamId}/games")
+	Future<Response<Event>> addGame(@Path() String teamId, @PartFile() MultipartFile file);
 }

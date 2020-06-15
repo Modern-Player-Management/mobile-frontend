@@ -67,4 +67,11 @@ class _$TeamApi extends TeamApi {
     final $request = Request('POST', $url, client.baseUrl, body: $body);
     return client.send<Event, Event>($request);
   }
+
+  @override
+  Future<Response<Event>> addGame(String teamId, MultipartFile file) {
+    final $url = '/api/teams/$teamId/games';
+    final $request = Request('POST', $url, client.baseUrl);
+    return client.send<Event, Event>($request);
+  }
 }
