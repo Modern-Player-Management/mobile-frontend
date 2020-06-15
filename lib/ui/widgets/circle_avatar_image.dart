@@ -2,27 +2,49 @@ import 'package:flutter/material.dart';
 
 import 'package:extended_image/extended_image.dart';
 
-class CircleAvatarImage extends StatelessWidget
+import 'package:mpm/app/locator.dart';
+import 'package:mpm/utils/utils.dart';
+
+class CircleAvatarImage extends StatefulWidget
 {
-	final String url;
-	final Map<String, String> headers;
-	final bool hasImage;
+	final String image;
 	final IconData icon;
 	final double size;
 
 	CircleAvatarImage({
-		@required this.url,
-		@required this.headers,
-		@required this.hasImage,
+		@required this.image,
 		this.icon,
 		this.size = 32
 	});
+	
+	@override
+	_CircleAvatarImageState createState() => _CircleAvatarImageState();
+}
+
+class _CircleAvatarImageState extends State<CircleAvatarImage> 
+{
+	final _storage = locator<SecureStorage>();
+
+	String url;
+	Map<String, String> headers;
+	bool hasImage = false;
+
+	@override
+	void initState()
+	{
+		super.initState();
+		hasImage = widget.image != null;
+		url = "$serverUrl/api/files/${widget.image}";
+		headers = {
+			"Authorization": "Bearer ${_storage.token}"
+		};
+	}
 
 	@override
 	Widget build(BuildContext context)
 	{
 		return CircleAvatar(
-			radius: size - 8,
+			radius: widget.size - 8,
 			backgroundColor: hasImage ?
 			Colors.transparent : null,
 			child: hasImage ?
@@ -44,15 +66,15 @@ class CircleAvatarImage extends StatelessWidget
 						default:
 							return Icon(
 								Icons.error,
-								size: size,
+								size: widget.size,
 							);
 					}
 				},
 			) :
 			Icon(
-				icon ??
+				widget.icon ??
 				Icons.group,
-				size: size,
+				size: widget.size,
 			)
 		);
 	}
