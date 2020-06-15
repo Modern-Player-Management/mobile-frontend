@@ -64,7 +64,6 @@ class _Header extends ViewModelWidget<PlayerViewModel>
 			children: <Widget>[
 				CircleAvatarImage(
 					image: model.player.image,
-					tag: model.player.id,
 					icon: Icons.person,
 				)
 			],
