@@ -25,6 +25,15 @@ class PlayerView extends ViewModelBuilderWidget<PlayerViewModel>
 				title: Text(
 					"MPM"
 				),
+				actions: <Widget>[
+					model.isProfil ?
+					IconButton(
+						icon: Icon(
+							Icons.exit_to_app
+						),
+						onPressed: model.disconnect,
+					) : Container()
+				],
 			),
 			body: Padding(
 				padding: const EdgeInsets.all(8.0),
