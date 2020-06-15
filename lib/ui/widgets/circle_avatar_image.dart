@@ -8,13 +8,11 @@ import 'package:mpm/utils/utils.dart';
 class CircleAvatarImage extends StatefulWidget
 {
 	final String image;
-	final String tag;
 	final IconData icon;
 	final double size;
 
 	CircleAvatarImage({
 		@required this.image,
-		@required this.tag,
 		this.icon,
 		this.size = 32
 	});
@@ -45,41 +43,38 @@ class _CircleAvatarImageState extends State<CircleAvatarImage>
 	@override
 	Widget build(BuildContext context)
 	{
-		return Hero(
-			tag: widget.tag,
-			child: CircleAvatar(
-				radius: widget.size - 8,
-				backgroundColor: hasImage ?
-				Colors.transparent : null,
-				child: hasImage ?
-				ExtendedImage.network(
-					url,
-					headers: headers,
-					enableLoadState: true,
-					loadStateChanged: (state) {
-						switch(state.extendedImageLoadState)
-						{
-							case LoadState.completed:
-								return ExtendedRawImage(
-									image: state.extendedImageInfo.image,
-								);
-							case LoadState.loading:
-								return Center(
-									child: CircularProgressIndicator(),
-								);
-							default:
-								return Icon(
-									Icons.error,
-									size: widget.size,
-								);
-						}
-					},
-				) :
-				Icon(
-					widget.icon ??
-					Icons.group,
-					size: widget.size,
-				)
+		return CircleAvatar(
+			radius: widget.size - 8,
+			backgroundColor: hasImage ?
+			Colors.transparent : null,
+			child: hasImage ?
+			ExtendedImage.network(
+				url,
+				headers: headers,
+				enableLoadState: true,
+				loadStateChanged: (state) {
+					switch(state.extendedImageLoadState)
+					{
+						case LoadState.completed:
+							return ExtendedRawImage(
+								image: state.extendedImageInfo.image,
+							);
+						case LoadState.loading:
+							return Center(
+								child: CircularProgressIndicator(),
+							);
+						default:
+							return Icon(
+								Icons.error,
+								size: widget.size,
+							);
+					}
+				},
+			) :
+			Icon(
+				widget.icon ??
+				Icons.group,
+				size: widget.size,
 			)
 		);
 	}
