@@ -84,9 +84,7 @@ class _TeamView extends ViewModelBuilderWidget<HomeTeamViewModel>
 		return Card(
 			child: ListTile(
 				leading: CircleAvatarImage(
-					url: model.url,
-					headers: model.headers,
-					hasImage: model.hasImage,
+					image: model.team.image,
 				),
 				title: Text(
 					team.name
