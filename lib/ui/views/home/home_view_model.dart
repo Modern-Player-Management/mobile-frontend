@@ -91,7 +91,7 @@ class HomeTeamViewModel extends FutureViewModel<void>
 			)
 		);
 
-		runFuture();
+		initialise();
 	}
 
 	bool get hasImage => team.image != null;
