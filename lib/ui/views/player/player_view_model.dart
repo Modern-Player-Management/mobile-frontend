@@ -8,6 +8,7 @@ import 'package:mpm/utils/utils.dart';
 class PlayerViewModel extends BaseViewModel
 {
 	final _storage = locator<SecureStorage>();
+	final _session = locator<Session>();
 
 	final Player player;
 
@@ -24,5 +25,12 @@ class PlayerViewModel extends BaseViewModel
 		};
 	}
 
+	void disconnect()
+	{
+		_session.disconnect();
+	}
+
 	bool get hasImage => player?.image != null;
+
+	bool get isProfil => player.id == _storage.player;
 }
