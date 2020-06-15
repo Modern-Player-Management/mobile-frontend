@@ -66,6 +66,7 @@ class _Header extends ViewModelWidget<TeamViewModel>
 						children: <Widget>[
 							CircleAvatarImage(
 								image: model.team.image,
+								tag: model.team.id,
 							),
 							SizedBox(
 								width: 16,
@@ -105,6 +106,7 @@ class _TeamPlayersView extends ViewModelBuilderWidget<TeamPlayersViewModel>
 						child: ListTile(
 							leading: CircleAvatarImage(
 								image: player.image,
+								tag: player.id,
 								icon: Icons.person,
 							),
 							title: Text(
