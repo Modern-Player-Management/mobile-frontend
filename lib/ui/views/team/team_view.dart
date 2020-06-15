@@ -36,6 +36,7 @@ class TeamView extends ViewModelBuilderWidget<TeamViewModel>
 			),
 			floatingActionButton: model.isManager ?
 			FloatingActionButton(
+				heroTag: "test",
 				child: Icon(
 					Icons.add
 				),
@@ -60,33 +61,17 @@ class _Header extends ViewModelWidget<TeamViewModel>
 	{
 		return SliverToBoxAdapter(
 			child: Card(
-				child: Padding(
-					padding: const EdgeInsets.all(8.0),
-					child: Row(
-						children: <Widget>[
-							CircleAvatarImage(
-								image: model.team.image,
-								tag: model.team.id,
-							),
-							SizedBox(
-								width: 16,
-							),
-							Column(
-								crossAxisAlignment: CrossAxisAlignment.start,
-								children: <Widget>[
-									IconText(
-										icon: Icons.description,
-										text: "${model.team.description}",
-									),
-									IconText(
-										icon: Icons.group,
-										text: "${model.team.players.length}",
-									)
-								],
-							)
-						],
+				child: ListTile(
+					leading: CircleAvatarImage(
+						image: model.team.image,
 					),
-				),
+					title: Text(
+						"${model.team.description}"
+					),
+					subtitle: Text(
+						"Players: ${model.team.players.length}"
+					),
+				)
 			),
 		);
 	}
@@ -106,7 +91,6 @@ class _TeamPlayersView extends ViewModelBuilderWidget<TeamPlayersViewModel>
 						child: ListTile(
 							leading: CircleAvatarImage(
 								image: player.image,
-								tag: player.id,
 								icon: Icons.person,
 							),
 							title: Text(

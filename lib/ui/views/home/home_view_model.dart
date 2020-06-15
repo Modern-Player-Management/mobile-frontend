@@ -77,7 +77,7 @@ class HomeTeamViewModel extends FutureViewModel<void>
 		await _navigation.navigateTo(
 			Routes.teamViewRoute,
 			arguments: TeamViewArguments(
-				team: team
+				team: team,
 			)
 		);
 

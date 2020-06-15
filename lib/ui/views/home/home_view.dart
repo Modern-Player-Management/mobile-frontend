@@ -81,24 +81,26 @@ class _TeamView extends ViewModelBuilderWidget<HomeTeamViewModel>
 	@override
 	Widget builder(context, model, child)
 	{
-		return Card(
-			child: ListTile(
-				leading: CircleAvatarImage(
-					image: model.team.image,
-					tag: model.team.id,
+		return Hero(
+			tag: model.team.id,
+			child: Card(
+				child: ListTile(
+					leading: CircleAvatarImage(
+						image: model.team.image,
+					),
+					title: Text(
+						team.name
+					),
+					subtitle: model.loaded ?
+					Text(
+						"Manager : ${model.team.manager.username}"
+					) : null,
+					trailing: model.loaded ?
+					Text(
+						"Players : ${model.team.players.length}"
+					) : null,
+					onTap: model.onTap,
 				),
-				title: Text(
-					team.name
-				),
-				subtitle: model.loaded ?
-				Text(
-					"Manager : ${model.team.manager.username}"
-				) : null,
-				trailing: model.loaded ?
-				Text(
-					"Players : ${model.team.players.length}"
-				) : null,
-				onTap: model.onTap,
 			),
 		);
 	}
