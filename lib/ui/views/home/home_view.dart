@@ -85,6 +85,7 @@ class _TeamView extends ViewModelBuilderWidget<HomeTeamViewModel>
 			child: ListTile(
 				leading: CircleAvatarImage(
 					image: model.team.image,
+					tag: model.team.id,
 				),
 				title: Text(
 					team.name
