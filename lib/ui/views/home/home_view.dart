@@ -53,13 +53,13 @@ class _TeamsView extends ViewModelBuilderWidget<HomeTeamsViewModel>
 	@override
 	Widget builder(context, model, child)
 	{
-		return model.dataReady ?
+		return model.isBusy ?
+		Center(
+			child: CircularProgressIndicator(),
+		) :
 		ListView.builder(
 			itemCount: model.data.length,
 			itemBuilder: (context, i) => _TeamView(team: model.data[i]),
-		) : 
-		Center(
-			child: CircularProgressIndicator(),
 		);
 	}
 
