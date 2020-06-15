@@ -63,9 +63,7 @@ class _Header extends ViewModelWidget<PlayerViewModel>
 		return Row(
 			children: <Widget>[
 				CircleAvatarImage(
-					url: model.url,
-					headers: model.headers,
-					hasImage: model.hasImage,
+					image: model.player.image,
 					icon: Icons.person,
 				)
 			],

@@ -44,24 +44,14 @@ class HomeTeamViewModel extends FutureViewModel<void>
 {
 	final _db = locator<AppDatabase>();
 	final _navigation = locator<NavigationService>();
-	final _storage = locator<SecureStorage>();
 
 	final Team team;
 
 	bool loaded = false;
 
-	String url;
-	Map<String, String> headers;
-
 	HomeTeamViewModel({
 		@required this.team
-	})
-	{
-		url = "$serverUrl/api/files/${team.image}";
-		headers = {
-			"Authorization": "Bearer ${_storage.token}"
-		};
-	}
+	});
 
 	@override
 	Future<void> futureToRun() async
@@ -93,6 +83,4 @@ class HomeTeamViewModel extends FutureViewModel<void>
 
 		initialise();
 	}
-
-	bool get hasImage => team.image != null;
 }
