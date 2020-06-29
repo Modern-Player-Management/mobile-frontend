@@ -2,19 +2,21 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:matcher/matcher.dart';
 import 'package:sqflite_ffi_test/sqflite_ffi_test.dart';
 
+import 'package:mpm/app/locator.dart';
 import 'package:mpm/services/database/database.dart';
 
 import 'team_test.dart';
 
 AppDatabase _db;
 
-void main() async
+void main()
 {
 	TestWidgetsFlutterBinding.ensureInitialized();
 	sqfliteFfiTestInit();
 
 	setUp(() async {
-		_db = await $FloorAppDatabase.inMemoryDatabaseBuilder().build();
+		await configure(true);
+		_db = locator<AppDatabase>();
 	});
 
 	group('simple database event tests', (){
@@ -26,7 +28,7 @@ void main() async
 
 	tearDown((){
 		_db.close();
-	});	
+	});
 }
 
 Future<Event> insertEvent() async

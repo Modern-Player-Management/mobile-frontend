@@ -29,12 +29,16 @@ final locator = GetIt.instance;
 @injectableInit
 Future<void> configure([bool testing = false]) async 
 {
-	if(!testing) {
-		$initGetIt(locator);
-		await locator.allReady(ignorePendingAsyncCreation: false);
-	}
-	else {
+	if(testing)
+	{
+		locator.reset();
 		var db = await $FloorAppDatabase.inMemoryDatabaseBuilder().build();
 		locator.registerSingleton<AppDatabase>(db);
+		
+	}
+	else
+	{
+		$initGetIt(locator);
+		await locator.allReady(ignorePendingAsyncCreation: false);
 	}
 }

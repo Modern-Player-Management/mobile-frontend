@@ -2,6 +2,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:matcher/matcher.dart';
 import 'package:sqflite_ffi_test/sqflite_ffi_test.dart';
 
+import 'package:mpm/app/locator.dart';
 import 'package:mpm/services/database/database.dart';
 
 import 'team_test.dart';
@@ -18,7 +19,8 @@ void main()
 	sqfliteFfiTestInit();
 
 	setUp(() async {
-		_db = await $FloorAppDatabase.inMemoryDatabaseBuilder().build();
+		await configure(true);
+		_db = locator<AppDatabase>();
 	});
 
 	group('simple database player tests', (){
