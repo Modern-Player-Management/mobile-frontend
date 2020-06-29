@@ -91,9 +91,18 @@ class TeamManager
 		return true;
 	}
 
-	Stream<List<Team>> getTeams()
+	Stream<List<Team>> getTeams() async *
 	{
-		return _teamDao.getTeams(_storage.player);
+		await for(var teams in _teamDao.getTeams(_storage.player))
+		{
+			for(var team in teams)
+			{
+				team.manager = await _teamDao.getManager(team);
+				team.players = await _teamDao.getPlayers(team).first;
+			}
+
+			yield teams;
+		}
 	}
 
 	Future<bool> insertTeam(Team team, [bool add = true]) async
