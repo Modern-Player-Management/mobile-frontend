@@ -6,9 +6,6 @@ import 'package:mpm/services/database/daos/model_dao.dart';
 @dao
 abstract class TeamDao extends ModelDao<Team>
 {
-	final _teamPlayerDao = locator<AppDatabase>().teamPlayerDao;
-	final _playerDao = locator<AppDatabase>().playerDao;
-
 	@Query('select * from teams where player = :player and `delete` = 0 order by name')
 	Stream<List<Team>> getTeams(String player);
 
@@ -26,11 +23,14 @@ abstract class TeamDao extends ModelDao<Team>
 
 	Future<Player> getManager(Team team) async
 	{
+		final _playerDao = locator<AppDatabase>().playerDao;
 		return await _playerDao.getPlayer(team.managerId);
 	}
 
 	Stream<List<Player>> getPlayers(Team team) async *
 	{
+		final _teamPlayerDao = locator<AppDatabase>().teamPlayerDao;
+		final _playerDao = locator<AppDatabase>().playerDao;
 		await for(var teamPlayers in _teamPlayerDao.getTeamPlayers(team.id))
 		{
 			List<Player> players = [];
@@ -48,6 +48,8 @@ abstract class TeamDao extends ModelDao<Team>
 
 	Future<List<Player>> getAllPlayers(Team team) async
 	{
+		final _teamPlayerDao = locator<AppDatabase>().teamPlayerDao;
+		final _playerDao = locator<AppDatabase>().playerDao;
 		List<Player> players = [];
 		for(var teamPlayer in await _teamPlayerDao.getAllTeamPlayers(team.id))
 		{
