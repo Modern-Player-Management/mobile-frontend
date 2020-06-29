@@ -1,6 +1,8 @@
 import 'package:get_it/get_it.dart';
 import 'package:injectable/injectable.dart';
 
+import 'package:mpm/services/database/database.dart';
+
 import 'package:mpm/app/locator.iconfig.dart';
 export 'package:mpm/app/router.gr.dart';
 
@@ -30,5 +32,9 @@ Future<void> configure([bool testing = false]) async
 	if(!testing) {
 		$initGetIt(locator);
 		await locator.allReady(ignorePendingAsyncCreation: false);
+	}
+	else {
+		var db = await $FloorAppDatabase.inMemoryDatabaseBuilder().build();
+		locator.registerSingleton<AppDatabase>(db);
 	}
 }
