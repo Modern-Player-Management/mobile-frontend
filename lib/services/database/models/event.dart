@@ -28,13 +28,6 @@ class Event
 	@ignore
 	List<Discrepancy> discrepancies;
 
-	@JsonKey(ignore: true)
-	bool save;
-	@JsonKey(ignore: true)
-	bool update;
-	@JsonKey(ignore: true)
-	bool delete;
-
   	Event({
 		this.id, 
 		this.team,
@@ -45,13 +38,7 @@ class Event
 		this.type,
 		this.participations,
 		this.discrepancies,
-		bool save = false,
-		bool update = false,
-		bool delete = false
-	}) : 
-		this.save = save ?? false,
-		this.update = update ?? false,
-		this.delete = delete ?? false;
+	});
 
 	static const fromJson = _$EventFromJson;
 
