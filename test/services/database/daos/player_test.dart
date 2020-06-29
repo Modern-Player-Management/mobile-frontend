@@ -23,10 +23,10 @@ void main()
 
 	group('simple database player tests', (){
 		
-		test('insert one player', insert_player);
-		test('find one player', find_player);
-		test('update player', update_player);
-		test('delete player', delete_player);
+		test('insert one player', insertPlayer);
+		test('find one player', findPlayer);
+		test('update player', updatePlayer);
+		test('delete player', deletePlayer);
 	});
 
 	tearDown((){
@@ -34,11 +34,11 @@ void main()
 	});
 }
 
-Future<Player> insert_player([AppDatabase db, Team team]) async
+Future<Player> insertPlayer([AppDatabase db, Team team]) async
 {
 	if(team == null) 
 	{
-		await insert_team(_db);
+		await insertTeam(_db);
 	}
 
 	final player = Player(
@@ -54,18 +54,18 @@ Future<Player> insert_player([AppDatabase db, Team team]) async
 	return player;
 }
 
-void find_player() async
+void findPlayer() async
 {
-	await insert_player();
+	await insertPlayer();
 
 	final player = await _db.playerDao.getPlayer(playerId);
 
 	expect(player.id, equals(playerId));
 }
 
-void update_player() async
+void updatePlayer() async
 {
-	final player = await insert_player();
+	final player = await insertPlayer();
 
 	player.username = "test";
 	int rows = await _db.playerDao.updateModel(player);
@@ -77,9 +77,9 @@ void update_player() async
 	expect(p.username, equals("test"));
 }
 
-void delete_player() async
+void deletePlayer() async
 {
-	final player = await insert_player();
+	final player = await insertPlayer();
 
 	var rows = await _db.playerDao.deleteModel(player);
 

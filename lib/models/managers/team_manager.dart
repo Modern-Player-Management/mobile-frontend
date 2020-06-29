@@ -148,7 +148,7 @@ class TeamManager
 		try
 		{
 			var response = await _api.updateTeam(team.id, team);
-			if(validResponse(response)) 
+			if(validResponse(response))
 			{
 				team.save = true;
 				await _teamDao.updateModel(team);

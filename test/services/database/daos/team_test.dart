@@ -25,14 +25,14 @@ void main()
 
 	group('simple database team tests', (){
 		
-		test('insert one team', insert_team);
-		test('find one team', find_team);
-		test('update team', update_team);
-		test('delete team', delete_team);
+		test('insert one team', insertTeam);
+		test('find one team', findTeam);
+		test('update team', updateTeam);
+		test('delete team', deleteTeam);
 	});
 
 	group('more database team tests', (){
-		test('team with manager', team_with_manager);
+		test('team with manager', teamWithManager);
 	});
 
 	tearDown((){
@@ -40,7 +40,7 @@ void main()
 	});
 }
 
-Future<Team> insert_team([AppDatabase db]) async
+Future<Team> insertTeam([AppDatabase db]) async
 {
 	final team = Team(
 		id: teamId,
@@ -55,18 +55,18 @@ Future<Team> insert_team([AppDatabase db]) async
 	return team;
 }
 
-void find_team() async
+void findTeam() async
 {
-	await insert_team();
+	await insertTeam();
 
 	final teams = await _db.teamDao.getTeams(player).first;
 
 	expect(teams.length, equals(1));
 }
 
-void update_team() async
+void updateTeam() async
 {
-	final team = await insert_team();
+	final team = await insertTeam();
 
 	team.name = "test";
 	int rows = await _db.teamDao.updateModel(team);
@@ -78,9 +78,9 @@ void update_team() async
 	expect(teams[0].name, equals("test"));
 }
 
-void delete_team() async
+void deleteTeam() async
 {
-	final team = await insert_team();
+	final team = await insertTeam();
 
 	var rows = await _db.teamDao.deleteModel(team);
 
@@ -91,7 +91,7 @@ void delete_team() async
 	expect(teams.length, equals(0));
 }
 
-void team_with_manager() async
+void teamWithManager() async
 {
 	final manager = Player(
 		id: managerId,
