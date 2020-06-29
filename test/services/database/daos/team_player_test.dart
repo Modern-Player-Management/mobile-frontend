@@ -23,11 +23,11 @@ void main()
 	});
 
 	group('simple database teamplayer tests', (){
-		test('insert one teamplayer', insert_teamPlayer);
+		test('insert one teamplayer', insertTeamPlayer);
 
-		test('find one teamplayer', find_teamPlayer);
+		test('find one teamplayer', findTeamPlayer);
 
-		test('delete teamplayer', delete_teamPlayer);
+		test('delete teamplayer', deleteTeamPlayer);
 	});
 
 	tearDown((){
@@ -35,38 +35,35 @@ void main()
 	});
 }
 
-Future<TeamPlayer> insert_teamPlayer([AppDatabase db]) async
+Future<TeamPlayer> insertTeamPlayer([AppDatabase db]) async
 {
-	var team = await insert_team(_db);
-	var player = await insert_player(_db, team);
+	var team = await insertTeam(_db);
+	var player = await insertPlayer(_db, team);
 
 	final teamPlayer = TeamPlayer(
-		teamId: teamId,
-		playerId: playerId
+		teamId: team.id,
+		playerId: player.id
 	);
 
 	var id = await (_db ?? db).teamPlayerDao.insertModel(teamPlayer);
 
 	expect(id, equals(1));
+
+	return teamPlayer;
 }
 
-void find_teamPlayer() async
+void findTeamPlayer() async
 {
-	await insert_teamPlayer();
-
-	final teamPlayer = TeamPlayer(
-		teamId: teamId,
-		playerId: playerId
-	);
+	await insertTeamPlayer();
 
 	var tps = await _db.teamPlayerDao.getAllTeamPlayers(teamId);
 
 	expect(tps.length, equals(1));
 }
 
-void delete_teamPlayer() async
+void deleteTeamPlayer() async
 {
-	await insert_teamPlayer();
+	await insertTeamPlayer();
 
 	final teamPlayer = TeamPlayer(
 		teamId: teamId,
