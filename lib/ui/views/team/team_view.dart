@@ -36,7 +36,6 @@ class TeamView extends ViewModelBuilderWidget<TeamViewModel>
 			),
 			floatingActionButton: model.isManager ?
 			FloatingActionButton(
-				heroTag: "test",
 				child: Icon(
 					Icons.add
 				),
