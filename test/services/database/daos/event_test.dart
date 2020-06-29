@@ -42,9 +42,13 @@ Future<Event> insertEvent() async
 		description: "description"
 	);
 
-	int id = await _db.eventDao.insertModel(event);
+	int row = await _db.eventDao.insertModel(event);
+	await _db.teamEventDao.insertModel(TeamEvent(
+		eventId: "id",
+		teamId: teamId
+	));
 
-	expect(id, equals(1));
+	expect(row, equals(1));
 
 	return event;
 }
@@ -53,7 +57,7 @@ void findEvent() async
 {
 	await insertEvent();
 
-	final events = await _db.eventDao.getEvents(teamId).first;
+	final events = await _db.eventDao.getAllEvents(teamId);
 
 	expect(events.length, equals(1));
 }
@@ -67,7 +71,7 @@ void updateEvent() async
 
 	expect(rows, equals(1));
 
-	final events = await _db.eventDao.getEvents(teamId).first;
+	final events = await _db.eventDao.getAllEvents(teamId);
 
 	expect(events[0].name, equals("test"));
 }
@@ -80,7 +84,7 @@ void deleteEvent() async
 
 	expect(rows, equals(1));
 
-	final events = await _db.eventDao.getEvents(teamId).first;
+	final events = await _db.eventDao.getAllEvents(teamId);
 
 	expect(events.length, equals(0));
 }

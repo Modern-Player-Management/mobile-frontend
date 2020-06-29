@@ -13,10 +13,10 @@ abstract class EventDao extends ModelDao<Event>
 	Future<void> updateEventId(String oldId, String newId);
 
 	@Query('select * from events inner join team_events on events.id = team_events.eventId '
-		'and team_events.teamId = :teamId and `team_events.delete` = 0')
+		'and team_events.teamId = :teamId and team_events.deleted = 0')
 	Stream<List<Event>> getEvents(String teamId);
 
 	@Query('select * from events inner join team_events on events.id = team_events.eventId '
-		'and team_events.teamId = :teamId and `team_events.delete` = 0')
+		'and team_events.teamId = :teamId and team_events.deleted = 0')
 	Future<List<Event>> getAllEvents(String teamId);
 }
