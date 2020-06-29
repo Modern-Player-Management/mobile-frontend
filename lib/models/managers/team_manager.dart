@@ -98,7 +98,7 @@ class TeamManager
 			for(var team in teams)
 			{
 				team.manager = await _teamDao.getManager(team);
-				team.players = await _teamDao.getPlayers(team).first;
+				team.players = await _teamDao.getAllPlayers(team);
 			}
 
 			yield teams;
