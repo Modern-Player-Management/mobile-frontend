@@ -2,6 +2,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:matcher/matcher.dart';
 import 'package:sqflite_ffi_test/sqflite_ffi_test.dart';
 
+import 'package:mpm/app/locator.dart';
 import 'package:mpm/services/database/database.dart';
 
 String teamId = "team";
@@ -20,7 +21,8 @@ void main()
 	sqfliteFfiTestInit();
 
 	setUp(() async {
-		_db = await $FloorAppDatabase.inMemoryDatabaseBuilder().build();
+		await configure(true);
+		_db = locator<AppDatabase>();
 	});
 
 	group('simple database team tests', (){
@@ -55,19 +57,21 @@ Future<Team> insertTeam([AppDatabase db]) async
 	return team;
 }
 
-void findTeam() async
+Future<Team> findTeam() async
 {
 	await insertTeam();
 
 	final teams = await _db.teamDao.getTeams(player).first;
 
 	expect(teams.length, equals(1));
+
+	return teams[0];
 }
 
 void updateTeam() async
 {
-	final team = await insertTeam();
-
+	var team = await insertTeam();
+	
 	team.name = "test";
 	int rows = await _db.teamDao.updateModel(team);
 
@@ -80,8 +84,7 @@ void updateTeam() async
 
 void deleteTeam() async
 {
-	final team = await insertTeam();
-
+	var team = await insertTeam();
 	var rows = await _db.teamDao.deleteModel(team);
 
 	expect(rows, equals(1));

@@ -66,7 +66,7 @@ class TeamViewModel extends BaseViewModel
 
 class TeamCalendarViewModel extends StreamViewModel<List<Event>>
 {
-	final _teamDao = locator<AppDatabase>().teamDao;
+	final _eventDao = locator<AppDatabase>().eventDao;
 
 	final BuildContext context;
 	TeamViewModel _teamViewModel;
@@ -81,14 +81,14 @@ class TeamCalendarViewModel extends StreamViewModel<List<Event>>
 	}
 
 	@override
-	get stream => _teamDao.getEvents(_teamViewModel.team);
+	get stream => _eventDao.getEvents(_teamViewModel.team.id);
 }
 
 class TeamPlayersViewModel extends StreamViewModel<List<Player>>
 {
 	final _playerManager = locator<PlayerManager>();
 
-	final _teamDao = locator<AppDatabase>().teamDao;
+	final _playerDao = locator<AppDatabase>().playerDao;
 	final _navigation = locator<NavigationService>();
 
 	final BuildContext context;
@@ -103,7 +103,7 @@ class TeamPlayersViewModel extends StreamViewModel<List<Player>>
 	}
 
 	@override
-	get stream => _teamDao.getPlayers(_teamViewModel.team);
+	get stream => _playerDao.getPlayers(_teamViewModel.team.id, _teamViewModel.team.managerId);
 
 	void onPressed(Player player) async
 	{
