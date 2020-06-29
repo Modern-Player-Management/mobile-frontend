@@ -69,7 +69,8 @@ class _Header extends ViewModelWidget<TeamViewModel>
 					subtitle: Text(
 						"Players: ${model.team.players.length}"
 					),
-					trailing: Row(
+					trailing: model.isManager ?
+					Row(
 						mainAxisSize: MainAxisSize.min,
 						children: <Widget>[
 							IconButton(
@@ -87,7 +88,7 @@ class _Header extends ViewModelWidget<TeamViewModel>
 								onPressed: model.delete,
 							),
 						],
-					),
+					) : null,
 				)
 			),
 		);
@@ -100,12 +101,14 @@ class _Calendar extends ViewModelBuilderWidget<TeamCalendarViewModel>
 	Widget builder(context, model, child)
 	{
 		return SliverToBoxAdapter(
-			child: TableCalendar(
-				locale: 'fr_FR',
-				headerStyle: HeaderStyle(
-					formatButtonVisible: false
+			child: Card(
+				child: TableCalendar(
+					locale: 'fr_FR',
+					headerStyle: HeaderStyle(
+						formatButtonVisible: false
+					),
+					calendarController: model.calendarController,
 				),
-				calendarController: model.calendarController,
 			),
 		);
 	}
