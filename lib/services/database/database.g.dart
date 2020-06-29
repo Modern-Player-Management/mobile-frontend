@@ -108,7 +108,7 @@ class _$AppDatabase extends AppDatabase {
         await database.execute(
             'CREATE TABLE IF NOT EXISTS `events` (`id` TEXT, `team` TEXT, `start` TEXT, `end` TEXT, `name` TEXT, `description` TEXT, `type` INTEGER, PRIMARY KEY (`id`))');
         await database.execute(
-            'CREATE TABLE IF NOT EXISTS `team_events` (`teamId` TEXT, `eventId` TEXT, `save` INTEGER, `delete` INTEGER, FOREIGN KEY (`teamId`) REFERENCES `teams` (`id`) ON UPDATE CASCADE ON DELETE CASCADE, FOREIGN KEY (`eventId`) REFERENCES `events` (`id`) ON UPDATE CASCADE ON DELETE CASCADE, PRIMARY KEY (`teamId`))');
+            'CREATE TABLE IF NOT EXISTS `team_events` (`teamId` TEXT, `eventId` TEXT, `saved` INTEGER, `deleted` INTEGER, FOREIGN KEY (`teamId`) REFERENCES `teams` (`id`) ON UPDATE CASCADE ON DELETE CASCADE, FOREIGN KEY (`eventId`) REFERENCES `events` (`id`) ON UPDATE CASCADE ON DELETE CASCADE, PRIMARY KEY (`teamId`))');
         await database.execute(
             'CREATE TABLE IF NOT EXISTS `discrepancies` (`id` TEXT, `type` INTEGER, `reason` TEXT, `delayLength` INTEGER, `event` TEXT, `save` INTEGER, `update` INTEGER, `delete` INTEGER, PRIMARY KEY (`id`))');
         await database.execute(
@@ -835,7 +835,7 @@ class _$EventDao extends EventDao {
   @override
   Stream<List<Event>> getEvents(String teamId) {
     return _queryAdapter.queryListStream(
-        'select * from events inner join team_events on events.id = team_events.eventId and team_events.teamId = ? and `team_events.delete` = 0',
+        'select * from events inner join team_events on events.id = team_events.eventId and team_events.teamId = ? and team_events.deleted = 0',
         arguments: <dynamic>[teamId],
         queryableName: 'events',
         isView: false,
@@ -845,7 +845,7 @@ class _$EventDao extends EventDao {
   @override
   Future<List<Event>> getAllEvents(String teamId) async {
     return _queryAdapter.queryList(
-        'select * from events inner join team_events on events.id = team_events.eventId and team_events.teamId = ? and `team_events.delete` = 0',
+        'select * from events inner join team_events on events.id = team_events.eventId and team_events.teamId = ? and team_events.deleted = 0',
         arguments: <dynamic>[teamId],
         mapper: _eventsMapper);
   }
@@ -877,8 +877,9 @@ class _$TeamEventDao extends TeamEventDao {
             (TeamEvent item) => <String, dynamic>{
                   'teamId': item.teamId,
                   'eventId': item.eventId,
-                  'save': item.save == null ? null : (item.save ? 1 : 0),
-                  'delete': item.delete == null ? null : (item.delete ? 1 : 0)
+                  'saved': item.saved == null ? null : (item.saved ? 1 : 0),
+                  'deleted':
+                      item.deleted == null ? null : (item.deleted ? 1 : 0)
                 },
             changeListener),
         _teamEventUpdateAdapter = UpdateAdapter(
@@ -888,8 +889,9 @@ class _$TeamEventDao extends TeamEventDao {
             (TeamEvent item) => <String, dynamic>{
                   'teamId': item.teamId,
                   'eventId': item.eventId,
-                  'save': item.save == null ? null : (item.save ? 1 : 0),
-                  'delete': item.delete == null ? null : (item.delete ? 1 : 0)
+                  'saved': item.saved == null ? null : (item.saved ? 1 : 0),
+                  'deleted':
+                      item.deleted == null ? null : (item.deleted ? 1 : 0)
                 },
             changeListener),
         _teamEventDeletionAdapter = DeletionAdapter(
@@ -899,8 +901,9 @@ class _$TeamEventDao extends TeamEventDao {
             (TeamEvent item) => <String, dynamic>{
                   'teamId': item.teamId,
                   'eventId': item.eventId,
-                  'save': item.save == null ? null : (item.save ? 1 : 0),
-                  'delete': item.delete == null ? null : (item.delete ? 1 : 0)
+                  'saved': item.saved == null ? null : (item.saved ? 1 : 0),
+                  'deleted':
+                      item.deleted == null ? null : (item.deleted ? 1 : 0)
                 },
             changeListener);
 
@@ -913,8 +916,8 @@ class _$TeamEventDao extends TeamEventDao {
   static final _team_eventsMapper = (Map<String, dynamic> row) => TeamEvent(
       teamId: row['teamId'] as String,
       eventId: row['eventId'] as String,
-      save: row['save'] == null ? null : (row['save'] as int) != 0,
-      delete: row['delete'] == null ? null : (row['delete'] as int) != 0);
+      saved: row['saved'] == null ? null : (row['saved'] as int) != 0,
+      deleted: row['deleted'] == null ? null : (row['deleted'] as int) != 0);
 
   final InsertionAdapter<TeamEvent> _teamEventInsertionAdapter;
 

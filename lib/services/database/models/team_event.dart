@@ -28,14 +28,14 @@ class TeamEvent
 	final String teamId;
 	final String eventId;
 
-	bool save, delete;
+	bool saved, deleted;
 
   	TeamEvent({
 		this.teamId, 
 		this.eventId,
-		bool save = false,
-		bool delete = false,
+		bool saved = false,
+		bool deleted = false,
 	}) : 
-		this.save = save ?? false,
-		this.delete = delete ?? false;
+		this.saved = saved ?? false,
+		this.deleted = deleted ?? false;
 }
