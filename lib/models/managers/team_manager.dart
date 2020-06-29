@@ -11,6 +11,7 @@ class TeamManager
 {
 	final _api = locator<TeamApi>();
 	final _teamDao = locator<AppDatabase>().teamDao;
+	final _playerDao = locator<AppDatabase>().playerDao;
 
 	final _storage = locator<SecureStorage>();
 	final _uuid = locator<Uuid>();
@@ -97,8 +98,8 @@ class TeamManager
 		{
 			for(var team in teams)
 			{
-				team.manager = await _teamDao.getManager(team);
-				team.players = await _teamDao.getAllPlayers(team);
+				team.manager = await _playerDao.getPlayer(team.managerId);
+				team.players = await _playerDao.getAllPlayers(team.id, team.managerId);
 			}
 
 			yield teams;

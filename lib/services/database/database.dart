@@ -41,4 +41,5 @@ abstract class AppDatabase extends FloorDatabase
 	{
 		return await $FloorAppDatabase.databaseBuilder('database.db').build();
 	}
+
 }
