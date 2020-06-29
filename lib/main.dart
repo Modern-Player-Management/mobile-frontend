@@ -24,31 +24,10 @@ void main() async
 	runApp(App());
 }
 
-class App extends ViewModelBuilderWidget<AppModel> with WidgetsBindingObserver
+class App extends ViewModelBuilderWidget<AppModel>
 {
 	@override
 	bool get reactive => false;
-
-	final _model = AppModel();
-
-	@override
-	void didChangeAppLifecycleState(AppLifecycleState state) 
-	{
-		switch(state)
-		{
-			case AppLifecycleState.resumed: 
-				_model.resume();
-				break;
-			case AppLifecycleState.paused:
-				_model.pause();
-				break;
-			case AppLifecycleState.inactive:
-				break;
-			case AppLifecycleState.detached: 
-				break;
-			default: break;
-		}
-	}
 
   	@override
 	Widget builder(context, model, child)
@@ -78,12 +57,13 @@ class App extends ViewModelBuilderWidget<AppModel> with WidgetsBindingObserver
 	@override
 	AppModel viewModelBuilder(context) 
 	{
-		WidgetsBinding.instance.addObserver(this);
-		return _model;
+		var model = AppModel();
+		WidgetsBinding.instance.addObserver(model);
+		return model;
 	}
 }
 
-class AppModel extends BaseViewModel
+class AppModel extends BaseViewModel with WidgetsBindingObserver
 {
 	final _connectivity = locator<Connectivity>();
 	final _session = locator<Session>();
@@ -93,6 +73,25 @@ class AppModel extends BaseViewModel
 	AppModel()
 	{
 		resume();
+	}
+
+	@override
+	void didChangeAppLifecycleState(AppLifecycleState state) 
+	{
+		switch(state)
+		{
+			case AppLifecycleState.resumed: 
+				resume();
+				break;
+			case AppLifecycleState.paused:
+				pause();
+				break;
+			case AppLifecycleState.inactive:
+				break;
+			case AppLifecycleState.detached: 
+				break;
+			default: break;
+		}
 	}
 
 	void _onConnectivityChanged(ConnectivityResult result)
