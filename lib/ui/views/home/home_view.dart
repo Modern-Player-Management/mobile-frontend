@@ -52,7 +52,6 @@ class _TeamsView extends ViewModelBuilderWidget<HomeTeamsViewModel>
 	@override
 	Widget builder(context, model, child)
 	{
-		print(model.data);
 		return model.dataReady ?
 		ListView.builder(
 			itemCount: model.data.length,
