@@ -25,8 +25,10 @@ export 'package:connectivity/connectivity.dart';
 final locator = GetIt.instance;
 
 @injectableInit
-Future<void> configure() async 
+Future<void> configure([bool testing = false]) async 
 {
-	$initGetIt(locator);
-	await locator.allReady(ignorePendingAsyncCreation: false);
+	if(!testing) {
+		$initGetIt(locator);
+		await locator.allReady(ignorePendingAsyncCreation: false);
+	}
 }

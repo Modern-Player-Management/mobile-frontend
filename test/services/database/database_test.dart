@@ -6,7 +6,7 @@ import 'package:mpm/services/database/database.dart';
 
 import 'daos/team_test.dart';
 
-AppDatabase db;
+AppDatabase _db;
 
 void main() async
 {
@@ -15,7 +15,7 @@ void main() async
 	await configure();
 
 	setUp(() async {
-		db = await $FloorAppDatabase.inMemoryDatabaseBuilder().build();
+		_db = await $FloorAppDatabase.inMemoryDatabaseBuilder().build();
 	});
 
 	group('complex database tests', (){
@@ -23,7 +23,7 @@ void main() async
 	});
 
 	tearDown((){
-		db.close();
+		_db.close();
 	});
 }
 
@@ -49,15 +49,15 @@ void deleteTeamWithTwoEvents() async
 		description: "test"
 	);
 
-	await db.teamDao.insertModel(team);
-	await db.eventDao.insertModel(event1);
-	await db.eventDao.insertModel(event2);
+	await _db.teamDao.insertModel(team);
+	await _db.eventDao.insertModel(event1);
+	await _db.eventDao.insertModel(event2);
 
-	await db.teamDao.deleteModel(team);
+	await _db.teamDao.deleteModel(team);
 
-	final teams = await db.teamDao.getTeams(player).first;
+	final teams = await _db.teamDao.getTeams(player).first;
 	expect(teams.length, equals(0));
 
-	final events = await db.eventDao.getEvents(teamId).first;
+	final events = await _db.eventDao.getEvents(teamId).first;
 	expect(events.length, equals(0));
 }
