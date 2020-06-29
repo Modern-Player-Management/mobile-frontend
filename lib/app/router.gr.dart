@@ -80,17 +80,22 @@ class Router extends RouterBase {
           settings: settings,
         );
       case Routes.teamViewRoute:
-        if (hasInvalidArgs<TeamViewArguments>(args, isRequired: true)) {
+        if (hasInvalidArgs<TeamViewArguments>(args)) {
           return misTypedArgsRoute<TeamViewArguments>(args);
         }
-        final typedArgs = args as TeamViewArguments;
+        final typedArgs = args as TeamViewArguments ?? TeamViewArguments();
         return MaterialPageRoute<dynamic>(
           builder: (context) => TeamView(team: typedArgs.team),
           settings: settings,
         );
       case Routes.manageTeamViewRoute:
+        if (hasInvalidArgs<ManageTeamViewArguments>(args)) {
+          return misTypedArgsRoute<ManageTeamViewArguments>(args);
+        }
+        final typedArgs =
+            args as ManageTeamViewArguments ?? ManageTeamViewArguments();
         return MaterialPageRoute<dynamic>(
-          builder: (context) => ManageTeamView(),
+          builder: (context) => ManageTeamView(team: typedArgs.team),
           settings: settings,
         );
       case Routes.playerViewRoute:
@@ -125,7 +130,13 @@ class Router extends RouterBase {
 //TeamView arguments holder class
 class TeamViewArguments {
   final Team team;
-  TeamViewArguments({@required this.team});
+  TeamViewArguments({this.team});
+}
+
+//ManageTeamView arguments holder class
+class ManageTeamViewArguments {
+  final Team team;
+  ManageTeamViewArguments({this.team});
 }
 
 //PlayerView arguments holder class

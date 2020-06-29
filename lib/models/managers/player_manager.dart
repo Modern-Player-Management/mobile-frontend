@@ -77,7 +77,7 @@ class PlayerManager
 			}
 			catch(e)
 			{
-				print(e);
+				print("Player manager, search player: $e");
 			}
 		}
 

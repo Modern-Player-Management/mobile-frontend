@@ -11,7 +11,7 @@ class TeamViewModel extends BaseViewModel
 	final _storage = locator<SecureStorage>();
 	final _navigator = locator<NavigationService>();
 
-	final Team team;
+	Team team;
 
 	TeamViewModel({
 		@required this.team
@@ -25,6 +25,27 @@ class TeamViewModel extends BaseViewModel
 				team: team
 			)
 		);
+	}
+
+	void edit() async
+	{
+		var res = await _navigator.navigateTo(
+			Routes.manageTeamViewRoute,
+			arguments: ManageTeamViewArguments(
+				team: team
+			)
+		);
+
+		if(res != null)
+		{
+			team = res;
+			notifyListeners();
+		}
+	}
+
+	void delete()
+	{
+
 	}
 
 	bool get isManager => team.managerId == _storage.player;
