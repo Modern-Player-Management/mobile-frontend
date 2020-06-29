@@ -1,5 +1,4 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:mpm/app/locator.dart';
 import 'package:sqflite_ffi_test/sqflite_ffi_test.dart';
 
 import 'package:mpm/services/database/database.dart';
@@ -12,7 +11,6 @@ void main() async
 {
 	TestWidgetsFlutterBinding.ensureInitialized();
 	sqfliteFfiTestInit();
-	await configure();
 
 	setUp(() async {
 		_db = await $FloorAppDatabase.inMemoryDatabaseBuilder().build();
