@@ -1,16 +1,17 @@
 import 'package:flutter/material.dart';
 
-void showLoadingDialog(BuildContext context, [Function willPop]) 
+void showLoadingDialog(BuildContext context, {Function willPop, bool canPop = true}) 
 {
 	showDialog(
 		context: context,
+		barrierDismissible: canPop,
 		builder: (_) => WillPopScope(
 			onWillPop: () async {
 				if(willPop != null)
 				{
 					willPop();
 				}
-				return true;
+				return canPop;
 			},
 			child: Material(
 				type: MaterialType.transparency,
