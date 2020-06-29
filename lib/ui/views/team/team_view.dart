@@ -46,6 +46,7 @@ class TeamView extends ViewModelBuilderWidget<TeamViewModel>
 	TeamViewModel viewModelBuilder(context)
 	{
 		return TeamViewModel(
+			context: context,
 			team: team
 		);
 	}

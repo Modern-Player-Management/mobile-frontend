@@ -10,7 +10,7 @@ class TeamViewModel extends BaseViewModel
 {
 	final _teamManager = locator<TeamManager>();
 	final _storage = locator<SecureStorage>();
-	final _navigator = locator<NavigationService>();
+	final _navigation = locator<NavigationService>();
 
 	final BuildContext context;
 	Team team;
@@ -22,7 +22,7 @@ class TeamViewModel extends BaseViewModel
 
 	void addPlayer()
 	{
-		_navigator.navigateTo(
+		_navigation.navigateTo(
 			Routes.searchPlayerViewRoute,
 			arguments: SearchPlayerViewArguments(
 				team: team
@@ -32,7 +32,7 @@ class TeamViewModel extends BaseViewModel
 
 	void edit() async
 	{
-		var res = await _navigator.navigateTo(
+		var res = await _navigation.navigateTo(
 			Routes.manageTeamViewRoute,
 			arguments: ManageTeamViewArguments(
 				team: team
@@ -57,6 +57,7 @@ class TeamViewModel extends BaseViewModel
 		if(res)
 		{
 			await _teamManager.deleteTeam(team);
+			_navigation.back();
 		}
 	}
 
