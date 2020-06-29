@@ -262,20 +262,20 @@ class _$TeamDao extends TeamDao {
   }
 
   @override
-  Future<int> insertTeam(Team team) {
+  Future<int> insertModel(Team model) {
     return _teamInsertionAdapter.insertAndReturnId(
-        team, OnConflictStrategy.replace);
+        model, OnConflictStrategy.replace);
   }
 
   @override
-  Future<int> updateTeam(Team team) {
+  Future<int> updateModel(Team model) {
     return _teamUpdateAdapter.updateAndReturnChangedRows(
-        team, OnConflictStrategy.abort);
+        model, OnConflictStrategy.abort);
   }
 
   @override
-  Future<int> deleteTeam(Team team) {
-    return _teamDeletionAdapter.deleteAndReturnChangedRows(team);
+  Future<int> deleteModel(Team model) {
+    return _teamDeletionAdapter.deleteAndReturnChangedRows(model);
   }
 }
 
@@ -364,20 +364,20 @@ class _$PlayerDao extends PlayerDao {
   }
 
   @override
-  Future<int> insertPlayer(Player player) {
+  Future<int> insertModel(Player model) {
     return _playerInsertionAdapter.insertAndReturnId(
-        player, OnConflictStrategy.replace);
+        model, OnConflictStrategy.replace);
   }
 
   @override
-  Future<int> updatePlayer(Player player) {
+  Future<int> updateModel(Player model) {
     return _playerUpdateAdapter.updateAndReturnChangedRows(
-        player, OnConflictStrategy.abort);
+        model, OnConflictStrategy.abort);
   }
 
   @override
-  Future<int> deletePlayer(Player player) {
-    return _playerDeletionAdapter.deleteAndReturnChangedRows(player);
+  Future<int> deleteModel(Player model) {
+    return _playerDeletionAdapter.deleteAndReturnChangedRows(model);
   }
 }
 
@@ -486,20 +486,20 @@ class _$TeamPlayerDao extends TeamPlayerDao {
   }
 
   @override
-  Future<int> insertTeamPlayer(TeamPlayer teamPlayer) {
+  Future<int> insertModel(TeamPlayer model) {
     return _teamPlayerInsertionAdapter.insertAndReturnId(
-        teamPlayer, OnConflictStrategy.replace);
+        model, OnConflictStrategy.replace);
   }
 
   @override
-  Future<int> updateTeamPlayer(TeamPlayer teamPlayer) {
+  Future<int> updateModel(TeamPlayer model) {
     return _teamPlayerUpdateAdapter.updateAndReturnChangedRows(
-        teamPlayer, OnConflictStrategy.abort);
+        model, OnConflictStrategy.abort);
   }
 
   @override
-  Future<int> deleteTeamPlayer(TeamPlayer teamPlayer) {
-    return _teamPlayerDeletionAdapter.deleteAndReturnChangedRows(teamPlayer);
+  Future<int> deleteModel(TeamPlayer model) {
+    return _teamPlayerDeletionAdapter.deleteAndReturnChangedRows(model);
   }
 }
 
@@ -616,20 +616,20 @@ class _$EventDao extends EventDao {
   }
 
   @override
-  Future<int> insertEvent(Event event) {
+  Future<int> insertModel(Event model) {
     return _eventInsertionAdapter.insertAndReturnId(
-        event, OnConflictStrategy.replace);
+        model, OnConflictStrategy.replace);
   }
 
   @override
-  Future<int> updateEvent(Event event) {
+  Future<int> updateModel(Event model) {
     return _eventUpdateAdapter.updateAndReturnChangedRows(
-        event, OnConflictStrategy.abort);
+        model, OnConflictStrategy.abort);
   }
 
   @override
-  Future<int> deleteEvent(Event event) {
-    return _eventDeletionAdapter.deleteAndReturnChangedRows(event);
+  Future<int> deleteModel(Event model) {
+    return _eventDeletionAdapter.deleteAndReturnChangedRows(model);
   }
 }
 
@@ -734,20 +734,20 @@ class _$DiscrepancyDao extends DiscrepancyDao {
   }
 
   @override
-  Future<int> insertDiscrepancy(Discrepancy discrepancy) {
+  Future<int> insertModel(Discrepancy model) {
     return _discrepancyInsertionAdapter.insertAndReturnId(
-        discrepancy, OnConflictStrategy.replace);
+        model, OnConflictStrategy.replace);
   }
 
   @override
-  Future<int> updateDiscrepancy(Discrepancy discrepancy) {
+  Future<int> updateModel(Discrepancy model) {
     return _discrepancyUpdateAdapter.updateAndReturnChangedRows(
-        discrepancy, OnConflictStrategy.abort);
+        model, OnConflictStrategy.abort);
   }
 
   @override
-  Future<int> deleteDiscrepancy(Discrepancy discrepancy) {
-    return _discrepancyDeletionAdapter.deleteAndReturnChangedRows(discrepancy);
+  Future<int> deleteModel(Discrepancy model) {
+    return _discrepancyDeletionAdapter.deleteAndReturnChangedRows(model);
   }
 }
 
@@ -854,14 +854,31 @@ class _$EventDiscrepancyDao extends EventDiscrepancyDao {
   }
 
   @override
-  Future<int> updateEventDiscrepancy(EventDiscrepancy eventDiscrepancy) {
+  Future<int> insertModel(EventDiscrepancy model) {
+    return _eventDiscrepancyInsertionAdapter.insertAndReturnId(
+        model, OnConflictStrategy.replace);
+  }
+
+  @override
+  Future<int> updateModelDiscrepancy(EventDiscrepancy eventDiscrepancy) {
     return _eventDiscrepancyUpdateAdapter.updateAndReturnChangedRows(
         eventDiscrepancy, OnConflictStrategy.abort);
   }
 
   @override
-  Future<int> deleteEventDiscrepancy(EventDiscrepancy eventDiscrepancy) {
+  Future<int> updateModel(EventDiscrepancy model) {
+    return _eventDiscrepancyUpdateAdapter.updateAndReturnChangedRows(
+        model, OnConflictStrategy.abort);
+  }
+
+  @override
+  Future<int> deleteModelDiscrepancy(EventDiscrepancy eventDiscrepancy) {
     return _eventDiscrepancyDeletionAdapter
         .deleteAndReturnChangedRows(eventDiscrepancy);
+  }
+
+  @override
+  Future<int> deleteModel(EventDiscrepancy model) {
+    return _eventDiscrepancyDeletionAdapter.deleteAndReturnChangedRows(model);
   }
 }

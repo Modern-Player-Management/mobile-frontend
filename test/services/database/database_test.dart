@@ -46,11 +46,11 @@ void delete_team_with_two_events() async
 		description: "test"
 	);
 
-	await db.teamDao.insertTeam(team);
-	await db.eventDao.insertEvent(event1);
-	await db.eventDao.insertEvent(event2);
+	await db.teamDao.insertModel(team);
+	await db.eventDao.insertModel(event1);
+	await db.eventDao.insertModel(event2);
 
-	await db.teamDao.deleteTeam(team);
+	await db.teamDao.deleteModel(team);
 
 	final teams = await db.teamDao.getTeams(player).first;
 	expect(teams.length, equals(0));
