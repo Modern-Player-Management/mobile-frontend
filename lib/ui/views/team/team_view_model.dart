@@ -1,17 +1,22 @@
 import 'package:flutter/material.dart';
+import 'package:mpm/utils/dialogs.dart';
 
 import 'package:stacked/stacked.dart';
+import 'package:table_calendar/table_calendar.dart';
 
 import 'package:mpm/app/locator.dart';
 
 class TeamViewModel extends BaseViewModel
 {
+	final _teamManager = locator<TeamManager>();
 	final _storage = locator<SecureStorage>();
 	final _navigator = locator<NavigationService>();
 
+	final BuildContext context;
 	Team team;
 
 	TeamViewModel({
+		@required this.context,
 		@required this.team
 	});
 
@@ -41,9 +46,18 @@ class TeamViewModel extends BaseViewModel
 		}
 	}
 
-	void delete()
+	void delete() async
 	{
+		var res = await showConfirmDialog(
+			context, 
+			"Delete team", 
+			"Are you sure you want to delete this team ?"
+		);
 
+		if(res)
+		{
+			await _teamManager.deleteTeam(team);
+		}
 	}
 
 	bool get isManager => team.managerId == _storage.player;
@@ -55,6 +69,8 @@ class TeamCalendarViewModel extends StreamViewModel<List<Event>>
 
 	final BuildContext context;
 	TeamViewModel _teamViewModel;
+
+	final calendarController = CalendarController();
 
 	TeamCalendarViewModel({
 		@required this.context

@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 
 import 'package:stacked/stacked.dart';
+import 'package:table_calendar/table_calendar.dart';
 
 import 'package:mpm/services/database/models/team.dart';
 import 'package:mpm/ui/views/team/team_view_model.dart';
 import 'package:mpm/ui/widgets/circle_avatar_image.dart';
-import 'package:mpm/ui/widgets/icon_text.dart';
 
 class TeamView extends ViewModelBuilderWidget<TeamViewModel>
 {
@@ -63,7 +63,7 @@ class _Header extends ViewModelWidget<TeamViewModel>
 						image: model.team.image,
 					),
 					title: Text(
-						model.team.description
+						"${model.team.description}"
 					),
 					subtitle: Text(
 						"Players: ${model.team.players.length}"
@@ -98,7 +98,15 @@ class _Calendar extends ViewModelBuilderWidget<TeamCalendarViewModel>
 	@override
 	Widget builder(context, model, child)
 	{
-		return Container();
+		return SliverToBoxAdapter(
+			child: TableCalendar(
+				locale: 'fr_FR',
+				headerStyle: HeaderStyle(
+					formatButtonVisible: false
+				),
+				calendarController: model.calendarController,
+			),
+		);
 	}
 
 	@override

@@ -6,6 +6,7 @@ import 'package:bot_toast/bot_toast.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart';
 import 'package:dynamic_theme/dynamic_theme.dart';
+import 'package:intl/date_symbol_data_local.dart';
 
 import 'package:mpm/app/locator.dart';
 import 'package:mpm/utils/colors.dart';
@@ -16,6 +17,8 @@ void main() async
 
 	// configure 
 	await configure();
+
+	await initializeDateFormatting();
 
 	// run app
 	runApp(App());
