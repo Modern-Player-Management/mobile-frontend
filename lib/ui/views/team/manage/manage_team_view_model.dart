@@ -24,7 +24,7 @@ class ManageTeamViewModel extends BaseViewModel
 	final bool isEdit;
 	File image;
 
-	bool get hasImage => isEdit && team.image != null;
+	bool get hasImage => isEdit && team.image != null && image == null;
 
 	ManageTeamViewModel({
 		Team team
