@@ -2,9 +2,8 @@ import 'package:flutter/material.dart';
 
 import 'package:stacked/stacked.dart';
 
-import 'package:mpm/services/database/models/team.dart';
 import 'package:mpm/ui/views/home/home_view_model.dart';
-import 'package:mpm/ui/widgets/circle_avatar_image.dart';
+import 'package:mpm/ui/widgets/team_widget.dart';
 
 class HomeView extends ViewModelBuilderWidget<HomeViewModel>
 {
@@ -53,10 +52,16 @@ class _TeamsView extends ViewModelBuilderWidget<HomeTeamsViewModel>
 	@override
 	Widget builder(context, model, child)
 	{
+		print(model.data);
 		return model.dataReady ?
 		ListView.builder(
 			itemCount: model.data.length,
-			itemBuilder: (context, i) => _TeamView(team: model.data[i]),
+			itemBuilder: (context, i){
+				return TeamWidget(
+					team: model.data[i],
+					onTap: model.onTap,
+				);
+			}
 		) :
 		Center(
 			child: CircularProgressIndicator(),
@@ -67,49 +72,5 @@ class _TeamsView extends ViewModelBuilderWidget<HomeTeamsViewModel>
 	HomeTeamsViewModel viewModelBuilder(context)
 	{
 		return HomeTeamsViewModel();
-	}
-}
-
-class _TeamView extends ViewModelBuilderWidget<HomeTeamViewModel>
-{
-	final Team team;
-
-	_TeamView({
-		@required this.team
-	});
-
-	@override
-	Widget builder(context, model, child)
-	{
-		return Hero(
-			tag: model.team.id,
-			child: Card(
-				child: ListTile(
-					leading: CircleAvatarImage(
-						image: model.team.image,
-					),
-					title: Text(
-						team.name
-					),
-					subtitle: model.dataReady ?
-					Text(
-						"Manager : ${model.team.manager.username}"
-					) : null,
-					trailing: model.dataReady ?
-					Text(
-						"Players : ${model.team.players.length}"
-					) : null,
-					onTap: model.onTap,
-				),
-			),
-		);
-	}
-
-	@override
-	HomeTeamViewModel viewModelBuilder(context)
-	{
-		return HomeTeamViewModel(
-			team: team
-		);
 	}
 }
