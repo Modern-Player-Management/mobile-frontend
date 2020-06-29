@@ -1,4 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
+import 'package:mpm/app/locator.dart';
 import 'package:sqflite_ffi_test/sqflite_ffi_test.dart';
 
 import 'package:mpm/services/database/database.dart';
@@ -9,14 +10,16 @@ AppDatabase db;
 
 void main() async
 {
+	TestWidgetsFlutterBinding.ensureInitialized();
+	sqfliteFfiTestInit();
+	await configure();
+
 	setUp(() async {
-		TestWidgetsFlutterBinding.ensureInitialized();
-		sqfliteFfiTestInit();
 		db = await $FloorAppDatabase.inMemoryDatabaseBuilder().build();
 	});
 
 	group('complex database tests', (){
-		test('delete team with two events', delete_team_with_two_events);
+		test('delete team with two events', deleteTeamWithTwoEvents);
 	});
 
 	tearDown((){
@@ -24,7 +27,7 @@ void main() async
 	});
 }
 
-void delete_team_with_two_events() async
+void deleteTeamWithTwoEvents() async
 {
 	final team = Team(
 		id: teamId,

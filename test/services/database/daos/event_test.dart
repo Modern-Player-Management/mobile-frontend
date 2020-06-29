@@ -18,10 +18,10 @@ void main() async
 	});
 
 	group('simple database event tests', (){
-		test('insert one event',insert_event);
-		test('find one event', find_event);
-		test('update event', update_event);
-		test('delete event', delete_event);
+		test('insert one event',insertEvent);
+		test('find one event', findEvent);
+		test('update event', updateEvent);
+		test('delete event', deleteEvent);
 	});
 
 	tearDown((){
@@ -29,9 +29,9 @@ void main() async
 	});	
 }
 
-Future<Event> insert_event() async
+Future<Event> insertEvent() async
 {
-	await insert_team(_db);
+	await insertTeam(_db);
 
 	final event = Event(
 		id: "id",
@@ -47,18 +47,18 @@ Future<Event> insert_event() async
 	return event;
 }
 
-void find_event() async
+void findEvent() async
 {
-	await insert_event();
+	await insertEvent();
 
 	final events = await _db.eventDao.getEvents(teamId).first;
 
 	expect(events.length, equals(1));
 }
 
-void update_event() async
+void updateEvent() async
 {
-	final event = await insert_event();
+	final event = await insertEvent();
 
 	event.name = "test";
 	int rows = await _db.eventDao.updateModel(event);
@@ -70,9 +70,9 @@ void update_event() async
 	expect(events[0].name, equals("test"));
 }
 
-void delete_event() async
+void deleteEvent() async
 {
-	final event = await insert_event();
+	final event = await insertEvent();
 
 	var rows = await _db.eventDao.deleteModel(event);
 
