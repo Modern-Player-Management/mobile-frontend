@@ -37,7 +37,8 @@ class Session
 	{
 		if(isAuth)
 		{
-			_teamManager.syncTeams();
+			await _teamManager.syncTeams();
+
 			_navigation.pushNamedAndRemoveUntil(
 				Routes.homeViewRoute, 
 				predicate: (route) => route == null
