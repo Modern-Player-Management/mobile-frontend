@@ -3,11 +3,19 @@ import 'package:flutter/material.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked_hooks/stacked_hooks.dart';
 
+import 'package:mpm/services/database/models/team.dart';
 import 'package:mpm/ui/views/team/manage/manage_team_view_model.dart';
+import 'package:mpm/ui/widgets/circle_avatar_image.dart';
 import 'package:mpm/ui/widgets/button.dart';
 
 class ManageTeamView extends ViewModelBuilderWidget<ManageTeamViewModel>
 {
+	final Team team;
+
+	ManageTeamView({
+		this.team
+	});
+
 	@override
   	bool get reactive => false;
 
@@ -17,7 +25,7 @@ class ManageTeamView extends ViewModelBuilderWidget<ManageTeamViewModel>
 		return Scaffold(
 			appBar: AppBar(
 				title: Text(
-					"Manage a team"
+					"${model.isEdit ? "Edit" : "Create"} a team"
 				),
 			),
 			body: Padding(
@@ -37,7 +45,7 @@ class ManageTeamView extends ViewModelBuilderWidget<ManageTeamViewModel>
 			floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
 			floatingActionButton: Button(
 				child: Text(
-					"Manage a team"
+					model.isEdit ? "Edit" : "Create"
 				),
 				color: Colors.green,
 				onPressed: model.manageTeam,
@@ -48,7 +56,9 @@ class ManageTeamView extends ViewModelBuilderWidget<ManageTeamViewModel>
 	@override
 	ManageTeamViewModel viewModelBuilder(context)
 	{
-		return ManageTeamViewModel();
+		return ManageTeamViewModel(
+			team: team
+		);
 	}
 }
 
@@ -60,15 +70,21 @@ class _ImagePicker extends HookViewModelWidget<ManageTeamViewModel>
 	@override
 	Widget buildViewModelWidget(context, model) 
 	{
+		Widget defaultIcon = Icon(
+			Icons.star
+		);
+
 		return InkWell(
-			child: CircleAvatar(
+			child: model.hasImage ?
+			CircleAvatarImage(
+				image: model.team.image,
+			) :
+			CircleAvatar(
 				backgroundColor: model.image == null ?
 				null : Colors.transparent,
 				radius: 32,
 				child: model.image == null ?
-				Icon(
-					Icons.star
-				) :
+				defaultIcon :
 				Image.file(model.image)
 			),
 			onTap: model.selectImage,

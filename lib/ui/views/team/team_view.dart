@@ -9,9 +9,6 @@ import 'package:mpm/ui/widgets/icon_text.dart';
 
 class TeamView extends ViewModelBuilderWidget<TeamViewModel>
 {
-	@override
-	bool get reactive => false;
-
 	final Team team;
 
 	TeamView({
@@ -65,10 +62,29 @@ class _Header extends ViewModelWidget<TeamViewModel>
 						image: model.team.image,
 					),
 					title: Text(
-						"${model.team.description}"
+						model.team.description
 					),
 					subtitle: Text(
 						"Players: ${model.team.players.length}"
+					),
+					trailing: Row(
+						mainAxisSize: MainAxisSize.min,
+						children: <Widget>[
+							IconButton(
+								icon: Icon(
+									Icons.edit,
+									color: Colors.green,
+								),
+								onPressed: model.edit,
+							),
+							IconButton(
+								icon: Icon(
+									Icons.delete,
+									color: Colors.red,
+								),
+								onPressed: model.delete,
+							),
+						],
 					),
 				)
 			),
