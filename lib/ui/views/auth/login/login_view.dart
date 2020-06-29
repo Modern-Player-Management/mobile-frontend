@@ -50,7 +50,9 @@ class LoginView extends ViewModelBuilderWidget<LoginViewModel>
 	@override
 	LoginViewModel viewModelBuilder(context) 
 	{
-		return LoginViewModel();
+		return LoginViewModel(
+			context: context
+		);
 	}
 }
 
