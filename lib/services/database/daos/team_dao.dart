@@ -9,7 +9,7 @@ abstract class TeamDao extends ModelDao<Team>
 	final _teamPlayerDao = locator<AppDatabase>().teamPlayerDao;
 	final _playerDao = locator<AppDatabase>().playerDao;
 
-	@Query('select * from teams where player = :player and `delete` = 0')
+	@Query('select * from teams where player = :player and `delete` = 0 order by name')
 	Stream<List<Team>> getTeams(String player);
 
 	@Query('select * from teams where player = :player and save = 1 and `delete` = 0')
@@ -44,6 +44,21 @@ abstract class TeamDao extends ModelDao<Team>
 
 			yield players;
 		}
+	}
+
+	Future<List<Player>> getAllPlayers(Team team) async
+	{
+		List<Player> players = [];
+		for(var teamPlayer in await _teamPlayerDao.getAllTeamPlayers(team.id))
+		{
+
+			if(teamPlayer.playerId != team.managerId)
+			{
+				players.add(await _playerDao.getPlayer(teamPlayer.playerId));
+			}
+		}
+
+		return players;
 	}
 
 	Stream<List<Event>> getEvents(Team team) async *
