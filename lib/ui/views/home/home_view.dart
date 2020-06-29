@@ -91,11 +91,11 @@ class _TeamView extends ViewModelBuilderWidget<HomeTeamViewModel>
 					title: Text(
 						team.name
 					),
-					subtitle: model.loaded ?
+					subtitle: model.dataReady ?
 					Text(
 						"Manager : ${model.team.manager.username}"
 					) : null,
-					trailing: model.loaded ?
+					trailing: model.dataReady ?
 					Text(
 						"Players : ${model.team.players.length}"
 					) : null,

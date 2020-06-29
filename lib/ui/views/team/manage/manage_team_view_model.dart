@@ -20,8 +20,17 @@ class ManageTeamViewModel extends BaseViewModel
 
 	final formKey = GlobalKey<FormState>();
 
-	Team team = Team();
+	final Team team;
+	final bool isEdit;
 	File image;
+
+	bool get hasImage => isEdit && team.image != null;
+
+	ManageTeamViewModel({
+		Team team
+	}) :
+	this.isEdit = team != null,
+	this.team = team ?? Team();
 
 	String nameValidator(String str)
 	{
@@ -70,8 +79,6 @@ class ManageTeamViewModel extends BaseViewModel
 			formKey.currentState.save();
 			team.managerId = _storage.player;
 
-			String fileId;
-
 			if(image != null)
 			{
 				http.MultipartFile file = await http.MultipartFile.fromPath(
@@ -85,21 +92,28 @@ class ManageTeamViewModel extends BaseViewModel
 					var res = await _fileApi.uploadFile(file);
 					if(res.isSuccessful)
 					{
-						fileId = res.body["id"];
+						team.image = res.body["id"];
 					}
 				}
 				catch(e)
 				{
-					print(e);
+					print("Manage team, upload file: $e");
 				}
 			}
-
-			team.image = fileId;
-			var res = await _teamManager.insertTeam(team);
-
-			if(res)
+			
+			if(isEdit)
 			{
-				_navigation.back();
+				if(await _teamManager.updateTeam(team))
+				{
+					_navigation.back(result: team);
+				}
+			}
+			else
+			{
+				if(await _teamManager.insertTeam(team))
+				{
+					_navigation.back();
+				}
 			}
 		}
 	}

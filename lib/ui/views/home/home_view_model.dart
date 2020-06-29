@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:stacked/stacked.dart';
 
 import 'package:mpm/app/locator.dart';
-import 'package:mpm/utils/utils.dart';
 
 class HomeViewModel extends BaseViewModel
 {
@@ -40,21 +39,19 @@ class HomeTeamsViewModel extends StreamViewModel<List<Team>>
 	get stream => locator<TeamManager>().getTeams();
 }
 
-class HomeTeamViewModel extends FutureViewModel<void>
+class HomeTeamViewModel extends FutureViewModel<bool>
 {
 	final _db = locator<AppDatabase>();
 	final _navigation = locator<NavigationService>();
 
 	final Team team;
 
-	bool loaded = false;
-
 	HomeTeamViewModel({
 		@required this.team
 	});
 
 	@override
-	Future<void> futureToRun() async
+	Future<bool> futureToRun() async
 	{
 		team.players = [];
 		team.manager = await _db.playerDao.getPlayer(team.managerId);
@@ -69,7 +66,7 @@ class HomeTeamViewModel extends FutureViewModel<void>
 			}
 		}
 
-		loaded = true;
+		return true;
 	}
 
 	void onTap() async
