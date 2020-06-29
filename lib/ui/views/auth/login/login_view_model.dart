@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mpm/utils/dialogs.dart';
 
 import 'package:stacked/stacked.dart';
 
@@ -10,11 +11,17 @@ class LoginViewModel extends BaseViewModel
 	final _authApi = locator<AuthApi>();
 	final _storage = locator<SecureStorage>();
 	final _session = locator<Session>();
+	final _navigation = locator<NavigationService>();
 
 	final formKey = GlobalKey<FormState>();
 
+	final BuildContext context;
 	final Player player = Player();
 	String requestError;
+
+	LoginViewModel({
+		@required this.context
+	});
 
 	String usernameValidator(String str)
 	{
@@ -40,6 +47,7 @@ class LoginViewModel extends BaseViewModel
 		if(formKey.currentState.validate())
 		{
 			formKey.currentState.save();
+			showLoadingDialog(context, canPop: false);
 			try
 			{
 				final res = await _authApi.authenticate(player.username, player.password);
@@ -52,12 +60,14 @@ class LoginViewModel extends BaseViewModel
 				}
 				else
 				{
+					_navigation.back();
 					requestError = "Invalid credentials";
 					notifyListeners();
 				}
 			}
 			catch(e)
 			{
+				_navigation.back();
 				print("login: $e");
 			}
 		}
