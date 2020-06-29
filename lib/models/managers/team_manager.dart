@@ -60,7 +60,7 @@ class TeamManager
 				for(var team in teams)
 				{
 					team.player = _storage.player;
-					team.save = true;
+					team.saved = true;
 					await _teamDao.insertModel(team);
 
 					int index = teamsKey.indexOf(team.id);
@@ -114,7 +114,7 @@ class TeamManager
 		{
 			team.id = _uuid.v1();
 			team.player = _storage.player;
-			team.save = true;
+			team.saved = true;
 
 			await _teamDao.insertModel(team);
 		}
@@ -143,7 +143,9 @@ class TeamManager
 	Future<bool> updateTeam(Team team) async
 	{
 		_checkValidResponse();
-
+		
+		team.saved = false;
+		team.update = true;
 		await _teamDao.updateModel(team);
 
 		try
@@ -151,7 +153,7 @@ class TeamManager
 			var response = await _api.updateTeam(team.id, team);
 			if(validResponse(response))
 			{
-				team.save = true;
+				team.saved = true;
 				await _teamDao.updateModel(team);
 			}
 			else
@@ -172,7 +174,7 @@ class TeamManager
 	{
 		_checkValidResponse();
 		
-		team.delete = true;
+		team.deleted = true;
 		await _teamDao.updateModel(team);
 
 		try

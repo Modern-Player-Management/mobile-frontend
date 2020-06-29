@@ -39,11 +39,11 @@ class Team
 	String created;
 
 	@JsonKey(ignore: true)
-	bool save;
+	bool saved;
 	@JsonKey(ignore: true)
 	bool update;
 	@JsonKey(ignore: true)
-	bool delete;
+	bool deleted;
 
   	Team({
 		this.id, 
@@ -55,16 +55,16 @@ class Team
 		this.isCurrentUserManager,
 		Player manager,
 		List<Player> players,
-		bool save = false,
+		bool saved = false,
 		bool update = false,
-		bool delete = false,
+		bool deleted = false,
 	}) : 
 		this.managerId = managerId ?? manager?.id,
 		this.manager = manager,
 		this.players = players ?? [],
-		this.save = save ?? false,
+		this.saved = saved ?? false,
 		this.update = update ?? false,
-		this.delete = delete ?? false;
+		this.deleted = deleted ?? false;
 
 	static const fromJson = _$TeamFromJson;
 

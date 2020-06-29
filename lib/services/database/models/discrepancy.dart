@@ -22,22 +22,13 @@ class Discrepancy
 	@JsonKey(ignore: true)
 	String event;
 
-	@JsonKey(ignore: true)
-	bool save;
-	@JsonKey(ignore: true)
-	bool update;
-	@JsonKey(ignore: true)
-	bool delete;
-
 	Discrepancy({
 		this.id, 
-		bool save = false,
-		bool update = false,
-		bool delete = false
-	}) : 
-		this.save = save ?? false,
-		this.update = update ?? false,
-		this.delete = delete ?? false;
+		this.type,
+		this.reason,
+		this.delayLength,
+		this.event
+	});
 
 	static const fromJson = _$DiscrepancyFromJson;
 
