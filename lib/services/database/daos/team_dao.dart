@@ -1,10 +1,14 @@
 import 'package:floor/floor.dart';
 
-import 'package:mpm/services/database/models/team.dart';
+import 'package:mpm/app/locator.dart';
+import 'package:mpm/services/database/daos/model_dao.dart';
 
 @dao
-abstract class TeamDao
+abstract class TeamDao extends ModelDao<Team>
 {
+	final teamPlayerDao = locator<AppDatabase>().teamPlayerDao;
+	final playerDao = locator<AppDatabase>().playerDao;
+
 	@Query('select * from teams where player = :player and `delete` = 0')
 	Stream<List<Team>> getTeams(String player);
 
@@ -17,17 +21,28 @@ abstract class TeamDao
 	@Query('select * from teams where player = :player and `delete` = 1')
 	Future<List<Team>> getUndeletedTeams(String player);
 
-	@Insert(
-		onConflict: OnConflictStrategy.replace
-	)
-	Future<int> insertTeam(Team team);
-
-	@update
-	Future<int> updateTeam(Team team);
-
 	@Query('update teams set id = :newId, save = :save where id = :oldId')
 	Future<void> updateTeamId(String oldId, String newId, int save);
 
-	@delete
-	Future<int> deleteTeam(Team team);
+	Stream<List<Player>> getPlayers(Team team) async *
+	{
+		await for(var teamPlayers in teamPlayerDao.getTeamPlayers(team.id))
+		{
+			List<Player> players = [];
+			for(var teamPlayer in teamPlayers)
+			{
+				if(teamPlayer.playerId != team.managerId)
+				{
+					players.add(await playerDao.getPlayer(teamPlayer.playerId));
+				}
+			}
+
+			yield players;
+		}
+	}
+
+	Stream<List<Event>> getEvents(Team team) async *
+	{
+		yield [];
+	}
 }

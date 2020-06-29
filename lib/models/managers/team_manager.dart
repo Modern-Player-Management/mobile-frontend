@@ -60,7 +60,7 @@ class TeamManager
 				{
 					team.player = _storage.player;
 					team.save = true;
-					await _teamDao.insertTeam(team);
+					await _teamDao.insertModel(team);
 
 					int index = teamsKey.indexOf(team.id);
 					if(index != -1)
@@ -74,7 +74,7 @@ class TeamManager
 
 				for(var team in savedTeams) 
 				{
-					await _teamDao.deleteTeam(team);
+					await _teamDao.deleteModel(team);
 				}
 			}
 			else
@@ -106,7 +106,7 @@ class TeamManager
 			team.player = _storage.player;
 			team.save = true;
 
-			await _teamDao.insertTeam(team);
+			await _teamDao.insertModel(team);
 		}
 
 		try
@@ -123,7 +123,7 @@ class TeamManager
 		}
 		catch(e) 
 		{
-			print("insertTeam: $e");
+			print("insertModel: $e");
 			return false;
 		}
 
@@ -134,7 +134,7 @@ class TeamManager
 	{
 		_checkValidResponse();
 
-		await _teamDao.updateTeam(team);
+		await _teamDao.updateModel(team);
 
 		try
 		{
@@ -142,7 +142,7 @@ class TeamManager
 			if(validResponse(response)) 
 			{
 				team.save = true;
-				await _teamDao.updateTeam(team);
+				await _teamDao.updateModel(team);
 			}
 			else
 			{
@@ -151,7 +151,7 @@ class TeamManager
 		}
 		catch(e) 
 		{
-			print("updateTeam: $e");
+			print("updateModel: $e");
 			return false;
 		}
 
@@ -163,14 +163,14 @@ class TeamManager
 		_checkValidResponse();
 		
 		team.delete = true;
-		await _teamDao.updateTeam(team);
+		await _teamDao.updateModel(team);
 
 		try
 		{
 			var response = await _api.deleteTeam(team.id);
 			if(validResponse(response))
 			{
-				await _teamDao.deleteTeam(team);
+				await _teamDao.deleteModel(team);
 			}
 			else
 			{
@@ -179,7 +179,7 @@ class TeamManager
 		}
 		catch(e) 
 		{
-			print("deleteTeam: $e");
+			print("deleteModel: $e");
 			return false;
 		}
 

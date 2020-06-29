@@ -14,10 +14,10 @@ void main() async
 	group('simple team api tests', (){
 		test('get teams', getTeams);
 		test('create team', createTeam);
-		test('update team', updateTeam);
-		test('delete team', deleteTeam);
+		test('update team', updateModel);
+		test('delete team', deleteModel);
 		test('add team player', addTeamPlayer);
-		test('delete team player', deleteTeamPlayer);
+		test('delete team player', deleteModelPlayer);
 		test('add event', addEvent);
 	});
 }
@@ -152,7 +152,7 @@ void createTeam() async
 	expect(res.body.id, "3fa85f64-5717-4562-b3fc-2c963f66afa6");
 }
 
-void updateTeam() async
+void updateModel() async
 {
 	final client = MockClient((req) async {
 		expect(req.method, "PUT");
@@ -171,7 +171,7 @@ void updateTeam() async
 	expect(res.isSuccessful, true);
 }
 
-void deleteTeam() async
+void deleteModel() async
 {
 	final client = MockClient((req) async {
 		expect(req.method, "DELETE");
@@ -201,7 +201,7 @@ void addTeamPlayer() async
 	expect(res.isSuccessful, true);
 }
 
-void deleteTeamPlayer() async
+void deleteModelPlayer() async
 {
 	final client = MockClient((req) async {
 		expect(req.method, "DELETE");

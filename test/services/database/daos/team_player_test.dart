@@ -45,7 +45,7 @@ Future<TeamPlayer> insert_teamPlayer([AppDatabase db]) async
 		playerId: playerId
 	);
 
-	var id = await (_db ?? db).teamPlayerDao.insertTeamPlayer(teamPlayer);
+	var id = await (_db ?? db).teamPlayerDao.insertModel(teamPlayer);
 
 	expect(id, equals(1));
 }
@@ -73,7 +73,7 @@ void delete_teamPlayer() async
 		playerId: playerId
 	);
 
-	var rows = await _db.teamPlayerDao.deleteTeamPlayer(teamPlayer);
+	var rows = await _db.teamPlayerDao.deleteModel(teamPlayer);
 
 	expect(rows, equals(1));
 }

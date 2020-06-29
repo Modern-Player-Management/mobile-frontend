@@ -40,7 +40,7 @@ Future<Event> insert_event() async
 		description: "description"
 	);
 
-	int id = await _db.eventDao.insertEvent(event);
+	int id = await _db.eventDao.insertModel(event);
 
 	expect(id, equals(1));
 
@@ -61,7 +61,7 @@ void update_event() async
 	final event = await insert_event();
 
 	event.name = "test";
-	int rows = await _db.eventDao.updateEvent(event);
+	int rows = await _db.eventDao.updateModel(event);
 
 	expect(rows, equals(1));
 
@@ -74,7 +74,7 @@ void delete_event() async
 {
 	final event = await insert_event();
 
-	var rows = await _db.eventDao.deleteEvent(event);
+	var rows = await _db.eventDao.deleteModel(event);
 
 	expect(rows, equals(1));
 
