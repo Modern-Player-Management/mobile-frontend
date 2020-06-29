@@ -223,7 +223,7 @@ class _$TeamDao extends TeamDao {
   @override
   Stream<List<Team>> getTeams(String player) {
     return _queryAdapter.queryListStream(
-        'select * from teams where player = ? and `delete` = 0',
+        'select * from teams where player = ? and `delete` = 0 order by name',
         arguments: <dynamic>[player],
         queryableName: 'teams',
         isView: false,
