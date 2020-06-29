@@ -28,14 +28,14 @@ class TeamPlayer
 	final String teamId;
 	final String playerId;
 
-	bool save, delete;
+	bool saved, deleted;
 
   	TeamPlayer({
 		this.teamId, 
 		this.playerId,
-		bool save = false,
-		bool delete = false,
+		bool saved = false,
+		bool deleted = false,
 	}) : 
-		this.save = save ?? false,
-		this.delete = delete ?? false;
+		this.saved = saved ?? false,
+		this.deleted = deleted ?? false;
 }

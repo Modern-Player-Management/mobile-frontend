@@ -13,10 +13,10 @@ abstract class PlayerDao extends ModelDao<Player>
 	Future<void> updatePlayerId(String oldId, String newId);
 
 	@Query('select * from players inner join team_players on players.id = team_players.playerId '
-		'and team_players.teamId = :teamId and team_players.playerId != :managerId and `team_players.delete` = 0')
+		'and team_players.teamId = :teamId and team_players.playerId != :managerId and team_players.deleted = 0')
 	Stream<List<Player>> getPlayers(String teamId, String managerId);
 
 	@Query('select * from players inner join team_players on players.id = team_players.playerId '
-		'and team_players.teamId = :teamId and team_players.playerId != :managerId and `team_players.delete` = 0')
+		'and team_players.teamId = :teamId and team_players.playerId != :managerId and team_players.deleted = 0')
 	Future<List<Player>> getAllPlayers(String teamId, String managerId);
 }

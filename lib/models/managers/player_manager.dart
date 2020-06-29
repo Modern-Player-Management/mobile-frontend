@@ -44,7 +44,7 @@ class PlayerManager
 		await _teamPlayerDao.insertModel(TeamPlayer(
 			teamId: team.id,
 			playerId: team.manager.id,
-			save: true
+			saved: true
 		));
 
 		for(var player in team.players)
@@ -55,7 +55,7 @@ class PlayerManager
 				await _teamPlayerDao.insertModel(TeamPlayer(
 					teamId: team.id,
 					playerId: player.id,
-					save: true
+					saved: true
 				));
 			}
 		}
@@ -102,7 +102,7 @@ class PlayerManager
 			var res = await _teamApi.addTeamPlayer(team.id, player.id);
 			if(validResponse(res))
 			{
-				teamPlayer.save = true;
+				teamPlayer.saved = true;
 				await _teamPlayerDao.updateModel(teamPlayer);
 			}
 			else
@@ -122,7 +122,7 @@ class PlayerManager
 	{
 		_checkValidResponse();
 		
-		teamPlayer.delete = true;
+		teamPlayer.deleted = true;
 		await _teamPlayerDao.updateModel(teamPlayer);
 
 		try
