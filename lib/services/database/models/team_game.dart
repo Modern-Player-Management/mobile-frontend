@@ -4,8 +4,8 @@ import 'package:mpm/app/locator.dart';
 import 'package:mpm/services/database/models/models.dart';
 
 @Entity(
-	tableName: 'team_players',
-	primaryKeys: ['teamId', 'playerId'],
+	tableName: 'teams_gamess',
+	primaryKeys: ['teamId', 'gameId'],
 	foreignKeys: [
 		ForeignKey(
 			childColumns: ['teamId'],
@@ -15,24 +15,24 @@ import 'package:mpm/services/database/models/models.dart';
 			onUpdate: ForeignKeyAction.cascade,
 		),
 		ForeignKey(
-			childColumns: ['playerId'],
+			childColumns: ['gameId'],
 			parentColumns: ['id'],
-			entity: Player,
+			entity: Game,
 			onDelete: ForeignKeyAction.cascade,
 			onUpdate: ForeignKeyAction.cascade,
 		),
 	],
 )
-class TeamPlayer
+class TeamGame
 {
 	final String teamId;
-	final String playerId;
+	final String gameId;
 
 	bool save, delete;
 
-  	TeamPlayer({
+  	TeamGame({
 		this.teamId, 
-		this.playerId,
+		this.gameId,
 		bool save = false,
 		bool delete = false,
 	}) : 

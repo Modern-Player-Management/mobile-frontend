@@ -1,6 +1,6 @@
 import 'package:floor/floor.dart';
-import 'package:mpm/services/database/daos/model_dao.dart';
 
+import 'package:mpm/services/database/daos/model_dao.dart';
 import 'package:mpm/services/database/models/team_player.dart';
 
 @dao
@@ -20,7 +20,4 @@ abstract class TeamPlayerDao extends ModelDao<TeamPlayer>
 
 	@Query('select * from teams_players where teamId = :teamId and `delete` = 1')
 	Future<List<TeamPlayer>> getUndeletedTeamPlayers(String teamId);
-
-	@Query('select * from teams_players where teamId = :teamId and playerId = :playerId')
-	Future<TeamPlayer> getTeamPlayer(String teamId, String playerId);
 }
