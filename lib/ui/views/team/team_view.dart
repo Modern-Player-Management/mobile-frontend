@@ -28,6 +28,7 @@ class TeamView extends ViewModelBuilderWidget<TeamViewModel>
 						floating: true,
 					),
 					_Header(),
+					_Calendar(),
 					_TeamPlayersView()
 				],
 			),
@@ -88,6 +89,23 @@ class _Header extends ViewModelWidget<TeamViewModel>
 					),
 				)
 			),
+		);
+	}
+}
+
+class _Calendar extends ViewModelBuilderWidget<TeamCalendarViewModel>
+{
+	@override
+	Widget builder(context, model, child)
+	{
+		return Container();
+	}
+
+	@override
+	TeamCalendarViewModel viewModelBuilder(context)
+	{
+		return TeamCalendarViewModel(
+			context: context
 		);
 	}
 }

@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 
 import 'package:stacked/stacked.dart';
@@ -51,15 +49,32 @@ class TeamViewModel extends BaseViewModel
 	bool get isManager => team.managerId == _storage.player;
 }
 
+class TeamCalendarViewModel extends StreamViewModel<List<Event>>
+{
+	final _teamDao = locator<AppDatabase>().teamDao;
+
+	final BuildContext context;
+	TeamViewModel _teamViewModel;
+
+	TeamCalendarViewModel({
+		@required this.context
+	})
+	{
+		_teamViewModel = getParentViewModel<TeamViewModel>(context);
+	}
+
+	@override
+	get stream => _teamDao.getEvents(_teamViewModel.team);
+}
+
 class TeamPlayersViewModel extends StreamViewModel<List<Player>>
 {
 	final _playerManager = locator<PlayerManager>();
 
-	final _db = locator<AppDatabase>();
+	final _teamDao = locator<AppDatabase>().teamDao;
 	final _navigation = locator<NavigationService>();
 
 	final BuildContext context;
-	final _controller = StreamController<List<Player>>.broadcast();
 
 	TeamViewModel _teamViewModel;
 
@@ -68,23 +83,10 @@ class TeamPlayersViewModel extends StreamViewModel<List<Player>>
 	})
 	{
 		_teamViewModel = getParentViewModel<TeamViewModel>(context);
-
-		_db.teamPlayerDao.getTeamPlayers(_teamViewModel.team.id).listen((teamPlayers) async {
-			List<Player> players = [];
-			for(var teamPlayer in teamPlayers)
-			{
-				var player = await _db.playerDao.getPlayer(teamPlayer.playerId);
-				if(player.id != _teamViewModel.team.manager.id)
-				{
-					players.add(player);
-				}
-			}
-			_controller.add(players);
-		});
 	}
 
 	@override
-	get stream => _controller.stream;
+	get stream => _teamDao.getPlayers(_teamViewModel.team);
 
 	void onPressed(Player player) async
 	{
@@ -93,7 +95,7 @@ class TeamPlayersViewModel extends StreamViewModel<List<Player>>
 			playerId: player.id
 		);
 
-		var res = await _playerManager.removeTeamPlayer(teamPlayer);
+		await _playerManager.removeTeamPlayer(teamPlayer);
 	}
 
 	void onTap(Player player)

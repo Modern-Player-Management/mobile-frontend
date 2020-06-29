@@ -1,9 +1,10 @@
 import 'package:floor/floor.dart';
 
+import 'package:mpm/services/database/daos/model_dao.dart';
 import 'package:mpm/services/database/models/event.dart';
 
 @dao
-abstract class EventDao
+abstract class EventDao extends ModelDao<Event>
 {
 	@Query('select * from events where team = :team and `delete` = 0')
 	Stream<List<Event>> getEvents(String team);
@@ -16,15 +17,4 @@ abstract class EventDao
 
 	@Query('select * from events where team = :team and `delete` = 1')
 	Future<List<Event>> getUndeletedEvents(String team);
-
-	@Insert(
-		onConflict: OnConflictStrategy.replace
-	)
-	Future<int> insertEvent(Event event);
-
-	@update
-	Future<int> updateEvent(Event event);
-
-	@delete
-	Future<int> deleteEvent(Event event);
 }

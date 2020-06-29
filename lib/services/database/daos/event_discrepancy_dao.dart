@@ -1,9 +1,10 @@
 import 'package:floor/floor.dart';
 
+import 'package:mpm/services/database/daos/model_dao.dart';
 import 'package:mpm/services/database/models/event_discrepancy.dart';
 
 @dao
-abstract class EventDiscrepancyDao
+abstract class EventDiscrepancyDao extends ModelDao<EventDiscrepancy>
 {
 	@Query('select * from events_discrepancies where eventId = :eventId and playerId = :playerId')
 	Future<EventDiscrepancy> getEventDiscrepancy(String eventId, String playerId);
@@ -23,8 +24,8 @@ abstract class EventDiscrepancyDao
 	Future<int> insertEventDiscrepancy(EventDiscrepancy eventDiscrepancy);
 
 	@update
-	Future<int> updateEventDiscrepancy(EventDiscrepancy eventDiscrepancy);
+	Future<int> updateModelDiscrepancy(EventDiscrepancy eventDiscrepancy);
 
 	@delete
-	Future<int> deleteEventDiscrepancy(EventDiscrepancy eventDiscrepancy);
+	Future<int> deleteModelDiscrepancy(EventDiscrepancy eventDiscrepancy);
 }

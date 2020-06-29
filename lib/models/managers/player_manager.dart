@@ -40,8 +40,8 @@ class PlayerManager
 
 		_checkValidResponse();
 
-		await _playerDao.insertPlayer(team.manager);
-		await _teamPlayerDao.insertTeamPlayer(TeamPlayer(
+		await _playerDao.insertModel(team.manager);
+		await _teamPlayerDao.insertModel(TeamPlayer(
 			teamId: team.id,
 			playerId: team.manager.id,
 			save: true
@@ -49,10 +49,10 @@ class PlayerManager
 
 		for(var player in team.players)
 		{
-			await _playerDao.insertPlayer(player);
+			await _playerDao.insertModel(player);
 			if(player.id != team.manager.id)
 			{
-				await _teamPlayerDao.insertTeamPlayer(TeamPlayer(
+				await _teamPlayerDao.insertModel(TeamPlayer(
 					teamId: team.id,
 					playerId: player.id,
 					save: true
@@ -88,14 +88,14 @@ class PlayerManager
 	{
 		_checkValidResponse();
 		
-		await _playerDao.insertPlayer(player);
+		await _playerDao.insertModel(player);
 
 		var teamPlayer = TeamPlayer(
 			teamId: team.id,
 			playerId: player.id
 		);
 
-		await _teamPlayerDao.insertTeamPlayer(teamPlayer);
+		await _teamPlayerDao.insertModel(teamPlayer);
 
 		try
 		{
@@ -103,7 +103,7 @@ class PlayerManager
 			if(validResponse(res))
 			{
 				teamPlayer.save = true;
-				await _teamPlayerDao.updateTeamPlayer(teamPlayer);
+				await _teamPlayerDao.updateModel(teamPlayer);
 			}
 			else
 			{
@@ -123,14 +123,14 @@ class PlayerManager
 		_checkValidResponse();
 		
 		teamPlayer.delete = true;
-		await _teamPlayerDao.updateTeamPlayer(teamPlayer);
+		await _teamPlayerDao.updateModel(teamPlayer);
 
 		try
 		{
 			var res = await _teamApi.deleteTeamPlayer(teamPlayer.teamId, teamPlayer.playerId);
 			if(validResponse(res))
 			{
-				await _teamPlayerDao.deleteTeamPlayer(teamPlayer);
+				await _teamPlayerDao.deleteModel(teamPlayer);
 			}
 			else
 			{

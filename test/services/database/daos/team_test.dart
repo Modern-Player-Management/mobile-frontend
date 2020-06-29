@@ -48,7 +48,7 @@ Future<Team> insert_team([AppDatabase db]) async
 		name: teamName
 	);
 
-	int id = await (_db ?? db).teamDao.insertTeam(team);
+	int id = await (_db ?? db).teamDao.insertModel(team);
 
 	expect(id, equals(1));
 
@@ -69,7 +69,7 @@ void update_team() async
 	final team = await insert_team();
 
 	team.name = "test";
-	int rows = await _db.teamDao.updateTeam(team);
+	int rows = await _db.teamDao.updateModel(team);
 
 	expect(rows, equals(1));
 
@@ -82,7 +82,7 @@ void delete_team() async
 {
 	final team = await insert_team();
 
-	var rows = await _db.teamDao.deleteTeam(team);
+	var rows = await _db.teamDao.deleteModel(team);
 
 	expect(rows, equals(1));
 
@@ -99,7 +99,7 @@ void team_with_manager() async
 		username: managerUsername
 	);
 
-	var id = await _db.playerDao.insertPlayer(manager);
+	var id = await _db.playerDao.insertModel(manager);
 
 	expect(id, equals(1));
 
@@ -110,7 +110,7 @@ void team_with_manager() async
 		managerId: managerId
 	);
 
-	id = await _db.teamDao.insertTeam(team);
+	id = await _db.teamDao.insertModel(team);
 
 	expect(id, equals(1));
 }
