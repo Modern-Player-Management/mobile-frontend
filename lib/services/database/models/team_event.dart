@@ -4,7 +4,7 @@ import 'package:mpm/app/locator.dart';
 import 'package:mpm/services/database/models/models.dart';
 
 @Entity(
-	tableName: 'teams_events',
+	tableName: 'team_events',
 	primaryKeys: ['teamId', 'playerId'],
 	foreignKeys: [
 		ForeignKey(
