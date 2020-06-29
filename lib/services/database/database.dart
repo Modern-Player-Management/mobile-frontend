@@ -16,7 +16,10 @@ part 'database.g.dart';
 	Team,
 	Player,
 	TeamPlayer,
+	Game,
+	TeamGame,
 	Event,
+	TeamEvent,
 	Discrepancy,
 	EventDiscrepancy,
 ], version: 1)
@@ -26,7 +29,10 @@ abstract class AppDatabase extends FloorDatabase
 	TeamDao get teamDao;
 	PlayerDao get playerDao;
 	TeamPlayerDao get teamPlayerDao;
+	GameDao get gameDao;
+	TeamGameDao get teamGameDao;
 	EventDao get eventDao;
+	TeamEventDao get teamEventDao;
 	DiscrepancyDao get discrepancyDao;
 	EventDiscrepancyDao get eventDiscrepancyDao;
 
