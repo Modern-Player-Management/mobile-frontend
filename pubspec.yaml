@@ -34,18 +34,18 @@ dependencies:
   flutter_secure_storage: ^3.3.3
   floor: ^0.13.0
   chopper: ^3.0.3
-  stacked_services: ^0.4.4+2
+  stacked_services: ^0.4.4+3
   get_it: ^4.0.2
   injectable: ^0.4.0+1
   auto_route: ^0.5.0
 
   # logic
-  stacked: ^1.6.0
+  stacked: ^1.6.1+1
   stacked_hooks: ^0.1.2
   json_serializable: ^3.3.0
   path_provider: ^1.6.11
   permission_handler: ^5.0.1+1
-  connectivity: ^0.4.8+6
+  connectivity: ^0.4.9
   validators: ^2.0.1
   uuid: ^2.1.0
   file_picker: ^1.12.0
