@@ -19,7 +19,7 @@ class _$DiscrepancyApi extends DiscrepancyApi {
   @override
   Future<Response<dynamic>> updateDiscrepancy(
       String discrepancyId, Discrepancy discrepancy) {
-    final $url = '/api/discrepancies/$discrepancyId';
+    final $url = '/$discrepancyId';
     final $body = discrepancy;
     final $request = Request('PUT', $url, client.baseUrl, body: $body);
     return client.send<dynamic, dynamic>($request);
@@ -27,7 +27,7 @@ class _$DiscrepancyApi extends DiscrepancyApi {
 
   @override
   Future<Response<dynamic>> deleteDiscrepancy(String discrepancyId) {
-    final $url = '/api/discrepancies/$discrepancyId';
+    final $url = '/$discrepancyId';
     final $request = Request('DELETE', $url, client.baseUrl);
     return client.send<dynamic, dynamic>($request);
   }

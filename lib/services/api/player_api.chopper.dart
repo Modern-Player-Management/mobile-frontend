@@ -18,7 +18,7 @@ class _$PlayerApi extends PlayerApi {
 
   @override
   Future<Response<List<Player>>> searchPlayers(String username) {
-    final $url = '/api/users/search/';
+    final $url = '/search/';
     final $params = <String, dynamic>{'search': username};
     final $request = Request('GET', $url, client.baseUrl, parameters: $params);
     return client.send<List<Player>, Player>($request);
@@ -26,14 +26,14 @@ class _$PlayerApi extends PlayerApi {
 
   @override
   Future<Response<Player>> getPlayer(String username) {
-    final $url = '/api/users/$username';
+    final $url = '/$username';
     final $request = Request('GET', $url, client.baseUrl);
     return client.send<Player, Player>($request);
   }
 
   @override
   Future<Response<dynamic>> updatePlayer(String playerId, Player player) {
-    final $url = '/api/users/$playerId';
+    final $url = '/$playerId';
     final $body = player;
     final $request = Request('PUT', $url, client.baseUrl, body: $body);
     return client.send<dynamic, dynamic>($request);
@@ -41,7 +41,7 @@ class _$PlayerApi extends PlayerApi {
 
   @override
   Future<Response<Player>> getProfile() {
-    final $url = '/api/users/profil';
+    final $url = '/profile';
     final $request = Request('GET', $url, client.baseUrl);
     return client.send<Player, Player>($request);
   }
