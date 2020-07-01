@@ -18,7 +18,7 @@ class _$EventApi extends EventApi {
 
   @override
   Future<Response<dynamic>> confirm(String eventId) {
-    final $url = '/api/events/$eventId/confirm';
+    final $url = '/$eventId/confirm';
     final $request = Request('POST', $url, client.baseUrl);
     return client.send<dynamic, dynamic>($request);
   }
@@ -26,7 +26,7 @@ class _$EventApi extends EventApi {
   @override
   Future<Response<dynamic>> addEventDiscrepancy(
       String eventId, Discrepancy discrepancy) {
-    final $url = '/api/events/$eventId/discrepancies';
+    final $url = '/$eventId/discrepancies';
     final $body = discrepancy;
     final $request = Request('POST', $url, client.baseUrl, body: $body);
     return client.send<dynamic, dynamic>($request);
@@ -34,7 +34,7 @@ class _$EventApi extends EventApi {
 
   @override
   Future<Response<dynamic>> updateEvent(String eventId, Event event) {
-    final $url = '/api/events/$eventId';
+    final $url = '/$eventId';
     final $body = event;
     final $request = Request('PUT', $url, client.baseUrl, body: $body);
     return client.send<dynamic, dynamic>($request);
@@ -42,14 +42,14 @@ class _$EventApi extends EventApi {
 
   @override
   Future<Response<dynamic>> deleteEvent(String eventId) {
-    final $url = '/api/events/$eventId';
+    final $url = '/$eventId';
     final $request = Request('DELETE', $url, client.baseUrl);
     return client.send<dynamic, dynamic>($request);
   }
 
   @override
   Future<Response<dynamic>> getIcal(String icalSecret) {
-    final $url = '/api/events/ical/$icalSecret';
+    final $url = '/ical/$icalSecret';
     final $request = Request('GET', $url, client.baseUrl);
     return client.send<dynamic, dynamic>($request);
   }
