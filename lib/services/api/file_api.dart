@@ -27,7 +27,7 @@ abstract class FileApi extends ChopperService
 			client: IOClient(
 				HttpClient()..connectionTimeout = const Duration(seconds: 4),
 			),
-			baseUrl: serverUrl,
+			baseUrl: '$serverUrl/api/Files',
 			converter: JsonSerializableConverter({
 				
 			}),
@@ -44,10 +44,10 @@ abstract class FileApi extends ChopperService
 
 	// Files requests
 
-	@Post(path: "/api/files")
+	@Post(path: "/")
 	@multipart
 	Future<Response<Map<String , dynamic>>> uploadFile(@PartFile() MultipartFile file);
 
-	@Get(path: "/api/files/{fileId}")
+	@Get(path: "/{fileId}")
 	Future<Response<String>> getFile(@Path() String fileId);
 }

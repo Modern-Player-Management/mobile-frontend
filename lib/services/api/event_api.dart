@@ -7,7 +7,7 @@ import 'package:injectable/injectable.dart';
 
 import 'package:mpm/app/locator.dart';
 import 'package:mpm/services/api/converters/json_serializable_converter.dart';
-import 'package:mpm/services/api/models/participation.dart';
+import 'package:mpm/services/database/models/participation.dart';
 import 'package:mpm/utils/utils.dart';
 
 part 'event_api.chopper.dart';
@@ -26,7 +26,7 @@ abstract class EventApi extends ChopperService
 			client: IOClient(
 				HttpClient()..connectionTimeout = const Duration(seconds: 4),
 			),
-			baseUrl: serverUrl,
+			baseUrl: '$serverUrl/api/Events',
 			converter: JsonSerializableConverter({
 				Team: Team.fromJson,
 				Player: Player.fromJson,
@@ -46,18 +46,18 @@ abstract class EventApi extends ChopperService
 
 	// events requests
 
-	@Post(path: "/api/events/{eventId}/confirm")
+	@Post(path: "/{eventId}/confirm")
 	Future<Response> confirm(@Path() String eventId);
 
-	@Post(path: "/api/events/{eventId}/discrepancies")
+	@Post(path: "/{eventId}/discrepancies")
 	Future<Response> addEventDiscrepancy(@Path() String eventId, @Body() Discrepancy discrepancy);
 
-	@Put(path: "/api/events/{eventId}")
+	@Put(path: "/{eventId}")
 	Future<Response> updateEvent(@Path() String eventId, @Body() Event event);
 
-	@Delete(path: "/api/events/{eventId}")
+	@Delete(path: "/{eventId}")
 	Future<Response> deleteEvent(@Path() String eventId);
 
-	@Get(path: "/api/events/ical/{icalSecret}")
+	@Get(path: "/ical/{icalSecret}")
 	Future<Response> getIcal(@Path() String icalSecret);
 }
