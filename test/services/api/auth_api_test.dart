@@ -20,7 +20,7 @@ void register() async
 {
 	final client = MockClient((req) async {
 		expect(req.method, "POST");
-		expect(req.url.path, equals("/register"));
+		expect(req.url.path, equals("/api/Auth/register"));
 		return http.Response("", 200);
 	});
 
@@ -35,7 +35,7 @@ void authenticate() async
 {
 	final client = MockClient((req) async {
 		expect(req.method, "POST");
-		expect(req.url.path, equals("/authenticate"));
+		expect(req.url.path, equals("/api/Auth/authenticate"));
 		return http.Response(json.encode({
 			"id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
 			"username": "string",
@@ -56,7 +56,7 @@ void available() async
 {
 	final client = MockClient((req) async {
 		expect(req.method, "POST");
-		expect(req.url.path, equals("/available"));
+		expect(req.url.path, equals("/api/Auth/available"));
 		return http.Response(json.encode({
 			"username": "test",
 			"isAvailable": true

@@ -29,7 +29,7 @@ abstract class TeamApi extends ChopperService
 			client: client ?? IOClient(
 				HttpClient()..connectionTimeout = const Duration(seconds: 4),
 			),
-			baseUrl: '$serverUrl/api/Teams',
+			baseUrl: '$serverUrl/Teams',
 			converter: JsonSerializableConverter({
 				Team: Team.fromJson,
 				Player: Player.fromJson,
