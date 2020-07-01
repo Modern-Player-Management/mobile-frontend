@@ -26,7 +26,7 @@ void getTeams() async
 {
 	final client = MockClient((req) async {
 		expect(req.method, "GET");
-		expect(req.url.path, equals("/api/teams"));
+		expect(req.url.path, equals("/api/Teams/"));
 		return http.Response(json.encode([
 			{
 				"id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
@@ -90,7 +90,7 @@ void createTeam() async
 {
 	final client = MockClient((req) async {
 		expect(req.method, "POST");
-		expect(req.url.path, equals("/api/teams"));
+		expect(req.url.path, equals("/api/Teams/"));
 		return http.Response(json.encode({
 			"id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
 			"name": "string",
@@ -156,7 +156,7 @@ void updateModel() async
 {
 	final client = MockClient((req) async {
 		expect(req.method, "PUT");
-		expect(req.url.path, equals("/api/teams/teamId"));
+		expect(req.url.path, equals("/api/Teams/teamId"));
 		return http.Response(json.encode({}), 200);
 	});
 
@@ -175,7 +175,7 @@ void deleteModel() async
 {
 	final client = MockClient((req) async {
 		expect(req.method, "DELETE");
-		expect(req.url.path, equals("/api/teams/teamId"));
+		expect(req.url.path, equals("/api/Teams/teamId"));
 		return http.Response(json.encode({}), 200);
 	});
 
@@ -190,7 +190,7 @@ void addTeamPlayer() async
 {
 	final client = MockClient((req) async {
 		expect(req.method, "POST");
-		expect(req.url.path, equals("/api/teams/teamId/player/playerId"));
+		expect(req.url.path, equals("/api/Teams/teamId/player/playerId"));
 		return http.Response(json.encode({}), 200);
 	});
 
@@ -205,7 +205,7 @@ void deleteModelPlayer() async
 {
 	final client = MockClient((req) async {
 		expect(req.method, "DELETE");
-		expect(req.url.path, equals("/api/teams/teamId/player/playerId"));
+		expect(req.url.path, equals("/api/Teams/teamId/player/playerId"));
 		return http.Response(json.encode({}), 200);
 	});
 
@@ -220,7 +220,7 @@ void addEvent() async
 {
 	final client = MockClient((req) async {
 		expect(req.method, "POST");
-		expect(req.url.path, equals("/api/teams/teamId/events"));
+		expect(req.url.path, equals("/api/Teams/teamId/events"));
 		return http.Response(json.encode({
 			"id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
 			"name": "string",
