@@ -17,7 +17,7 @@ abstract class AuthApi extends ChopperService
 	static AuthApi create() => createWith();
 
 	static AuthApi createWith([http.BaseClient client]) => _$AuthApi(ChopperClient(
-		baseUrl: serverUrl,
+		baseUrl: '$serverUrl/Auth',
 		client: client ?? io.IOClient(
 			HttpClient()..connectionTimeout = const Duration(seconds: 4),
 		),

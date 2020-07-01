@@ -26,7 +26,7 @@ abstract class DiscrepancyApi extends ChopperService
 			client: IOClient(
 				HttpClient()..connectionTimeout = const Duration(seconds: 4),
 			),
-			baseUrl: serverUrl,
+			baseUrl: '$serverUrl/Discrepancies​',
 			converter: JsonSerializableConverter({
 				
 			}),
@@ -43,9 +43,9 @@ abstract class DiscrepancyApi extends ChopperService
 
 	// Discrepancies requests
 
-	@Put(path: "/api/discrepancies/{discrepancyId}")
+	@Put(path: "/{discrepancyId}")
 	Future<Response> updateDiscrepancy(@Path() String discrepancyId, @Body() Discrepancy discrepancy);
 
-	@Delete(path: "/api/discrepancies/{discrepancyId}")
+	@Delete(path: "/{discrepancyId}")
 	Future<Response> deleteDiscrepancy(@Path() String discrepancyId);
 }
