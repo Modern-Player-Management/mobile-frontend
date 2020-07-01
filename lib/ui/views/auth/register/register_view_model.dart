@@ -8,8 +8,8 @@ import 'package:mpm/services/database/models/player.dart';
 
 class RegisterViewModel extends BaseViewModel
 {
-	final authApi = locator<AuthApi>();
-	final storage = locator<SecureStorage>();
+	final _authApi = locator<AuthApi>();
+	final _navigation = locator<NavigationService>();
 	final formKey = GlobalKey<FormState>();
 
 	final Player player = Player();
@@ -91,10 +91,10 @@ class RegisterViewModel extends BaseViewModel
 			formKey.currentState.save();
 			try
 			{
-				final res = await authApi.register(player.username, player.email, player.password);
+				final res = await _authApi.register(player.username, player.email, player.password);
 				if(res.isSuccessful)
 				{
-					
+					_navigation.replaceWith(Routes.loginViewRoute);
 				}
 				else
 				{
