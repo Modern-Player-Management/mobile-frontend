@@ -27,7 +27,7 @@ abstract class PlayerApi extends ChopperService
 			client: IOClient(
 				HttpClient()..connectionTimeout = const Duration(seconds: 4),
 			),
-			baseUrl: '$serverUrl/api/Users',
+			baseUrl: '$serverUrl/Users',
 			converter: JsonSerializableConverter({
 				Team: Team.fromJson,
 				Player: Player.fromJson,

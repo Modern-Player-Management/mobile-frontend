@@ -26,7 +26,7 @@ abstract class EventApi extends ChopperService
 			client: IOClient(
 				HttpClient()..connectionTimeout = const Duration(seconds: 4),
 			),
-			baseUrl: '$serverUrl/api/Events',
+			baseUrl: '$serverUrl/Events',
 			converter: JsonSerializableConverter({
 				Team: Team.fromJson,
 				Player: Player.fromJson,

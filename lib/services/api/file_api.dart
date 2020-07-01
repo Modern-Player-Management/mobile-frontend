@@ -27,7 +27,7 @@ abstract class FileApi extends ChopperService
 			client: IOClient(
 				HttpClient()..connectionTimeout = const Duration(seconds: 4),
 			),
-			baseUrl: '$serverUrl/api/Files',
+			baseUrl: '$serverUrl/Files',
 			converter: JsonSerializableConverter({
 				
 			}),
