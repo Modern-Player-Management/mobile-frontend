@@ -9,7 +9,8 @@ import 'package:injectable/injectable.dart';
 
 import 'package:mpm/app/locator.dart';
 import 'package:mpm/services/api/converters/json_serializable_converter.dart';
-import 'package:mpm/services/api/models/participation.dart';
+import 'package:mpm/services/database/models/participation.dart';
+import 'package:mpm/services/database/models/player_stats.dart';
 import 'package:mpm/utils/utils.dart';
 
 part 'team_api.chopper.dart';
@@ -28,7 +29,7 @@ abstract class TeamApi extends ChopperService
 			client: client ?? IOClient(
 				HttpClient()..connectionTimeout = const Duration(seconds: 4),
 			),
-			baseUrl: serverUrl,
+			baseUrl: '$serverUrl/api/Teams',
 			converter: JsonSerializableConverter({
 				Team: Team.fromJson,
 				Player: Player.fromJson,
@@ -56,27 +57,33 @@ abstract class TeamApi extends ChopperService
 
 	// Teams requests
 
-	@Post(path: "/api/teams")
+	@Post(path: "/")
 	Future<Response<Team>> createTeam(@Body() Team team);
 
-	@Get(path: "/api/teams")
+	@Get(path: "/")
 	Future<Response<List<Team>>> getTeams();
 
-	@Post(path: "/api/teams/{teamId}/player/{playerId}")
-	Future<Response> addTeamPlayer(@Path() String teamId, @Path() String playerId);
+	@Get(path: "/{teamId}")
+	Future<Response<Team>> getTeam();
 
-	@Delete(path: "/api/teams/{teamId}/player/{playerId}")
-	Future<Response> deleteTeamPlayer(@Path() String teamId, @Path() String playerId);
-
-	@Put(path: "/api/teams/{teamId}")
+	@Put(path: "/{teamId}")
 	Future<Response> updateTeam(@Path() String teamId, @Body() Team team);
 
-	@Delete(path: "/api/teams/{teamId}")
+	@Delete(path: "/{teamId}")
 	Future<Response> deleteTeam(@Path() String teamId);
 
-	@Post(path: "/api/teams/{teamId}/events")
+	@Post(path: "/{teamId}/player/{playerId}")
+	Future<Response> addTeamPlayer(@Path() String teamId, @Path() String playerId);
+
+	@Delete(path: "/{teamId}/player/{playerId}")
+	Future<Response> deleteTeamPlayer(@Path() String teamId, @Path() String playerId);
+
+	@Post(path: "/{teamId}/events")
 	Future<Response<Event>> addEvent(@Path() String teamId, @Body() Event event);
 
-	@Post(path: "/api/teams/{teamId}/games")
+	@Post(path: "/{teamId}/games")
 	Future<Response<Event>> addGame(@Path() String teamId, @PartFile() MultipartFile file);
+
+	@Get(path: "/{teamId}/stats")
+	Future<Response<PlayerStats>> getPlayerStats();
 }

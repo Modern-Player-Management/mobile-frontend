@@ -1,7 +1,7 @@
 import 'package:floor/floor.dart';
 import 'package:json_annotation/json_annotation.dart';
 
-import 'package:mpm/services/api/models/participation.dart';
+import 'package:mpm/services/database/models/participation.dart';
 import 'package:mpm/services/database/models/discrepancy.dart';
 
 part 'event.g.dart';
