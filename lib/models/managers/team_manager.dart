@@ -44,6 +44,9 @@ class TeamManager
 
 		_checkValidResponse();
 
+		_saveUnsavedTeams();
+		_deleteUndeletedTeams();
+
 		try
 		{
 			var res = await _api.getTeams();
@@ -90,6 +93,47 @@ class TeamManager
 		}
 
 		return true;
+	}
+
+	void _saveUnsavedTeams() async
+	{
+		for(var team in await _teamDao.getUnsavedTeams(_storage.player))
+		{
+			try
+			{
+				var res = await _api.updateTeam(team.id, team);
+				if(validResponse(res))
+				{
+					team.saved = true;
+					await _teamDao.updateModel(team);
+				}
+			}
+			catch(e)
+			{
+				print("_saveUnsavedTeams: $e");
+				return;
+			}
+		}
+	}
+
+	void _deleteUndeletedTeams() async
+	{
+		for(var team in await _teamDao.getUndeletedTeams(_storage.player))
+		{
+			try
+			{
+				var res = await _api.deleteTeam(team.id);
+				if(validResponse(res))
+				{
+					await _teamDao.deleteModel(team);
+				}
+			}
+			catch(e)
+			{
+				print("_deleteUndeletedTeams: $e");
+				return;
+			}
+		}
 	}
 
 	Stream<List<Team>> getTeams() async *
