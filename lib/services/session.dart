@@ -33,16 +33,19 @@ class Session
 		return response != null && response.isSuccessful;
 	}
 
-	Future<void> synchronize() async
+	Future<void> synchronize([bool redirect = true]) async
 	{
 		if(isAuth)
 		{
 			await _teamManager.syncTeams();
 
-			_navigation.pushNamedAndRemoveUntil(
-				Routes.homeViewRoute, 
-				predicate: (route) => route == null
-			);
+			if(redirect)
+			{
+				_navigation.pushNamedAndRemoveUntil(
+					Routes.homeViewRoute, 
+					predicate: (route) => route == null
+				);
+			}
 		}
 		else
 		{
