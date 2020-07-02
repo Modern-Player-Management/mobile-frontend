@@ -101,11 +101,24 @@ class TeamManager
 		{
 			try
 			{
-				var res = await _api.updateTeam(team.id, team);
-				if(validResponse(res))
+				if(team.updated)
 				{
-					team.saved = true;
-					await _teamDao.updateModel(team);
+					var res = await _api.updateTeam(team.id, team);
+					if(validResponse(res))
+					{
+						team.saved = true;
+						await _teamDao.updateModel(team);
+					}
+				}
+				else
+				{
+					var res = await _api.createTeam(team);
+					if(validResponse(res))
+					{
+						team.updated = false;
+						team.saved = true;
+						await _teamDao.updateModel(team);
+					}
 				}
 			}
 			catch(e)
@@ -158,7 +171,7 @@ class TeamManager
 		{
 			team.id = _uuid.v1();
 			team.player = _storage.player;
-			team.saved = true;
+			team.saved = false;
 
 			await _teamDao.insertModel(team);
 		}
@@ -189,7 +202,7 @@ class TeamManager
 		_checkValidResponse();
 		
 		team.saved = false;
-		team.update = true;
+		team.updated = true;
 		await _teamDao.updateModel(team);
 
 		try
