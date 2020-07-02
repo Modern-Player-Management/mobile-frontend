@@ -7,3 +7,5 @@ export 'package:mpm/services/database/models/team_event.dart';
 export 'package:mpm/services/database/models/event.dart';
 export 'package:mpm/services/database/models/discrepancy.dart';
 export 'package:mpm/services/database/models/event_discrepancy.dart';
+export 'package:mpm/services/database/models/participation.dart';
+export 'package:mpm/services/database/models/event_participation.dart';
