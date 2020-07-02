@@ -32,11 +32,11 @@ class _$PlayerApi extends PlayerApi {
   }
 
   @override
-  Future<Response<dynamic>> updatePlayer(String playerId, Player player) {
+  Future<Response<Player>> updatePlayer(String playerId, Player player) {
     final $url = '/$playerId';
     final $body = player;
     final $request = Request('PUT', $url, client.baseUrl, body: $body);
-    return client.send<dynamic, dynamic>($request);
+    return client.send<Player, Player>($request);
   }
 
   @override
