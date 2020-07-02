@@ -30,15 +30,15 @@ class EventDiscrepancy
 	final String eventId;
 	final String discrepancyId;
 
-	bool save, delete;
+	bool saved, deleted;
 
   	EventDiscrepancy({
 		this.id, 
 		this.eventId, 
 		this.discrepancyId,
-		bool save = false,
-		bool delete = false,
+		bool saved = false,
+		bool deleted = false,
 	}) : 
-		this.save = save ?? false,
-		this.delete = delete ?? false;
+		this.saved = saved ?? false,
+		this.deleted = deleted ?? false;
 }
