@@ -96,7 +96,7 @@ class _$AppDatabase extends AppDatabase {
       },
       onCreate: (database, version) async {
         await database.execute(
-            'CREATE TABLE IF NOT EXISTS `teams` (`id` TEXT, `player` TEXT, `name` TEXT, `description` TEXT, `image` TEXT, `managerId` TEXT, `created` TEXT, `saved` INTEGER, `update` INTEGER, `deleted` INTEGER, PRIMARY KEY (`id`))');
+            'CREATE TABLE IF NOT EXISTS `teams` (`id` TEXT, `player` TEXT, `name` TEXT, `description` TEXT, `image` TEXT, `managerId` TEXT, `created` TEXT, `saved` INTEGER, `updated` INTEGER, `deleted` INTEGER, PRIMARY KEY (`id`))');
         await database.execute(
             'CREATE TABLE IF NOT EXISTS `players` (`id` TEXT, `username` TEXT, `email` TEXT, `image` TEXT, `created` TEXT, `calendarSecret` TEXT, PRIMARY KEY (`id`))');
         await database.execute(
@@ -112,7 +112,7 @@ class _$AppDatabase extends AppDatabase {
         await database.execute(
             'CREATE TABLE IF NOT EXISTS `discrepancies` (`id` TEXT, `type` INTEGER, `reason` TEXT, `delayLength` INTEGER, `event` TEXT, PRIMARY KEY (`id`))');
         await database.execute(
-            'CREATE TABLE IF NOT EXISTS `events_discrepancies` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `eventId` TEXT, `discrepancyId` TEXT, `confirmed` INTEGER, `save` INTEGER, `delete` INTEGER, FOREIGN KEY (`eventId`) REFERENCES `events` (`id`) ON UPDATE CASCADE ON DELETE CASCADE, FOREIGN KEY (`discrepancyId`) REFERENCES `discrepancies` (`id`) ON UPDATE CASCADE ON DELETE CASCADE)');
+            'CREATE TABLE IF NOT EXISTS `events_discrepancies` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `eventId` TEXT, `discrepancyId` TEXT, `save` INTEGER, `delete` INTEGER, FOREIGN KEY (`eventId`) REFERENCES `events` (`id`) ON UPDATE CASCADE ON DELETE CASCADE, FOREIGN KEY (`discrepancyId`) REFERENCES `discrepancies` (`id`) ON UPDATE CASCADE ON DELETE CASCADE)');
         await database
             .execute('CREATE INDEX `index_teams_player` ON `teams` (`player`)');
 
@@ -185,7 +185,8 @@ class _$TeamDao extends TeamDao {
                   'managerId': item.managerId,
                   'created': item.created,
                   'saved': item.saved == null ? null : (item.saved ? 1 : 0),
-                  'update': item.update == null ? null : (item.update ? 1 : 0),
+                  'updated':
+                      item.updated == null ? null : (item.updated ? 1 : 0),
                   'deleted':
                       item.deleted == null ? null : (item.deleted ? 1 : 0)
                 },
@@ -203,7 +204,8 @@ class _$TeamDao extends TeamDao {
                   'managerId': item.managerId,
                   'created': item.created,
                   'saved': item.saved == null ? null : (item.saved ? 1 : 0),
-                  'update': item.update == null ? null : (item.update ? 1 : 0),
+                  'updated':
+                      item.updated == null ? null : (item.updated ? 1 : 0),
                   'deleted':
                       item.deleted == null ? null : (item.deleted ? 1 : 0)
                 },
@@ -221,7 +223,8 @@ class _$TeamDao extends TeamDao {
                   'managerId': item.managerId,
                   'created': item.created,
                   'saved': item.saved == null ? null : (item.saved ? 1 : 0),
-                  'update': item.update == null ? null : (item.update ? 1 : 0),
+                  'updated':
+                      item.updated == null ? null : (item.updated ? 1 : 0),
                   'deleted':
                       item.deleted == null ? null : (item.deleted ? 1 : 0)
                 },
@@ -241,7 +244,7 @@ class _$TeamDao extends TeamDao {
       player: row['player'] as String,
       managerId: row['managerId'] as String,
       saved: row['saved'] == null ? null : (row['saved'] as int) != 0,
-      update: row['update'] == null ? null : (row['update'] as int) != 0,
+      updated: row['updated'] == null ? null : (row['updated'] as int) != 0,
       deleted: row['deleted'] == null ? null : (row['deleted'] as int) != 0);
 
   final InsertionAdapter<Team> _teamInsertionAdapter;
@@ -1114,7 +1117,6 @@ class _$EventDiscrepancyDao extends EventDiscrepancyDao {
                   'id': item.id,
                   'eventId': item.eventId,
                   'discrepancyId': item.discrepancyId,
-                  'confirmed': item.confirmed,
                   'save': item.save == null ? null : (item.save ? 1 : 0),
                   'delete': item.delete == null ? null : (item.delete ? 1 : 0)
                 }),
@@ -1126,7 +1128,6 @@ class _$EventDiscrepancyDao extends EventDiscrepancyDao {
                   'id': item.id,
                   'eventId': item.eventId,
                   'discrepancyId': item.discrepancyId,
-                  'confirmed': item.confirmed,
                   'save': item.save == null ? null : (item.save ? 1 : 0),
                   'delete': item.delete == null ? null : (item.delete ? 1 : 0)
                 }),
@@ -1138,7 +1139,6 @@ class _$EventDiscrepancyDao extends EventDiscrepancyDao {
                   'id': item.id,
                   'eventId': item.eventId,
                   'discrepancyId': item.discrepancyId,
-                  'confirmed': item.confirmed,
                   'save': item.save == null ? null : (item.save ? 1 : 0),
                   'delete': item.delete == null ? null : (item.delete ? 1 : 0)
                 });
@@ -1154,7 +1154,6 @@ class _$EventDiscrepancyDao extends EventDiscrepancyDao {
           id: row['id'] as int,
           eventId: row['eventId'] as String,
           discrepancyId: row['discrepancyId'] as String,
-          confirmed: row['confirmed'] as int,
           save: row['save'] == null ? null : (row['save'] as int) != 0,
           delete: row['delete'] == null ? null : (row['delete'] as int) != 0);
 
