@@ -31,15 +31,15 @@ class EventParticipation
 	final String eventId;
 	final String participationId;
 
-	bool save, delete;
+	bool saved, deleted;
 
   	EventParticipation({
 		this.id, 
 		this.eventId, 
 		this.participationId,
-		bool save = false,
-		bool delete = false,
+		bool saved = false,
+		bool deleted = false,
 	}) : 
-		this.save = save ?? false,
-		this.delete = delete ?? false;
+		this.saved = saved ?? false,
+		this.deleted = deleted ?? false;
 }
