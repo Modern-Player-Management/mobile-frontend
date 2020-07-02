@@ -28,9 +28,6 @@ abstract class FileApi extends ChopperService
 				HttpClient()..connectionTimeout = Duration(seconds: 2),
 			),
 			baseUrl: '$serverUrl/Files',
-			converter: JsonSerializableConverter({
-				
-			}),
 			interceptors: [
 				(Request request) {
 					final headers = Map<String, String>.from(request.headers);

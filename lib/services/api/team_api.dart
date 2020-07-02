@@ -34,7 +34,8 @@ abstract class TeamApi extends ChopperService
 				Team: Team.fromJson,
 				Player: Player.fromJson,
 				Event: Event.fromJson,
-				Participation: Participation.fromJson
+				Participation: Participation.fromJson,
+				Discrepancy: Discrepancy.fromJson
 			}),
 			interceptors: [
 				(Request request) 
