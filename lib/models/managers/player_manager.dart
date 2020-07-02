@@ -92,7 +92,8 @@ class PlayerManager
 
 		var teamPlayer = TeamPlayer(
 			teamId: team.id,
-			playerId: player.id
+			playerId: player.id,
+			saved: false
 		);
 
 		await _teamPlayerDao.insertModel(teamPlayer);
