@@ -17,12 +17,12 @@ class _$DiscrepancyApi extends DiscrepancyApi {
   final definitionType = DiscrepancyApi;
 
   @override
-  Future<Response<dynamic>> updateDiscrepancy(
+  Future<Response<Discrepancy>> updateDiscrepancy(
       String discrepancyId, Discrepancy discrepancy) {
     final $url = '/$discrepancyId';
     final $body = discrepancy;
     final $request = Request('PUT', $url, client.baseUrl, body: $body);
-    return client.send<dynamic, dynamic>($request);
+    return client.send<Discrepancy, Discrepancy>($request);
   }
 
   @override

@@ -28,10 +28,9 @@ abstract class EventApi extends ChopperService
 			),
 			baseUrl: '$serverUrl/Events',
 			converter: JsonSerializableConverter({
-				Team: Team.fromJson,
-				Player: Player.fromJson,
 				Event: Event.fromJson,
-				Participation: Participation.fromJson
+				Participation: Participation.fromJson,
+				Discrepancy: Discrepancy.fromJson
 			}),
 			interceptors: [
 				(Request request) {
@@ -46,18 +45,21 @@ abstract class EventApi extends ChopperService
 
 	// events requests
 
-	@Post(path: "/{eventId}/confirm")
+	@Post(path: "/{eventId}/presence")
 	Future<Response> confirm(@Path() String eventId);
 
 	@Post(path: "/{eventId}/discrepancies")
-	Future<Response> addEventDiscrepancy(@Path() String eventId, @Body() Discrepancy discrepancy);
+	Future<Response<Discrepancy>> addDiscrepancy(@Path() String eventId, @Body() Discrepancy discrepancy);
 
 	@Put(path: "/{eventId}")
-	Future<Response> updateEvent(@Path() String eventId, @Body() Event event);
+	Future<Response<Event>> updateEvent(@Path() String eventId, @Body() Event event);
 
 	@Delete(path: "/{eventId}")
 	Future<Response> deleteEvent(@Path() String eventId);
 
 	@Get(path: "/ical/{icalSecret}")
 	Future<Response> getIcal(@Path() String icalSecret);
+
+	@Get(path: "/ical/{icalSecret}")
+	Future<Response<List<String>>> getEventTypes();
 }

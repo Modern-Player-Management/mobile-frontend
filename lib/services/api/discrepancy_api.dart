@@ -28,7 +28,7 @@ abstract class DiscrepancyApi extends ChopperService
 			),
 			baseUrl: '$serverUrl/Discrepancies​',
 			converter: JsonSerializableConverter({
-				
+				Discrepancy: Discrepancy.fromJson
 			}),
 			interceptors: [
 				(Request request) {
@@ -44,7 +44,7 @@ abstract class DiscrepancyApi extends ChopperService
 	// Discrepancies requests
 
 	@Put(path: "/{discrepancyId}")
-	Future<Response> updateDiscrepancy(@Path() String discrepancyId, @Body() Discrepancy discrepancy);
+	Future<Response<Discrepancy>> updateDiscrepancy(@Path() String discrepancyId, @Body() Discrepancy discrepancy);
 
 	@Delete(path: "/{discrepancyId}")
 	Future<Response> deleteDiscrepancy(@Path() String discrepancyId);
