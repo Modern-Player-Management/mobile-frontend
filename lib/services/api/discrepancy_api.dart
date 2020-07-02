@@ -24,7 +24,7 @@ abstract class DiscrepancyApi extends ChopperService
 	{
 		return _$DiscrepancyApi(ChopperClient(
 			client: IOClient(
-				HttpClient()..connectionTimeout = const Duration(seconds: 4),
+				HttpClient()..connectionTimeout = Duration(seconds: 2),
 			),
 			baseUrl: '$serverUrl/Discrepancies​',
 			converter: JsonSerializableConverter({

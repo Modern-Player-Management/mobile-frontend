@@ -27,7 +27,7 @@ abstract class TeamApi extends ChopperService
 	{
 		return _$TeamApi(ChopperClient(
 			client: client ?? IOClient(
-				HttpClient()..connectionTimeout = const Duration(seconds: 4),
+				HttpClient()..connectionTimeout = Duration(seconds: 2),
 			),
 			baseUrl: '$serverUrl/Teams',
 			converter: JsonSerializableConverter({
