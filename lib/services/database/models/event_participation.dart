@@ -1,10 +1,11 @@
 import 'package:floor/floor.dart';
 
 import 'package:mpm/app/locator.dart';
-import 'package:mpm/services/database/models/models.dart';
+import 'package:mpm/services/database/models/event.dart';
+import 'package:mpm/services/database/models/participation.dart';
 
 @Entity(
-	tableName: 'events_discrepancies',
+	tableName: 'events_participations',
 	foreignKeys: [
 		ForeignKey(
 			childColumns: ['eventId'],
@@ -14,28 +15,28 @@ import 'package:mpm/services/database/models/models.dart';
 			onUpdate: ForeignKeyAction.cascade,
 		),
 		ForeignKey(
-			childColumns: ['discrepancyId'],
+			childColumns: ['participationId'],
 			parentColumns: ['id'],
-			entity: Discrepancy,
+			entity: Participation,
 			onDelete: ForeignKeyAction.cascade,
 			onUpdate: ForeignKeyAction.cascade,
 		),
 	]
 )
-class EventDiscrepancy
+class EventParticipation
 {	
 	@PrimaryKey(autoGenerate: true)
 	final int id;
 	
 	final String eventId;
-	final String discrepancyId;
+	final String participationId;
 
 	bool save, delete;
 
-  	EventDiscrepancy({
+  	EventParticipation({
 		this.id, 
 		this.eventId, 
-		this.discrepancyId,
+		this.participationId,
 		bool save = false,
 		bool delete = false,
 	}) : 
