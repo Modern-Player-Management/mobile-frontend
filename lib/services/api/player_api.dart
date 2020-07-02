@@ -25,7 +25,7 @@ abstract class PlayerApi extends ChopperService
 	{
 		return _$PlayerApi(ChopperClient(
 			client: IOClient(
-				HttpClient()..connectionTimeout = const Duration(seconds: 4),
+				HttpClient()..connectionTimeout = Duration(seconds: 2),
 			),
 			baseUrl: '$serverUrl/Users',
 			converter: JsonSerializableConverter({
