@@ -18,26 +18,26 @@ class _$EventApi extends EventApi {
 
   @override
   Future<Response<dynamic>> confirm(String eventId) {
-    final $url = '/$eventId/confirm';
+    final $url = '/$eventId/presence';
     final $request = Request('POST', $url, client.baseUrl);
     return client.send<dynamic, dynamic>($request);
   }
 
   @override
-  Future<Response<dynamic>> addEventDiscrepancy(
+  Future<Response<Discrepancy>> addDiscrepancy(
       String eventId, Discrepancy discrepancy) {
     final $url = '/$eventId/discrepancies';
     final $body = discrepancy;
     final $request = Request('POST', $url, client.baseUrl, body: $body);
-    return client.send<dynamic, dynamic>($request);
+    return client.send<Discrepancy, Discrepancy>($request);
   }
 
   @override
-  Future<Response<dynamic>> updateEvent(String eventId, Event event) {
+  Future<Response<Event>> updateEvent(String eventId, Event event) {
     final $url = '/$eventId';
     final $body = event;
     final $request = Request('PUT', $url, client.baseUrl, body: $body);
-    return client.send<dynamic, dynamic>($request);
+    return client.send<Event, Event>($request);
   }
 
   @override
@@ -52,5 +52,12 @@ class _$EventApi extends EventApi {
     final $url = '/ical/$icalSecret';
     final $request = Request('GET', $url, client.baseUrl);
     return client.send<dynamic, dynamic>($request);
+  }
+
+  @override
+  Future<Response<List<String>>> getEventTypes() {
+    final $url = '/ical/{icalSecret}';
+    final $request = Request('GET', $url, client.baseUrl);
+    return client.send<List<String>, String>($request);
   }
 }
