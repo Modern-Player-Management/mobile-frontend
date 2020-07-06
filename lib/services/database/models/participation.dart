@@ -13,11 +13,12 @@ class Participation
 	String id;
 
 	bool confirmed;
-	final String username;
+	final String userId, username;
 
   	Participation({
 		  this.id,
 		  this.confirmed,
+		  this.userId,
 		  this.username,
 	  });
 	

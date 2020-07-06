@@ -2,7 +2,6 @@ import 'package:floor/floor.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 import 'package:mpm/app/locator.dart';
-import 'package:mpm/services/database/models/player.dart';
 
 part 'team.g.dart';
 
@@ -35,6 +34,12 @@ class Team
 
 	@ignore
 	List<Player> players;
+
+	@ignore
+	List<Event> events;
+
+	@ignore
+	List<Game> games;
 
 	String created;
 

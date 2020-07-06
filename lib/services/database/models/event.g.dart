@@ -15,6 +15,7 @@ Event _$EventFromJson(Map<String, dynamic> json) {
     name: json['name'] as String,
     description: json['description'] as String,
     type: json['type'] as int,
+    currentHasConfirmed: json['currentHasConfirmed'] as bool,
     participations: (json['participations'] as List)
         ?.map((e) => e == null
             ? null
@@ -35,6 +36,7 @@ Map<String, dynamic> _$EventToJson(Event instance) => <String, dynamic>{
       'name': instance.name,
       'description': instance.description,
       'type': instance.type,
+      'currentHasConfirmed': instance.currentHasConfirmed,
       'participations': instance.participations,
       'discrepancies': instance.discrepancies,
     };

@@ -16,11 +16,18 @@ class EventManager
 
 	final _storage = locator<SecureStorage>();
 
+	DiscrepancyManager _discrepancyManager;
+	ParticipationManager _participationManager;
+
 	bool Function(Response) validResponse;
 
 	EventManager({
 		@required @factoryParam Function validResponse
-	}) : this.validResponse = validResponse;
+	}) : this.validResponse = validResponse
+	{
+		_discrepancyManager = locator<DiscrepancyManager>(param1: validResponse);
+		_participationManager = locator<ParticipationManager>(param1: validResponse);
+	}
 
 	void _checkValidResponse()
 	{
@@ -40,6 +47,38 @@ class EventManager
 		_checkValidResponse();
 		_saveUnsavedEvents(team);
 		_deleteUndeletedEvents(team);
+
+		var models = await _eventDao.getSaved(team.id);
+		var keys = [
+			for(var el in models)
+				el.id
+		];
+
+		for(var event in team.events)
+		{
+			var teamEvent = TeamEvent(
+				eventId: event.id,
+				teamId: team.id,
+				saved: true
+			);
+
+			await _teamEventDao.insertModel(teamEvent);
+
+			int index = keys.indexOf(event.id);
+			if(index != -1)
+			{
+				models.removeAt(index);
+				keys.removeAt(index);
+			}
+
+			await _discrepancyManager.syncDiscrepancies(event);
+			await _participationManager.syncParticipations(event);
+		}
+
+		for(var model in models)
+		{
+			await _eventDao.deleteModel(model);
+		}
 	}
 
 	void _saveUnsavedEvents(Team team) async
