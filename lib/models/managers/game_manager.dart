@@ -11,7 +11,6 @@ class GameManager
 	final _gameApi = locator<GameApi>();
 
 	final _gameDao = locator<AppDatabase>().gameDao;
-	final _teamGameDao = locator<AppDatabase>().teamGameDao;
 
 	final _storage = locator<SecureStorage>();
 
@@ -47,13 +46,8 @@ class GameManager
 
 		for(var game in team.games)
 		{
-			var teamGame = TeamGame(
-				gameId: game.id,
-				teamId: team.id,
-				saved: true
-			);
-
-			await _teamGameDao.insertModel(teamGame);
+			game.teamId = team.id;
+			await _gameDao.insertModel(game);
 
 			int index = keys.indexOf(game.id);
 			if(index != -1)
