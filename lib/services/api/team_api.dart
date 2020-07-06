@@ -65,7 +65,7 @@ abstract class TeamApi extends ChopperService
 	Future<Response<List<Team>>> getTeams();
 
 	@Get(path: "/{teamId}")
-	Future<Response<Team>> getTeam();
+	Future<Response<Team>> getTeam(@Path() String teamId);
 
 	@Put(path: "/{teamId}")
 	Future<Response> updateTeam(@Path() String teamId, @Body() Team team);

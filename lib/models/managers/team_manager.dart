@@ -66,6 +66,8 @@ class TeamManager
 
 				for(var team in teams)
 				{
+					team = (await _teamApi.getTeam(team.id)).body;
+
 					team.player = _storage.player;
 					team.saved = true;
 					await _teamDao.insertModel(team);
@@ -78,6 +80,7 @@ class TeamManager
 					}
 
 					await _playerManager.syncPlayers(team);
+
 					await _eventManager.syncEvents(team);
 					await _gameManager.syncGames(team);
 				}
