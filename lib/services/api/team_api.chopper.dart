@@ -32,8 +32,8 @@ class _$TeamApi extends TeamApi {
   }
 
   @override
-  Future<Response<Team>> getTeam() {
-    final $url = '/{teamId}';
+  Future<Response<Team>> getTeam(String teamId) {
+    final $url = '/$teamId';
     final $request = Request('GET', $url, client.baseUrl);
     return client.send<Team, Team>($request);
   }
