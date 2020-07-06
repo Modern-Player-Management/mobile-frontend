@@ -22,12 +22,12 @@ abstract class EventDao extends ModelDao<Event>
 
 	@Query('select * from events left join team_events on events.id = team_events.eventId '
 		'and team_events.teamId = :teamId and team_events.saved = 1 '
-		'team_events.deleted = 0')
+		'and team_events.deleted = 0')
 	Future<List<Event>> getSaved(String teamId);
 
 	@Query('select * from events left join team_events on events.id = team_events.eventId '
 		'and team_events.teamId = :teamId and team_events.saved = 0 '
-		'team_events.deleted = 0')
+		'and team_events.deleted = 0')
 	Future<List<Event>> getUnsaved(String teamId);
 
 	@Query('select * from events left join team_events on events.id = team_events.eventId '
