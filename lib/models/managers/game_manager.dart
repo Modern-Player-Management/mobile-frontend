@@ -8,7 +8,6 @@ import 'package:mpm/app/locator.dart';
 @injectable
 class GameManager
 {
-	final _teamApi = locator<TeamApi>();
 	final _gameApi = locator<GameApi>();
 
 	final _gameDao = locator<AppDatabase>().gameDao;
