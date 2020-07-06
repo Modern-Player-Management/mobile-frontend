@@ -16,6 +16,7 @@ export 'package:mpm/services/api/player_api.dart';
 export 'package:mpm/services/api/event_api.dart';
 export 'package:mpm/services/api/discrepancy_api.dart';
 export 'package:mpm/services/api/file_api.dart';
+export 'package:mpm/services/api/game_api.dart';
 
 export 'package:mpm/services/secure_storage.dart';
 export 'package:mpm/services/session.dart';

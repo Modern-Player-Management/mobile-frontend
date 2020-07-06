@@ -20,7 +20,7 @@ class HomeViewModel extends BaseViewModel
 		_navigation.navigateTo(
 			Routes.playerViewRoute,
 			arguments: PlayerViewArguments(
-				player: await _playerDao.getPlayer(_storage.player)
+				player: await _playerDao.get(_storage.player)
 			)
 		);
 	}

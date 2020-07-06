@@ -10,19 +10,22 @@ part 'participation.g.dart';
 class Participation
 {
 	@primaryKey
-	final int id;
+	String id;
 
-	final bool confirmed;
-	final String userId, username;
+	bool confirmed;
+	final String username;
 
   	Participation({
 		  this.id,
 		  this.confirmed,
-		  this.userId,
-		  this.username
+		  this.username,
 	  });
 	
 	static const fromJson = _$ParticipationFromJson;
 
-	Map<String, dynamic> toJson() => _$ParticipationToJson(this);
+	Map<String, dynamic> toJson() {
+		return {
+			"presence": confirmed
+		};
+	}
 }

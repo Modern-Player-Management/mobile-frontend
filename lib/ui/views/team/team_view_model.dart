@@ -81,7 +81,7 @@ class TeamCalendarViewModel extends StreamViewModel<List<Event>>
 	}
 
 	@override
-	get stream => _eventDao.getEvents(_teamViewModel.team.id);
+	get stream => _eventDao.getStream(_teamViewModel.team.id);
 }
 
 class TeamPlayersViewModel extends StreamViewModel<List<Player>>
@@ -103,7 +103,7 @@ class TeamPlayersViewModel extends StreamViewModel<List<Player>>
 	}
 
 	@override
-	get stream => _playerDao.getPlayers(_teamViewModel.team.id, _teamViewModel.team.managerId);
+	get stream => _playerDao.getStream(_teamViewModel.team.id, _teamViewModel.team.managerId);
 
 	void onPressed(Player player) async
 	{

@@ -7,16 +7,16 @@ import 'package:mpm/services/database/models/event.dart';
 abstract class EventDao extends ModelDao<Event>
 {
 	@Query('select * from events where id = :id')
-	Future<Event> getEvent(String id);
+	Future<Event> get(String id);
 
 	@Query('update events set id = :newId where id = :oldId')
-	Future<void> updateEventId(String oldId, String newId);
+	Future<void> updateId(String oldId, String newId);
 
 	@Query('select * from events inner join team_events on events.id = team_events.eventId '
 		'and team_events.teamId = :teamId and team_events.deleted = 0')
-	Stream<List<Event>> getEvents(String teamId);
+	Stream<List<Event>> getStream(String teamId);
 
 	@Query('select * from events inner join team_events on events.id = team_events.eventId '
 		'and team_events.teamId = :teamId and team_events.deleted = 0')
-	Future<List<Event>> getAllEvents(String teamId);
+	Future<List<Event>> getList(String teamId);
 }
