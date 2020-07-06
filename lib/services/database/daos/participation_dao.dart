@@ -25,13 +25,13 @@ abstract class ParticipationDao extends ModelDao<Participation>
 	@Query('select * from participations left join event_participations on '
 		'participations.id = event_participations.participationId and '
 		'event_participations.eventId = :eventId and event_participations.saved = 1 '
-		'event_participations.deleted = 0')
+		'and event_participations.deleted = 0')
 	Future<List<Participation>> getSaved(String eventId);
 
 	@Query('select * from participations left join event_participations on '
 		'participations.id = event_participations.participationId and '
 		'event_participations.eventId = :eventId and event_participations.saved = 0 '
-		'event_participations.deleted = 0')
+		'and event_participations.deleted = 0')
 	Future<List<Participation>> getUnsaved(String eventId);
 
 	@Query('select * from participations left join event_participations on '

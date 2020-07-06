@@ -22,12 +22,12 @@ abstract class GameDao extends ModelDao<Game>
 
 	@Query('select * from games left join team_games on games.id = team_games.gameId '
 		'and team_games.teamId = :teamId and team_games.saved = 1 '
-		'team_games.deleted = 0')
+		'and team_games.deleted = 0')
 	Future<List<Game>> getSaved(String teamId);
 
 	@Query('select * from games left join team_games on games.id = team_games.gameId '
 		'and team_games.teamId = :teamId and team_games.saved = 0 '
-		'team_games.deleted = 0')
+		'and team_games.deleted = 0')
 	Future<List<Game>> getUnsaved(String teamId);
 
 	@Query('select * from games left join team_games on games.id = team_games.gameId '

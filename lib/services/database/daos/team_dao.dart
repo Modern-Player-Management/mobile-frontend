@@ -12,7 +12,7 @@ abstract class TeamDao extends ModelDao<Team>
 	@Query('select * from teams where player = :player and deleted = 0 order by name')
 	Future<List<Team>> getList(String player);
 
-	@Query('select * from teams where player = :player and saved = 1 and delete = 0')
+	@Query('select * from teams where player = :player and saved = 1 and deleted = 0')
 	Future<List<Team>> getSaved(String player);
 
 	@Query('select * from teams where player = :player and saved = 0 and deleted = 0')
