@@ -58,7 +58,7 @@ void findTeamPlayer() async
 {
 	await insertTeamPlayer();
 
-	var tps = await _db.teamPlayerDao.getAllTeamPlayers(teamId);
+	var tps = await _db.teamPlayerDao.getList(teamId);
 
 	expect(tps.length, equals(1));
 }

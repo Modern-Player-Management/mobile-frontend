@@ -61,7 +61,7 @@ Future<Team> findTeam() async
 {
 	await insertTeam();
 
-	final teams = await _db.teamDao.getTeams(player).first;
+	final teams = await _db.teamDao.getStream(player).first;
 
 	expect(teams.length, equals(1));
 
@@ -77,7 +77,7 @@ void updateTeam() async
 
 	expect(rows, equals(1));
 
-	final teams = await _db.teamDao.getTeams(player).first;
+	final teams = await _db.teamDao.getStream(player).first;
 
 	expect(teams[0].name, equals("test"));
 }
@@ -89,7 +89,7 @@ void deleteTeam() async
 
 	expect(rows, equals(1));
 
-	final teams = await _db.teamDao.getTeams(player).first;
+	final teams = await _db.teamDao.getStream(player).first;
 
 	expect(teams.length, equals(0));
 }

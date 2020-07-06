@@ -9,7 +9,7 @@ import 'package:mpm/app/locator.dart';
 @injectable
 class TeamManager
 {
-	final _api = locator<TeamApi>();
+	final _teamApi = locator<TeamApi>();
 	final _teamDao = locator<AppDatabase>().teamDao;
 	final _playerDao = locator<AppDatabase>().playerDao;
 
@@ -49,12 +49,12 @@ class TeamManager
 
 		try
 		{
-			var res = await _api.getTeams();
+			var res = await _teamApi.getTeams();
 			if(validResponse(res))
 			{
 				List<Team> teams = res.body;
 
-				var savedTeams = await _teamDao.getSavedTeams(_storage.player);
+				var savedTeams = await _teamDao.getSaved(_storage.player);
 				var teamsKey = [
 					for(var team in savedTeams)
 						team.id
@@ -97,25 +97,28 @@ class TeamManager
 
 	void _saveUnsavedTeams() async
 	{
-		for(var team in await _teamDao.getUnsavedTeams(_storage.player))
+		for(var team in await _teamDao.getUnsaved(_storage.player))
 		{
 			try
 			{
-				if(team.updated)
+				if(team.create)
 				{
-					var res = await _api.updateTeam(team.id, team);
+					var res = await _teamApi.createTeam(team);
 					if(validResponse(res))
 					{
+						var id = res.body.id;
+						_teamDao.updateId(team.id, id);
+						team.id = id;
+						team.create = false;
 						team.saved = true;
 						await _teamDao.updateModel(team);
 					}
 				}
 				else
 				{
-					var res = await _api.createTeam(team);
+					var res = await _teamApi.updateTeam(team.id, team);
 					if(validResponse(res))
 					{
-						team.updated = false;
 						team.saved = true;
 						await _teamDao.updateModel(team);
 					}
@@ -123,7 +126,7 @@ class TeamManager
 			}
 			catch(e)
 			{
-				print("_saveUnsavedTeams: $e");
+				print("saveUnsavedTeams: $e");
 				return;
 			}
 		}
@@ -131,11 +134,11 @@ class TeamManager
 
 	void _deleteUndeletedTeams() async
 	{
-		for(var team in await _teamDao.getUndeletedTeams(_storage.player))
+		for(var team in await _teamDao.getUndeleted(_storage.player))
 		{
 			try
 			{
-				var res = await _api.deleteTeam(team.id);
+				var res = await _teamApi.deleteTeam(team.id);
 				if(validResponse(res))
 				{
 					await _teamDao.deleteModel(team);
@@ -143,7 +146,7 @@ class TeamManager
 			}
 			catch(e)
 			{
-				print("_deleteUndeletedTeams: $e");
+				print("deleteUndeletedTeams: $e");
 				return;
 			}
 		}
@@ -151,12 +154,12 @@ class TeamManager
 
 	Stream<List<Team>> getTeams() async *
 	{
-		await for(var teams in _teamDao.getTeams(_storage.player))
+		await for(var teams in _teamDao.getStream(_storage.player))
 		{
 			for(var team in teams)
 			{
-				team.manager = await _playerDao.getPlayer(team.managerId);
-				team.players = await _playerDao.getAllPlayers(team.id, team.managerId);
+				team.manager = await _playerDao.get(team.managerId);
+				team.players = await _playerDao.getList(team.id, team.managerId);
 			}
 
 			yield teams;
@@ -178,10 +181,15 @@ class TeamManager
 
 		try
 		{
-			var response = await _api.createTeam(team);
+			var response = await _teamApi.createTeam(team);
 			if(validResponse(response))
 			{
-				await _teamDao.updateTeamId(team.id, response.body.id, 1);
+				var id = response.body.id;
+				await _teamDao.updateId(team.id, id);
+
+				team.id = id;
+				team.saved = true;
+				await _teamDao.updateModel(team);
 			}
 			else
 			{
@@ -202,12 +210,12 @@ class TeamManager
 		_checkValidResponse();
 		
 		team.saved = false;
-		team.updated = true;
+		team.create = true;
 		await _teamDao.updateModel(team);
 
 		try
 		{
-			var response = await _api.updateTeam(team.id, team);
+			var response = await _teamApi.updateTeam(team.id, team);
 			if(validResponse(response))
 			{
 				team.saved = true;
@@ -236,7 +244,7 @@ class TeamManager
 
 		try
 		{
-			var response = await _api.deleteTeam(team.id);
+			var response = await _teamApi.deleteTeam(team.id);
 			if(validResponse(response))
 			{
 				await _teamDao.deleteModel(team);

@@ -40,6 +40,9 @@ class PlayerManager
 
 		_checkValidResponse();
 
+		_saveUnsavedPlayers(team);
+		_deleteUndeletedPlayers(team);
+
 		await _playerDao.insertModel(team.manager);
 		await _teamPlayerDao.insertModel(TeamPlayer(
 			teamId: team.id,
@@ -57,6 +60,47 @@ class PlayerManager
 					playerId: player.id,
 					saved: true
 				));
+			}
+		}
+	}
+
+	void _saveUnsavedPlayers(Team team) async
+	{
+		for(var teamPlayer in await _teamPlayerDao.getUnsaved(team.id))
+		{
+			try
+			{
+				var res = await _teamApi.addTeamPlayer(teamPlayer.teamId, teamPlayer.playerId);
+				if(validResponse(res))
+				{
+					teamPlayer.saved = true;
+					await _teamPlayerDao.updateModel(teamPlayer);
+				}
+			}
+			catch(e)
+			{
+				print("saveUnsavedPlayers: $e");
+				return;
+			}
+		}
+	}
+
+	void _deleteUndeletedPlayers(Team team) async
+	{
+		for(var teamPlayer in await _teamPlayerDao.getUndeleted(team.id))
+		{
+			try
+			{
+				var res = await _teamApi.deleteTeamPlayer(teamPlayer.teamId, teamPlayer.playerId);
+				if(validResponse(res))
+				{
+					await _teamPlayerDao.deleteModel(teamPlayer);
+				}
+			}
+			catch(e)
+			{
+				print("deleteUndeletedPlayers: $e");
+				return;
 			}
 		}
 	}

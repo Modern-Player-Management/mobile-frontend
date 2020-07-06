@@ -60,7 +60,7 @@ void findPlayer() async
 {
 	await insertPlayer();
 
-	final player = await _db.playerDao.getPlayer(playerId);
+	final player = await _db.playerDao.get(playerId);
 
 	expect(player.id, equals(playerId));
 }
@@ -74,7 +74,7 @@ void updatePlayer() async
 
 	expect(rows, equals(1));
 
-	final p = await _db.playerDao.getPlayer(playerId);
+	final p = await _db.playerDao.get(playerId);
 
 	expect(p.username, equals("test"));
 }
@@ -87,7 +87,7 @@ void deletePlayer() async
 
 	expect(rows, equals(1));
 
-	final p = await _db.playerDao.getPlayer(playerId);
+	final p = await _db.playerDao.get(playerId);
 
 	expect(p, equals(null));
 }
