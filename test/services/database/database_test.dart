@@ -57,11 +57,11 @@ void deleteTeamWithTwoPlayers() async
 
 	await _db.teamDao.deleteModel(team);
 
-	final teams = await _db.teamDao.getStream(player).first;
+	final teams = await _db.teamDao.getList(player);
 	expect(teams.length, equals(0));
 
 	final events = await _db.playerDao.getList(team.id, team.managerId);
-	expect(events.length, equals(0));
+	expect(events.length, equals(2));
 }
 
 void deleteTeamWithTwoEvents() async
@@ -72,29 +72,27 @@ void deleteTeamWithTwoEvents() async
 		name: "name"
 	);
 
-	final event1 = Event(id: "1");
-	final teamEvent1 = TeamEvent(
-		teamId: teamId,
-		eventId: "1"
+	final event1 = Event(
+		id: "1", 
+		teamId: teamId
 	);
 
-	final event2 = Event(id: "2");
-	final teamEvent2 = TeamEvent(
-		teamId: teamId,
-		eventId: "2"
+	final event2 = Event(
+		id: "2", 
+		teamId: teamId
 	);
 
 	await _db.teamDao.insertModel(team);
 	await _db.eventDao.insertModel(event1);
-	await _db.teamEventDao.insertModel(teamEvent1);
 	await _db.eventDao.insertModel(event2);
-	await _db.teamEventDao.insertModel(teamEvent2);
+
+	var events = await _db.eventDao.getList(teamId);
 
 	await _db.teamDao.deleteModel(team);
 
 	final teams = await _db.teamDao.getList(player);
 	expect(teams.length, equals(0));
 
-	final events = await _db.eventDao.getList(teamId);
+	events = await _db.eventDao.getList(teamId);
 	expect(events.length, equals(0));
 }

@@ -11,7 +11,6 @@ class ParticipationManager
 	final _eventApi = locator<EventApi>();
 
 	final _participationDao = locator<AppDatabase>().participationDao;
-	final _eventParticipationDao = locator<AppDatabase>().eventParticipationDao;
 
 	final _storage = locator<SecureStorage>();
 
@@ -48,13 +47,7 @@ class ParticipationManager
 
 		for(var participation in event.participations)
 		{
-			var eventParticipation = EventParticipation(
-				eventId: event.id,
-				participationId: participation.id,
-				saved: true
-			);
-
-			await _eventParticipationDao.insertModel(eventParticipation);
+			await _participationDao.insertModel(participation);
 
 			int index = keys.indexOf(event.id);
 			if(index != -1)
@@ -72,22 +65,31 @@ class ParticipationManager
 
 	void _saveUnsavedParticipations(Event event) async
 	{
-		for(var eventParticipation in await _eventParticipationDao.getUnsaved(event.id))
+		for(var participation in await _participationDao.getUnsaved(event.id))
 		{
-			Participation participation = await _participationDao.get(eventParticipation.participationId);
-
 			try
 			{
-				var res = await _eventApi.presence(event.id, participation);
-				if(validResponse(res))
+				if(participation.create)
 				{
-					eventParticipation.saved = true;
-					await _eventParticipationDao.updateModel(eventParticipation);
-
-					var id = res.body.id;
-					_participationDao.updateId(participation.id, id);
-					participation.id = id;
-					await _participationDao.updateModel(participation);
+					var res = await _eventApi.presence(event.id, participation);
+					if(validResponse(res))
+					{
+						var id = res.body.id;
+						_participationDao.updateId(participation.id, id);
+						participation.id = id;
+						participation.saved = true;
+						participation.create = false;
+						await _participationDao.updateModel(participation);
+					}
+				}
+				else
+				{
+					var res = await _eventApi.presence(event.id, participation);
+					if(validResponse(res))
+					{
+						participation.saved = true;
+						await _participationDao.updateModel(participation);
+					}
 				}
 			}
 			catch(e)

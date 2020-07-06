@@ -12,25 +12,20 @@ abstract class GameDao extends ModelDao<Game>
 	@Query('update games set id = :newId where id = :oldId')
 	Future<void> updateId(String oldId, String newId);
 
-	@Query('select * from games left join team_games on games.id = team_games.gameId '
-		'and team_games.teamId = :teamId and team_games.deleted = 0')
+	@Query('select * from games where teamId = :teamId and deleted = 0 ')
 	Stream<List<Game>> getStream(String teamId);
 
-	@Query('select * from games left join team_games on games.id = team_games.gameId '
-		'and team_games.teamId = :teamId and team_games.deleted = 0')
+	@Query('select * from games where teamId = :teamId and deleted = 0 ')
 	Future<List<Game>> getList(String teamId);
 
-	@Query('select * from games left join team_games on games.id = team_games.gameId '
-		'and team_games.teamId = :teamId and team_games.saved = 1 '
-		'and team_games.deleted = 0')
+	@Query('select * from games where teamId = :teamId '
+		'and saved = 1 and deleted = 0')
 	Future<List<Game>> getSaved(String teamId);
 
-	@Query('select * from games left join team_games on games.id = team_games.gameId '
-		'and team_games.teamId = :teamId and team_games.saved = 0 '
-		'and team_games.deleted = 0')
+	@Query('select * from games where teamId = :teamId '
+		'and saved = 0 and deleted = 0')
 	Future<List<Game>> getUnsaved(String teamId);
 
-	@Query('select * from games left join team_games on games.id = team_games.gameId '
-		'and team_games.teamId = :teamId and team_games.deleted = 1')
+	@Query('select * from games where teamId = :teamId and deleted = 1')
 	Future<List<Game>> getUndeleted(String teamId);
 }
