@@ -291,7 +291,7 @@ class _$TeamDao extends TeamDao {
   @override
   Future<List<Team>> getSaved(String player) async {
     return _queryAdapter.queryList(
-        'select * from teams where player = ? and saved = 1 and delete = 0',
+        'select * from teams where player = ? and saved = 1 and deleted = 0',
         arguments: <dynamic>[player],
         mapper: _teamsMapper);
   }
@@ -678,7 +678,7 @@ class _$EventDao extends EventDao {
   @override
   Future<List<Event>> getSaved(String teamId) async {
     return _queryAdapter.queryList(
-        'select * from events left join team_events on events.id = team_events.eventId and team_events.teamId = ? and team_events.saved = 1 team_events.deleted = 0',
+        'select * from events left join team_events on events.id = team_events.eventId and team_events.teamId = ? and team_events.saved = 1 and team_events.deleted = 0',
         arguments: <dynamic>[teamId],
         mapper: _eventsMapper);
   }
@@ -686,7 +686,7 @@ class _$EventDao extends EventDao {
   @override
   Future<List<Event>> getUnsaved(String teamId) async {
     return _queryAdapter.queryList(
-        'select * from events left join team_events on events.id = team_events.eventId and team_events.teamId = ? and team_events.saved = 0 team_events.deleted = 0',
+        'select * from events left join team_events on events.id = team_events.eventId and team_events.teamId = ? and team_events.saved = 0 and team_events.deleted = 0',
         arguments: <dynamic>[teamId],
         mapper: _eventsMapper);
   }
@@ -1187,7 +1187,7 @@ class _$ParticipationDao extends ParticipationDao {
   @override
   Future<List<Participation>> getSaved(String eventId) async {
     return _queryAdapter.queryList(
-        'select * from participations left join event_participations on participations.id = event_participations.participationId and event_participations.eventId = ? and event_participations.saved = 1 event_participations.deleted = 0',
+        'select * from participations left join event_participations on participations.id = event_participations.participationId and event_participations.eventId = ? and event_participations.saved = 1 and event_participations.deleted = 0',
         arguments: <dynamic>[eventId],
         mapper: _participationsMapper);
   }
@@ -1195,7 +1195,7 @@ class _$ParticipationDao extends ParticipationDao {
   @override
   Future<List<Participation>> getUnsaved(String eventId) async {
     return _queryAdapter.queryList(
-        'select * from participations left join event_participations on participations.id = event_participations.participationId and event_participations.eventId = ? and event_participations.saved = 0 event_participations.deleted = 0',
+        'select * from participations left join event_participations on participations.id = event_participations.participationId and event_participations.eventId = ? and event_participations.saved = 0 and event_participations.deleted = 0',
         arguments: <dynamic>[eventId],
         mapper: _participationsMapper);
   }
@@ -1437,7 +1437,7 @@ class _$GameDao extends GameDao {
   @override
   Future<List<Game>> getSaved(String teamId) async {
     return _queryAdapter.queryList(
-        'select * from games left join team_games on games.id = team_games.gameId and team_games.teamId = ? and team_games.saved = 1 team_games.deleted = 0',
+        'select * from games left join team_games on games.id = team_games.gameId and team_games.teamId = ? and team_games.saved = 1 and team_games.deleted = 0',
         arguments: <dynamic>[teamId],
         mapper: _gamesMapper);
   }
@@ -1445,7 +1445,7 @@ class _$GameDao extends GameDao {
   @override
   Future<List<Game>> getUnsaved(String teamId) async {
     return _queryAdapter.queryList(
-        'select * from games left join team_games on games.id = team_games.gameId and team_games.teamId = ? and team_games.saved = 0 team_games.deleted = 0',
+        'select * from games left join team_games on games.id = team_games.gameId and team_games.teamId = ? and team_games.saved = 0 and team_games.deleted = 0',
         arguments: <dynamic>[teamId],
         mapper: _gamesMapper);
   }

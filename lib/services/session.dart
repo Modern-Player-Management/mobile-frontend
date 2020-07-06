@@ -49,8 +49,11 @@ class Session
 		}
 		else
 		{
-			await Future.delayed(Duration(seconds: 2));
-			_goToAuthView();
+			await Future.delayed(Duration(seconds: 1));
+			if(redirect)
+			{
+				_goToAuthView();
+			}
 		}
 	}
 
