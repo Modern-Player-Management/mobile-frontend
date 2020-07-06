@@ -37,16 +37,12 @@ Future<Event> insertEvent() async
 
 	final event = Event(
 		id: "id",
-		team: teamId,
+		teamId: teamId,
 		name: "title",
 		description: "description"
 	);
 
 	int row = await _db.eventDao.insertModel(event);
-	await _db.teamEventDao.insertModel(TeamEvent(
-		eventId: "id",
-		teamId: teamId
-	));
 
 	expect(row, equals(1));
 

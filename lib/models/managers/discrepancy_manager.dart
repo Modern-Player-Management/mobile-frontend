@@ -12,7 +12,6 @@ class DiscrepancyManager
 	final _discrepancyApi = locator<DiscrepancyApi>();
 
 	final _discrepancyDao = locator<AppDatabase>().discrepancyDao;
-	final _eventDiscrepancyDao = locator<AppDatabase>().eventDiscrepancyDao;
 
 	final _storage = locator<SecureStorage>();
 
@@ -49,13 +48,8 @@ class DiscrepancyManager
 
 		for(var discrepancy in event.discrepancies)
 		{
-			var eventDiscrepancy = EventDiscrepancy(
-				eventId: event.id,
-				discrepancyId: discrepancy.id,
-				saved: true
-			);
-
-			await _eventDiscrepancyDao.insertModel(eventDiscrepancy);
+			discrepancy.eventId = event.id;
+			await _discrepancyDao.insertModel(discrepancy);
 
 			int index = keys.indexOf(event.id);
 			if(index != -1)
@@ -73,10 +67,8 @@ class DiscrepancyManager
 
 	void _saveUnsavedDiscrepancies(Event event) async
 	{
-		for(var eventDiscrepancy in await _eventDiscrepancyDao.getUnsaved(event.id))
+		for(var discrepancy in await _discrepancyDao.getUnsaved(event.id))
 		{
-			Discrepancy discrepancy = await _discrepancyDao.get(eventDiscrepancy.discrepancyId);
-
 			try
 			{
 				if(discrepancy.create)
@@ -84,12 +76,10 @@ class DiscrepancyManager
 					var res = await _eventApi.addDiscrepancy(event.id, discrepancy);
 					if(validResponse(res))
 					{
-						eventDiscrepancy.saved = true;
-						await _eventDiscrepancyDao.updateModel(eventDiscrepancy);
-
 						var id = res.body.id;
 						_discrepancyDao.updateId(discrepancy.id, id);
 						discrepancy.id = id;
+						discrepancy.saved = true;
 						discrepancy.create = false;
 						await _discrepancyDao.updateModel(discrepancy);
 					}
@@ -99,8 +89,8 @@ class DiscrepancyManager
 					var res = await _discrepancyApi.updateDiscrepancy(discrepancy.id, discrepancy);
 					if(validResponse(res))
 					{
-						eventDiscrepancy.saved = true;
-						await _eventDiscrepancyDao.updateModel(eventDiscrepancy);
+						discrepancy.saved = true;
+						await _discrepancyDao.updateModel(discrepancy);
 					}
 				}
 			}
