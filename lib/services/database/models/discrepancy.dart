@@ -5,9 +5,6 @@ part 'discrepancy.g.dart';
 
 @Entity(
 	tableName: 'discrepancies',
-	foreignKeys: [
-		
-	]
 )
 @JsonSerializable()
 class Discrepancy
@@ -16,11 +13,8 @@ class Discrepancy
 	String id;
 
 	int type;
-	String reason;
+	String reason, userId, username;
 	int delayLength;
-
-	@JsonKey(ignore: true)
-	String event;
 
 	@JsonKey(ignore: true)
 	bool create;
@@ -30,7 +24,6 @@ class Discrepancy
 		this.type,
 		this.reason,
 		this.delayLength,
-		this.event,
 		bool create
 	}) :
 		this.create = create ?? false;

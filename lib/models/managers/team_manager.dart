@@ -17,6 +17,8 @@ class TeamManager
 	final _uuid = locator<Uuid>();
 
 	PlayerManager _playerManager;
+	EventManager _eventManager;
+	GameManager _gameManager;
 
 	bool Function(Response) validResponse;
 
@@ -25,6 +27,8 @@ class TeamManager
 	}) : this.validResponse = validResponse
 	{
 		_playerManager = locator<PlayerManager>(param1: validResponse);
+		_eventManager = locator<EventManager>(param1: validResponse);
+		_gameManager = locator<GameManager>(param1: validResponse);
 	}
 
 	void _checkValidResponse()
@@ -54,10 +58,10 @@ class TeamManager
 			{
 				List<Team> teams = res.body;
 
-				var savedTeams = await _teamDao.getSaved(_storage.player);
-				var teamsKey = [
-					for(var team in savedTeams)
-						team.id
+				var models = await _teamDao.getSaved(_storage.player);
+				var keys = [
+					for(var el in models)
+						el.id
 				];
 
 				for(var team in teams)
@@ -66,19 +70,21 @@ class TeamManager
 					team.saved = true;
 					await _teamDao.insertModel(team);
 
-					int index = teamsKey.indexOf(team.id);
+					int index = keys.indexOf(team.id);
 					if(index != -1)
 					{
-						savedTeams.removeAt(index);
-						teamsKey.removeAt(index);
+						models.removeAt(index);
+						keys.removeAt(index);
 					}
 
 					await _playerManager.syncPlayers(team);
+					await _eventManager.syncEvents(team);
+					await _gameManager.syncGames(team);
 				}
 
-				for(var team in savedTeams) 
+				for(var model in models)
 				{
-					await _teamDao.deleteModel(team);
+					await _teamDao.deleteModel(model);
 				}
 			}
 			else

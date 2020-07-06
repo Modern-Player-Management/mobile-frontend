@@ -21,6 +21,8 @@ class Event
 	String name, description; 
 
 	int type;
+
+	bool currentHasConfirmed;
 	
 	@JsonKey(ignore: true)
 	bool create;
@@ -39,6 +41,7 @@ class Event
 		this.name, 
 		this.description,
 		this.type,
+		this.currentHasConfirmed,
 		this.participations,
 		this.discrepancies,
 		bool create
