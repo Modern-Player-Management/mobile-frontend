@@ -33,7 +33,7 @@ class Session
 		return response != null && response.isSuccessful;
 	}
 
-	Future<void> synchronize([bool redirect = true]) async
+	Future<void> synchronize({bool redirect = true}) async
 	{
 		if(isAuth)
 		{
