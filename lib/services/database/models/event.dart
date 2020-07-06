@@ -21,6 +21,9 @@ class Event
 	String name, description; 
 
 	int type;
+	
+	@JsonKey(ignore: true)
+	bool create;
 
 	@ignore
 	List<Participation> participations;
@@ -38,7 +41,9 @@ class Event
 		this.type,
 		this.participations,
 		this.discrepancies,
-	});
+		bool create
+	}) : 
+		this.create = create ?? false;
 
 	static const fromJson = _$EventFromJson;
 

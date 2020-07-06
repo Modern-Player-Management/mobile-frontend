@@ -57,10 +57,10 @@ void deleteTeamWithTwoPlayers() async
 
 	await _db.teamDao.deleteModel(team);
 
-	final teams = await _db.teamDao.getTeams(player).first;
+	final teams = await _db.teamDao.getStream(player).first;
 	expect(teams.length, equals(0));
 
-	final events = await _db.playerDao.getAllPlayers(team.id, team.managerId);
+	final events = await _db.playerDao.getList(team.id, team.managerId);
 	expect(events.length, equals(0));
 }
 
@@ -92,9 +92,9 @@ void deleteTeamWithTwoEvents() async
 
 	await _db.teamDao.deleteModel(team);
 
-	final teams = await _db.teamDao.getTeams(player).first;
+	final teams = await _db.teamDao.getList(player);
 	expect(teams.length, equals(0));
 
-	final events = await _db.eventDao.getAllEvents(teamId);
+	final events = await _db.eventDao.getList(teamId);
 	expect(events.length, equals(0));
 }

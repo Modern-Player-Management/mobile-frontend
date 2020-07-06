@@ -57,7 +57,7 @@ void findEvent() async
 {
 	await insertEvent();
 
-	final events = await _db.eventDao.getAllEvents(teamId);
+	final events = await _db.eventDao.getList(teamId);
 
 	expect(events.length, equals(1));
 }
@@ -71,7 +71,7 @@ void updateEvent() async
 
 	expect(rows, equals(1));
 
-	final events = await _db.eventDao.getAllEvents(teamId);
+	final events = await _db.eventDao.getList(teamId);
 
 	expect(events[0].name, equals("test"));
 }
@@ -84,7 +84,7 @@ void deleteEvent() async
 
 	expect(rows, equals(1));
 
-	final events = await _db.eventDao.getAllEvents(teamId);
+	final events = await _db.eventDao.getList(teamId);
 
 	expect(events.length, equals(0));
 }

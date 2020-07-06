@@ -7,17 +7,17 @@ import 'package:mpm/services/database/models/team_game.dart';
 abstract class TeamGameDao extends ModelDao<TeamGame>
 {
 	@Query('select * from team_games where teamId = :teamId and deleted = 0')
-	Stream<List<TeamGame>> getTeamGames(String teamId);
+	Stream<List<TeamGame>> getStream(String teamId);
 
 	@Query('select * from team_games where teamId = :teamId and deleted = 0')
-	Future<List<TeamGame>> getAllTeamGames(String teamId);
+	Future<List<TeamGame>> getList(String teamId);
 
 	@Query('select * from team_games where teamId = :teamId and saved = 1 and deleted = 0')
-	Future<List<TeamGame>> getSavedTeamGames(String teamId);
+	Future<List<TeamGame>> getSaved(String teamId);
 
 	@Query('select * from team_games where teamId = :teamId and saved = 0 and deleted = 0')
-	Future<List<TeamGame>> getUnsavedTeamGames(String teamId);
+	Future<List<TeamGame>> getUnsaved(String teamId);
 
 	@Query('select * from team_games where teamId = :teamId and deleted = 1')
-	Future<List<TeamGame>> getUndeletedTeamGames(String teamId);
+	Future<List<TeamGame>> getUndeleted(String teamId);
 }

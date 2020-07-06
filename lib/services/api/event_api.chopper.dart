@@ -17,7 +17,8 @@ class _$EventApi extends EventApi {
   final definitionType = EventApi;
 
   @override
-  Future<Response<dynamic>> confirm(String eventId) {
+  Future<Response<dynamic>> presence(
+      String eventId, Participation participation) {
     final $url = '/$eventId/presence';
     final $request = Request('POST', $url, client.baseUrl);
     return client.send<dynamic, dynamic>($request);

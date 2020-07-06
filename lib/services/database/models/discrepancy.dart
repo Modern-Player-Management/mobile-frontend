@@ -22,13 +22,18 @@ class Discrepancy
 	@JsonKey(ignore: true)
 	String event;
 
+	@JsonKey(ignore: true)
+	bool create;
+
 	Discrepancy({
 		this.id, 
 		this.type,
 		this.reason,
 		this.delayLength,
-		this.event
-	});
+		this.event,
+		bool create
+	}) :
+		this.create = create ?? false;
 
 	static const fromJson = _$DiscrepancyFromJson;
 
