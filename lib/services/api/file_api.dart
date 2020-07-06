@@ -8,7 +8,6 @@ import 'package:http/io_client.dart';
 import 'package:injectable/injectable.dart';
 
 import 'package:mpm/app/locator.dart';
-import 'package:mpm/services/api/converters/json_serializable_converter.dart';
 import 'package:mpm/utils/utils.dart';
 
 part 'file_api.chopper.dart';
