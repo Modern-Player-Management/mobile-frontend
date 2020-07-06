@@ -14,11 +14,28 @@ abstract class DiscrepancyDao extends ModelDao<Discrepancy>
 
 	@Query('select * from discrepancies inner join event_discrepancies on '
 		'discrepancies.id = event_discrepancies.discrepancyId and '
-		'event_discrepancies.eventId = :eventId and `event_discrepancies.deleted` = 0')
+		'event_discrepancies.eventId = :eventId and event_discrepancies.deleted = 0')
 	Stream<List<Discrepancy>> getStream(String eventId);
 
 	@Query('select * from discrepancies inner join event_discrepancies on '
 		'discrepancies.id = event_discrepancies.discrepancyId and '
-		'event_discrepancies.eventId = :eventId and `event_discrepancies.deleted` = 0')
+		'event_discrepancies.eventId = :eventId and event_discrepancies.deleted = 0')
 	Future<List<Discrepancy>> getList(String eventId);
+
+	@Query('select * from discrepancies inner join event_discrepancies on '
+		'discrepancies.id = event_discrepancies.discrepancyId and '
+		'event_discrepancies.eventId = :eventId and event_discrepancies.saved = 1 '
+		'event_discrepancies.deleted = 0')
+	Future<List<Discrepancy>> getSaved(String eventId);
+
+	@Query('select * from discrepancies inner join event_discrepancies on '
+		'discrepancies.id = event_discrepancies.discrepancyId and '
+		'event_discrepancies.eventId = :eventId and event_discrepancies.saved = 0 '
+		'event_discrepancies.deleted = 0')
+	Future<List<Discrepancy>> getUnsaved(String eventId);
+
+	@Query('select * from discrepancies inner join event_discrepancies on '
+		'discrepancies.id = event_discrepancies.discrepancyId and '
+		'event_discrepancies.eventId = :eventId and event_discrepancies.deleted = 1')
+	Future<List<Discrepancy>> getUndeleted(String eventId);
 }

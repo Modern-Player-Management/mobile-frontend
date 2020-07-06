@@ -106,15 +106,15 @@ class _$AppDatabase extends AppDatabase {
         await database.execute(
             'CREATE TABLE IF NOT EXISTS `team_players` (`teamId` TEXT, `playerId` TEXT, `saved` INTEGER, `deleted` INTEGER, FOREIGN KEY (`teamId`) REFERENCES `teams` (`id`) ON UPDATE CASCADE ON DELETE CASCADE, FOREIGN KEY (`playerId`) REFERENCES `players` (`id`) ON UPDATE CASCADE ON DELETE CASCADE, PRIMARY KEY (`teamId`, `playerId`))');
         await database.execute(
-            'CREATE TABLE IF NOT EXISTS `events` (`id` TEXT, `team` TEXT, `start` TEXT, `end` TEXT, `name` TEXT, `description` TEXT, `type` INTEGER, `create` INTEGER, PRIMARY KEY (`id`))');
+            'CREATE TABLE IF NOT EXISTS `events` (`id` TEXT, `team` TEXT, `start` TEXT, `end` TEXT, `name` TEXT, `description` TEXT, `type` INTEGER, `currentHasConfirmed` INTEGER, `create` INTEGER, PRIMARY KEY (`id`))');
         await database.execute(
             'CREATE TABLE IF NOT EXISTS `team_events` (`teamId` TEXT, `eventId` TEXT, `saved` INTEGER, `deleted` INTEGER, FOREIGN KEY (`teamId`) REFERENCES `teams` (`id`) ON UPDATE CASCADE ON DELETE CASCADE, FOREIGN KEY (`eventId`) REFERENCES `events` (`id`) ON UPDATE CASCADE ON DELETE CASCADE, PRIMARY KEY (`teamId`))');
         await database.execute(
-            'CREATE TABLE IF NOT EXISTS `discrepancies` (`id` TEXT, `type` INTEGER, `reason` TEXT, `delayLength` INTEGER, `event` TEXT, `create` INTEGER, PRIMARY KEY (`id`))');
+            'CREATE TABLE IF NOT EXISTS `discrepancies` (`id` TEXT, `type` INTEGER, `reason` TEXT, `userId` TEXT, `username` TEXT, `delayLength` INTEGER, `create` INTEGER, PRIMARY KEY (`id`))');
         await database.execute(
             'CREATE TABLE IF NOT EXISTS `events_discrepancies` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `eventId` TEXT, `discrepancyId` TEXT, `saved` INTEGER, `deleted` INTEGER, FOREIGN KEY (`eventId`) REFERENCES `events` (`id`) ON UPDATE CASCADE ON DELETE CASCADE, FOREIGN KEY (`discrepancyId`) REFERENCES `discrepancies` (`id`) ON UPDATE CASCADE ON DELETE CASCADE)');
         await database.execute(
-            'CREATE TABLE IF NOT EXISTS `participations` (`id` TEXT, `confirmed` INTEGER, `username` TEXT, PRIMARY KEY (`id`))');
+            'CREATE TABLE IF NOT EXISTS `participations` (`id` TEXT, `confirmed` INTEGER, `userId` TEXT, `username` TEXT, PRIMARY KEY (`id`))');
         await database.execute(
             'CREATE TABLE IF NOT EXISTS `events_participations` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `eventId` TEXT, `participationId` TEXT, `saved` INTEGER, `deleted` INTEGER, FOREIGN KEY (`eventId`) REFERENCES `events` (`id`) ON UPDATE CASCADE ON DELETE CASCADE, FOREIGN KEY (`participationId`) REFERENCES `participations` (`id`) ON UPDATE CASCADE ON DELETE CASCADE)');
         await database.execute(
@@ -273,7 +273,7 @@ class _$TeamDao extends TeamDao {
   @override
   Stream<List<Team>> getStream(String player) {
     return _queryAdapter.queryListStream(
-        'select * from teams where player = ? and `deleted` = 0 order by name',
+        'select * from teams where player = ? and deleted = 0 order by name',
         arguments: <dynamic>[player],
         queryableName: 'teams',
         isView: false,
@@ -283,7 +283,7 @@ class _$TeamDao extends TeamDao {
   @override
   Future<List<Team>> getList(String player) async {
     return _queryAdapter.queryList(
-        'select * from teams where player = ? and `deleted` = 0 order by name',
+        'select * from teams where player = ? and deleted = 0 order by name',
         arguments: <dynamic>[player],
         mapper: _teamsMapper);
   }
@@ -577,6 +577,9 @@ class _$EventDao extends EventDao {
                   'name': item.name,
                   'description': item.description,
                   'type': item.type,
+                  'currentHasConfirmed': item.currentHasConfirmed == null
+                      ? null
+                      : (item.currentHasConfirmed ? 1 : 0),
                   'create': item.create == null ? null : (item.create ? 1 : 0)
                 },
             changeListener),
@@ -592,6 +595,9 @@ class _$EventDao extends EventDao {
                   'name': item.name,
                   'description': item.description,
                   'type': item.type,
+                  'currentHasConfirmed': item.currentHasConfirmed == null
+                      ? null
+                      : (item.currentHasConfirmed ? 1 : 0),
                   'create': item.create == null ? null : (item.create ? 1 : 0)
                 },
             changeListener),
@@ -607,6 +613,9 @@ class _$EventDao extends EventDao {
                   'name': item.name,
                   'description': item.description,
                   'type': item.type,
+                  'currentHasConfirmed': item.currentHasConfirmed == null
+                      ? null
+                      : (item.currentHasConfirmed ? 1 : 0),
                   'create': item.create == null ? null : (item.create ? 1 : 0)
                 },
             changeListener);
@@ -625,6 +634,9 @@ class _$EventDao extends EventDao {
       name: row['name'] as String,
       description: row['description'] as String,
       type: row['type'] as int,
+      currentHasConfirmed: row['currentHasConfirmed'] == null
+          ? null
+          : (row['currentHasConfirmed'] as int) != 0,
       create: row['create'] == null ? null : (row['create'] as int) != 0);
 
   final InsertionAdapter<Event> _eventInsertionAdapter;
@@ -659,6 +671,30 @@ class _$EventDao extends EventDao {
   Future<List<Event>> getList(String teamId) async {
     return _queryAdapter.queryList(
         'select * from events inner join team_events on events.id = team_events.eventId and team_events.teamId = ? and team_events.deleted = 0',
+        arguments: <dynamic>[teamId],
+        mapper: _eventsMapper);
+  }
+
+  @override
+  Future<List<Event>> getSaved(String teamId) async {
+    return _queryAdapter.queryList(
+        'select * from events inner join team_events on events.id = team_events.eventId and team_events.teamId = ? and team_events.saved = 1 team_events.deleted = 0',
+        arguments: <dynamic>[teamId],
+        mapper: _eventsMapper);
+  }
+
+  @override
+  Future<List<Event>> getUnsaved(String teamId) async {
+    return _queryAdapter.queryList(
+        'select * from events inner join team_events on events.id = team_events.eventId and team_events.teamId = ? and team_events.saved = 0 team_events.deleted = 0',
+        arguments: <dynamic>[teamId],
+        mapper: _eventsMapper);
+  }
+
+  @override
+  Future<List<Event>> getUndeleted(String teamId) async {
+    return _queryAdapter.queryList(
+        'select * from events inner join team_events on events.id = team_events.eventId and team_events.teamId = ? and team_events.deleted = 1',
         arguments: <dynamic>[teamId],
         mapper: _eventsMapper);
   }
@@ -808,8 +844,9 @@ class _$DiscrepancyDao extends DiscrepancyDao {
                   'id': item.id,
                   'type': item.type,
                   'reason': item.reason,
+                  'userId': item.userId,
+                  'username': item.username,
                   'delayLength': item.delayLength,
-                  'event': item.event,
                   'create': item.create == null ? null : (item.create ? 1 : 0)
                 },
             changeListener),
@@ -821,8 +858,9 @@ class _$DiscrepancyDao extends DiscrepancyDao {
                   'id': item.id,
                   'type': item.type,
                   'reason': item.reason,
+                  'userId': item.userId,
+                  'username': item.username,
                   'delayLength': item.delayLength,
-                  'event': item.event,
                   'create': item.create == null ? null : (item.create ? 1 : 0)
                 },
             changeListener),
@@ -834,8 +872,9 @@ class _$DiscrepancyDao extends DiscrepancyDao {
                   'id': item.id,
                   'type': item.type,
                   'reason': item.reason,
+                  'userId': item.userId,
+                  'username': item.username,
                   'delayLength': item.delayLength,
-                  'event': item.event,
                   'create': item.create == null ? null : (item.create ? 1 : 0)
                 },
             changeListener);
@@ -851,7 +890,6 @@ class _$DiscrepancyDao extends DiscrepancyDao {
       type: row['type'] as int,
       reason: row['reason'] as String,
       delayLength: row['delayLength'] as int,
-      event: row['event'] as String,
       create: row['create'] == null ? null : (row['create'] as int) != 0);
 
   final InsertionAdapter<Discrepancy> _discrepancyInsertionAdapter;
@@ -876,7 +914,7 @@ class _$DiscrepancyDao extends DiscrepancyDao {
   @override
   Stream<List<Discrepancy>> getStream(String eventId) {
     return _queryAdapter.queryListStream(
-        'select * from discrepancies inner join event_discrepancies on discrepancies.id = event_discrepancies.discrepancyId and event_discrepancies.eventId = ? and `event_discrepancies.deleted` = 0',
+        'select * from discrepancies inner join event_discrepancies on discrepancies.id = event_discrepancies.discrepancyId and event_discrepancies.eventId = ? and event_discrepancies.deleted = 0',
         arguments: <dynamic>[eventId],
         queryableName: 'discrepancies',
         isView: false,
@@ -886,7 +924,31 @@ class _$DiscrepancyDao extends DiscrepancyDao {
   @override
   Future<List<Discrepancy>> getList(String eventId) async {
     return _queryAdapter.queryList(
-        'select * from discrepancies inner join event_discrepancies on discrepancies.id = event_discrepancies.discrepancyId and event_discrepancies.eventId = ? and `event_discrepancies.deleted` = 0',
+        'select * from discrepancies inner join event_discrepancies on discrepancies.id = event_discrepancies.discrepancyId and event_discrepancies.eventId = ? and event_discrepancies.deleted = 0',
+        arguments: <dynamic>[eventId],
+        mapper: _discrepanciesMapper);
+  }
+
+  @override
+  Future<List<Discrepancy>> getSaved(String eventId) async {
+    return _queryAdapter.queryList(
+        'select * from discrepancies inner join event_discrepancies on discrepancies.id = event_discrepancies.discrepancyId and event_discrepancies.eventId = ? and event_discrepancies.saved = 1 event_discrepancies.deleted = 0',
+        arguments: <dynamic>[eventId],
+        mapper: _discrepanciesMapper);
+  }
+
+  @override
+  Future<List<Discrepancy>> getUnsaved(String eventId) async {
+    return _queryAdapter.queryList(
+        'select * from discrepancies inner join event_discrepancies on discrepancies.id = event_discrepancies.discrepancyId and event_discrepancies.eventId = ? and event_discrepancies.saved = 0 event_discrepancies.deleted = 0',
+        arguments: <dynamic>[eventId],
+        mapper: _discrepanciesMapper);
+  }
+
+  @override
+  Future<List<Discrepancy>> getUndeleted(String eventId) async {
+    return _queryAdapter.queryList(
+        'select * from discrepancies inner join event_discrepancies on discrepancies.id = event_discrepancies.discrepancyId and event_discrepancies.eventId = ? and event_discrepancies.deleted = 1',
         arguments: <dynamic>[eventId],
         mapper: _discrepanciesMapper);
   }
@@ -993,7 +1055,7 @@ class _$EventDiscrepancyDao extends EventDiscrepancyDao {
   @override
   Future<List<EventDiscrepancy>> getSaved(String eventId) async {
     return _queryAdapter.queryList(
-        'select * from events_discrepancies where eventId = ? and saved = 1 and `deleted` = 0',
+        'select * from events_discrepancies where eventId = ? and saved = 1 and deleted = 0',
         arguments: <dynamic>[eventId],
         mapper: _events_discrepanciesMapper);
   }
@@ -1001,7 +1063,7 @@ class _$EventDiscrepancyDao extends EventDiscrepancyDao {
   @override
   Future<List<EventDiscrepancy>> getUnsaved(String eventId) async {
     return _queryAdapter.queryList(
-        'select * from events_discrepancies where eventId = ? and saved = 0 and `deleted` = 0',
+        'select * from events_discrepancies where eventId = ? and saved = 0 and deleted = 0',
         arguments: <dynamic>[eventId],
         mapper: _events_discrepanciesMapper);
   }
@@ -1009,7 +1071,7 @@ class _$EventDiscrepancyDao extends EventDiscrepancyDao {
   @override
   Future<List<EventDiscrepancy>> getUndeleted(String eventId) async {
     return _queryAdapter.queryList(
-        'select * from events_discrepancies where eventId = ? and `deleted` = 1',
+        'select * from events_discrepancies where eventId = ? and deleted = 1',
         arguments: <dynamic>[eventId],
         mapper: _events_discrepanciesMapper);
   }
@@ -1042,6 +1104,7 @@ class _$ParticipationDao extends ParticipationDao {
                   'id': item.id,
                   'confirmed':
                       item.confirmed == null ? null : (item.confirmed ? 1 : 0),
+                  'userId': item.userId,
                   'username': item.username
                 },
             changeListener),
@@ -1053,6 +1116,7 @@ class _$ParticipationDao extends ParticipationDao {
                   'id': item.id,
                   'confirmed':
                       item.confirmed == null ? null : (item.confirmed ? 1 : 0),
+                  'userId': item.userId,
                   'username': item.username
                 },
             changeListener),
@@ -1064,6 +1128,7 @@ class _$ParticipationDao extends ParticipationDao {
                   'id': item.id,
                   'confirmed':
                       item.confirmed == null ? null : (item.confirmed ? 1 : 0),
+                  'userId': item.userId,
                   'username': item.username
                 },
             changeListener);
@@ -1079,6 +1144,7 @@ class _$ParticipationDao extends ParticipationDao {
           id: row['id'] as String,
           confirmed:
               row['confirmed'] == null ? null : (row['confirmed'] as int) != 0,
+          userId: row['userId'] as String,
           username: row['username'] as String);
 
   final InsertionAdapter<Participation> _participationInsertionAdapter;
@@ -1103,7 +1169,7 @@ class _$ParticipationDao extends ParticipationDao {
   @override
   Stream<List<Participation>> getStream(String eventId) {
     return _queryAdapter.queryListStream(
-        'select * from participations inner join event_participations on participations.id = event_participations.participationId and event_participations.eventId = ? and `event_participations.deleted` = 0',
+        'select * from participations inner join event_participations on participations.id = event_participations.participationId and event_participations.eventId = ? and event_participations.deleted = 0',
         arguments: <dynamic>[eventId],
         queryableName: 'participations',
         isView: false,
@@ -1113,7 +1179,31 @@ class _$ParticipationDao extends ParticipationDao {
   @override
   Future<List<Participation>> getList(String eventId) async {
     return _queryAdapter.queryList(
-        'select * from participations inner join event_participations on participations.id = event_participations.participationId and event_participations.eventId = ? and `event_participations.deleted` = 0',
+        'select * from participations inner join event_participations on participations.id = event_participations.participationId and event_participations.eventId = ? and event_participations.deleted = 0',
+        arguments: <dynamic>[eventId],
+        mapper: _participationsMapper);
+  }
+
+  @override
+  Future<List<Participation>> getSaved(String eventId) async {
+    return _queryAdapter.queryList(
+        'select * from participations inner join event_participations on participations.id = event_participations.participationId and event_participations.eventId = ? and event_participations.saved = 1 event_participations.deleted = 0',
+        arguments: <dynamic>[eventId],
+        mapper: _participationsMapper);
+  }
+
+  @override
+  Future<List<Participation>> getUnsaved(String eventId) async {
+    return _queryAdapter.queryList(
+        'select * from participations inner join event_participations on participations.id = event_participations.participationId and event_participations.eventId = ? and event_participations.saved = 0 event_participations.deleted = 0',
+        arguments: <dynamic>[eventId],
+        mapper: _participationsMapper);
+  }
+
+  @override
+  Future<List<Participation>> getUndeleted(String eventId) async {
+    return _queryAdapter.queryList(
+        'select * from participations inner join event_participations on participations.id = event_participations.participationId and event_participations.eventId = ? and event_participations.deleted = 0',
         arguments: <dynamic>[eventId],
         mapper: _participationsMapper);
   }
@@ -1221,7 +1311,7 @@ class _$EventParticipationDao extends EventParticipationDao {
   @override
   Future<List<EventParticipation>> getSaved(String eventId) async {
     return _queryAdapter.queryList(
-        'select * from events_participations where eventId = ? and saved = 1 and `deleted` = 0',
+        'select * from events_participations where eventId = ? and saved = 1 and deleted = 0',
         arguments: <dynamic>[eventId],
         mapper: _events_participationsMapper);
   }
@@ -1229,7 +1319,7 @@ class _$EventParticipationDao extends EventParticipationDao {
   @override
   Future<List<EventParticipation>> getUnsaved(String eventId) async {
     return _queryAdapter.queryList(
-        'select * from events_participations where eventId = ? and saved = 0 and `deleted` = 0',
+        'select * from events_participations where eventId = ? and saved = 0 and deleted = 0',
         arguments: <dynamic>[eventId],
         mapper: _events_participationsMapper);
   }
@@ -1237,7 +1327,7 @@ class _$EventParticipationDao extends EventParticipationDao {
   @override
   Future<List<EventParticipation>> getUndeleted(String eventId) async {
     return _queryAdapter.queryList(
-        'select * from events_participations where eventId = ? and `deleted` = 1',
+        'select * from events_participations where eventId = ? and deleted = 1',
         arguments: <dynamic>[eventId],
         mapper: _events_participationsMapper);
   }
@@ -1316,7 +1406,7 @@ class _$GameDao extends GameDao {
 
   @override
   Future<Game> get(String id) async {
-    return _queryAdapter.query('select * from events where id = ?',
+    return _queryAdapter.query('select * from games where id = ?',
         arguments: <dynamic>[id], mapper: _gamesMapper);
   }
 
@@ -1329,7 +1419,7 @@ class _$GameDao extends GameDao {
   @override
   Stream<List<Game>> getStream(String teamId) {
     return _queryAdapter.queryListStream(
-        'select * from games inner join team_games on games.id = team_games.gameId and team_games.teamId = ? and `team_games.delete` = 0',
+        'select * from games inner join team_games on games.id = team_games.gameId and team_games.teamId = ? and team_games.deleted = 0',
         arguments: <dynamic>[teamId],
         queryableName: 'games',
         isView: false,
@@ -1339,7 +1429,31 @@ class _$GameDao extends GameDao {
   @override
   Future<List<Game>> getList(String teamId) async {
     return _queryAdapter.queryList(
-        'select * from games inner join team_games on games.id = team_games.gameId and team_games.teamId = ? and `team_games.delete` = 0',
+        'select * from games inner join team_games on games.id = team_games.gameId and team_games.teamId = ? and team_games.deleted = 0',
+        arguments: <dynamic>[teamId],
+        mapper: _gamesMapper);
+  }
+
+  @override
+  Future<List<Game>> getSaved(String teamId) async {
+    return _queryAdapter.queryList(
+        'select * from games inner join team_games on games.id = team_games.gameId and team_games.teamId = ? and team_games.saved = 1 team_games.deleted = 0',
+        arguments: <dynamic>[teamId],
+        mapper: _gamesMapper);
+  }
+
+  @override
+  Future<List<Game>> getUnsaved(String teamId) async {
+    return _queryAdapter.queryList(
+        'select * from games inner join team_games on games.id = team_games.gameId and team_games.teamId = ? and team_games.saved = 0 team_games.deleted = 0',
+        arguments: <dynamic>[teamId],
+        mapper: _gamesMapper);
+  }
+
+  @override
+  Future<List<Game>> getUndeleted(String teamId) async {
+    return _queryAdapter.queryList(
+        'select * from games inner join team_games on games.id = team_games.gameId and team_games.teamId = ? and team_games.deleted = 1',
         arguments: <dynamic>[teamId],
         mapper: _gamesMapper);
   }

@@ -7,8 +7,13 @@ import 'package:mpm/app/locator.iconfig.dart';
 export 'package:mpm/app/router.gr.dart';
 
 export 'package:mpm/services/database/database.dart';
+
 export 'package:mpm/models/managers/team_manager.dart';
 export 'package:mpm/models/managers/player_manager.dart';
+export 'package:mpm/models/managers/event_manager.dart';
+export 'package:mpm/models/managers/game_manager.dart';
+export 'package:mpm/models/managers/discrepancy_manager.dart';
+export 'package:mpm/models/managers/participation_manager.dart';
 
 export 'package:mpm/services/api/auth_api.dart';
 export 'package:mpm/services/api/team_api.dart';

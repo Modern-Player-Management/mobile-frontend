@@ -40,6 +40,35 @@ class DiscrepancyManager
 		_checkValidResponse();
 		_saveUnsavedDiscrepancies(event);
 		_deleteUndeletedDiscrepancies(event);
+
+		var models = await _discrepancyDao.getSaved(event.id);
+		var keys = [
+			for(var el in models)
+				el.id
+		];
+
+		for(var discrepancy in event.discrepancies)
+		{
+			var eventDiscrepancy = EventDiscrepancy(
+				eventId: event.id,
+				discrepancyId: discrepancy.id,
+				saved: true
+			);
+
+			await _eventDiscrepancyDao.insertModel(eventDiscrepancy);
+
+			int index = keys.indexOf(event.id);
+			if(index != -1)
+			{
+				models.removeAt(index);
+				keys.removeAt(index);
+			}
+		}
+
+		for(var model in models)
+		{
+			await _discrepancyDao.deleteModel(model);
+		}
 	}
 
 	void _saveUnsavedDiscrepancies(Event event) async
@@ -85,10 +114,8 @@ class DiscrepancyManager
 
 	void _deleteUndeletedDiscrepancies(Event event) async
 	{
-		for(var eventDiscrepancy in await _eventDiscrepancyDao.getUndeleted(event.id))
+		for(var discrepancy in await _discrepancyDao.getUndeleted(event.id))
 		{
-			Discrepancy discrepancy = await _discrepancyDao.get(eventDiscrepancy.discrepancyId);
-
 			try
 			{
 				var res = await _discrepancyApi.deleteDiscrepancy(discrepancy.id);

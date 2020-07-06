@@ -39,6 +39,35 @@ class ParticipationManager
 		_checkValidResponse();
 		_saveUnsavedParticipations(event);
 		_deleteUndeletedParticipations(event);
+
+		var models = await _participationDao.getSaved(event.id);
+		var keys = [
+			for(var el in models)
+				el.id
+		];
+
+		for(var participation in event.participations)
+		{
+			var eventParticipation = EventParticipation(
+				eventId: event.id,
+				participationId: participation.id,
+				saved: true
+			);
+
+			await _eventParticipationDao.insertModel(eventParticipation);
+
+			int index = keys.indexOf(event.id);
+			if(index != -1)
+			{
+				models.removeAt(index);
+				keys.removeAt(index);
+			}
+		}
+
+		for(var model in models)
+		{
+			await _participationDao.deleteModel(model);
+		}
 	}
 
 	void _saveUnsavedParticipations(Event event) async
@@ -71,10 +100,8 @@ class ParticipationManager
 
 	void _deleteUndeletedParticipations(Event event) async
 	{
-		for(var eventDiscrepancy in await _eventParticipationDao.getUndeleted(event.id))
+		for(var participation in await _participationDao.getUndeleted(event.id))
 		{
-			Participation participation = await _participationDao.get(eventDiscrepancy.participationId);
-
 			try
 			{
 				var res = await _eventApi.presence(event.id, participation);

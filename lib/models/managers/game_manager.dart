@@ -39,14 +39,41 @@ class GameManager
 
 		_checkValidResponse();
 		_deleteUndeletedGames(team);
+
+		var models = await _gameDao.getSaved(team.id);
+		var keys = [
+			for(var el in models)
+				el.id
+		];
+
+		for(var game in team.games)
+		{
+			var teamGame = TeamGame(
+				gameId: game.id,
+				teamId: team.id,
+				saved: true
+			);
+
+			await _teamGameDao.insertModel(teamGame);
+
+			int index = keys.indexOf(game.id);
+			if(index != -1)
+			{
+				models.removeAt(index);
+				keys.removeAt(index);
+			}
+		}
+
+		for(var model in models)
+		{
+			await _gameDao.deleteModel(model);
+		}
 	}
 
 	void _deleteUndeletedGames(Team team) async
 	{
-		for(var teamGame in await _teamGameDao.getUndeleted(team.id))
+		for(var game in await _gameDao.getUndeleted(team.id))
 		{
-			Game game = await _gameDao.get(teamGame.gameId);
-
 			try
 			{
 				var res = await _gameApi.deleteGame(game.id);
