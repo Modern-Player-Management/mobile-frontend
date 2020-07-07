@@ -59,7 +59,7 @@ class TeamViewModel extends BaseViewModel
 	void _addEvent()
 	{
 		_navigation.navigateTo(
-			Routes.manageEventViewRoute,
+			Routes.manageEventView,
 			arguments: ManageEventViewArguments(
 				team: team
 			)
@@ -69,7 +69,7 @@ class TeamViewModel extends BaseViewModel
 	void _addPlayer()
 	{
 		_navigation.navigateTo(
-			Routes.searchPlayerViewRoute,
+			Routes.searchPlayerView,
 			arguments: SearchPlayerViewArguments(
 				team: team
 			)
@@ -79,7 +79,7 @@ class TeamViewModel extends BaseViewModel
 	void edit() async
 	{
 		var res = await _navigation.navigateTo(
-			Routes.manageTeamViewRoute,
+			Routes.manageTeamView,
 			arguments: ManageTeamViewArguments(
 				team: team
 			)
@@ -130,7 +130,7 @@ class TeamCalendarViewModel extends StreamViewModel<List<Event>>
 	get stream async * {
 		await for(var events in _eventDao.getStream(_teamViewModel.team.id))
 		{
-			print(events);
+			print("events: $events");
 			yield events;
 		}
 	}
@@ -176,7 +176,7 @@ class TeamPlayersViewModel extends StreamViewModel<List<Player>>
 	void onTap(Player player)
 	{
 		_navigation.navigateTo(
-			Routes.playerViewRoute,
+			Routes.playerView,
 			arguments: PlayerViewArguments(
 				player: player
 			)

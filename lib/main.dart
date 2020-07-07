@@ -46,8 +46,8 @@ class App extends ViewModelBuilderWidget<AppModel>
 					builder: BotToastInit(),
 					navigatorObservers: [BotToastNavigatorObserver()],
 					theme: theme,
-					initialRoute: Routes.splashViewRoute,
-					onGenerateRoute: Router().onGenerateRoute,
+					initialRoute: Routes.splashView,
+					onGenerateRoute: Router(),
 					navigatorKey: locator<NavigationService>().navigatorKey,
 				);
 			},

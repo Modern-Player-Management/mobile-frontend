@@ -94,7 +94,7 @@ class RegisterViewModel extends BaseViewModel
 				final res = await _authApi.register(player.username, player.email, player.password);
 				if(res.isSuccessful)
 				{
-					_navigation.replaceWith(Routes.loginViewRoute);
+					_navigation.replaceWith(Routes.loginView);
 				}
 				else
 				{
