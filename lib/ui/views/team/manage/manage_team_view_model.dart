@@ -10,6 +10,7 @@ import 'package:http_parser/http_parser.dart';
 
 import 'package:mpm/app/locator.dart';
 import 'package:mpm/utils/utils.dart';
+import 'package:mpm/utils/dialogs.dart';
 
 class ManageTeamViewModel extends BaseViewModel
 {
@@ -18,6 +19,7 @@ class ManageTeamViewModel extends BaseViewModel
 	final _fileApi = locator<FileApi>();
 	final _navigation = locator<NavigationService>();
 
+	final BuildContext context;
 	final formKey = GlobalKey<FormState>();
 
 	final Team team;
@@ -27,6 +29,7 @@ class ManageTeamViewModel extends BaseViewModel
 	bool get hasImage => isEdit && team.image != null && image == null;
 
 	ManageTeamViewModel({
+		@required this.context,
 		Team team
 	}) :
 		this.isEdit = team != null,
@@ -76,6 +79,7 @@ class ManageTeamViewModel extends BaseViewModel
 	{
 		if(formKey.currentState.validate())
 		{
+			showLoadingDialog(context);
 			formKey.currentState.save();
 			team.managerId = _storage.player;
 
@@ -101,19 +105,27 @@ class ManageTeamViewModel extends BaseViewModel
 				}
 			}
 			
+			bool res = false;
+			dynamic result;
+
 			if(isEdit)
 			{
-				if(await _teamManager.updateTeam(team))
+				res = await _teamManager.update(team);
+				if(res)
 				{
-					_navigation.back(result: team);
+					result = team;
 				}
 			}
 			else
 			{
-				if(await _teamManager.insertTeam(team))
-				{
-					_navigation.back();
-				}
+				res = await _teamManager.insert(team);
+			}
+			
+			_navigation.back();
+
+			if(res)
+			{
+				_navigation.back(result: result);
 			}
 		}
 	}
