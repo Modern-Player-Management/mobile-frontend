@@ -4,9 +4,11 @@ import 'package:stacked/stacked.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:ff_navigation_bar/ff_navigation_bar.dart';
 
+import 'package:mpm/services/database/models/event.dart';
 import 'package:mpm/services/database/models/team.dart';
 import 'package:mpm/ui/views/team/team_view_model.dart';
 import 'package:mpm/ui/widgets/circle_avatar_image.dart';
+import 'package:mpm/utils/colors.dart';
 
 class TeamView extends ViewModelBuilderWidget<TeamViewModel>
 {
@@ -104,7 +106,7 @@ class _Tabs extends ViewModelWidget<TeamViewModel>
 			controller: model.controller,
 			onPageChanged: model.onPageChanged,
 			children: <Widget>[
-				_Calendar(),
+				_Events(),
 				_TeamPlayersView()
 			],
 		);
@@ -134,17 +136,40 @@ class _NavigationBar extends ViewModelWidget<TeamViewModel>
 	}
 }
 
-class _Calendar extends ViewModelBuilderWidget<TeamCalendarViewModel>
+class _Events extends ViewModelBuilderWidget<TeamCalendarViewModel>
 {
 	@override
 	Widget builder(context, model, child)
 	{
-		return TableCalendar(
-			locale: 'fr_FR',
-			headerStyle: HeaderStyle(
-				formatButtonVisible: false
-			),
-			calendarController: model.calendarController,
+		return CustomScrollView(
+			physics: BouncingScrollPhysics(),
+			slivers: <Widget>[
+				SliverToBoxAdapter(
+					child: _Calendar(),
+				),
+				SliverToBoxAdapter(
+					child: Padding(
+						padding: const EdgeInsets.symmetric(horizontal: 8),
+						child: Text(
+							"Events",
+							style: Theme.of(context).textTheme.headline6,
+						),
+					),
+				),
+				SliverList(
+					delegate: SliverChildBuilderDelegate(
+						(context, index) {
+							Event event = model.selectedEvents[index];
+							return ListTile(
+								title: Text(
+									event.name
+								),
+							);
+						},
+						childCount: model.selectedEvents.length
+					),
+				)
+			],	
 		);
 	}
 
@@ -157,6 +182,58 @@ class _Calendar extends ViewModelBuilderWidget<TeamCalendarViewModel>
 	}
 }
 
+class _Calendar extends ViewModelWidget<TeamCalendarViewModel>
+{
+	@override
+	Widget build(context, model)
+	{
+		return TableCalendar(
+			locale: 'fr_FR',
+			headerStyle: HeaderStyle(
+				formatButtonVisible: false
+			),
+			calendarController: model.calendarController,
+			onDaySelected: model.onDaySelected,
+			events: model.data,
+			calendarStyle: CalendarStyle(
+				outsideDaysVisible: false,
+				todayColor: ThemeColors.accent,
+				selectedColor: ThemeColors.primary
+			),
+			availableGestures: AvailableGestures.horizontalSwipe,
+			builders: CalendarBuilders(
+				markersBuilder: (context, date, events, holidays) {
+					if(events.isNotEmpty)
+					{
+						return [AnimatedContainer(
+							duration: const Duration(milliseconds: 300),
+							decoration: BoxDecoration(
+								shape: BoxShape.rectangle,
+								color: model.calendarController.isToday(date) ? 
+									ThemeColors.primary :
+									ThemeColors.accent
+							),
+							width: 16.0,
+							height: 16.0,
+							child: Center(
+								child: Text(
+									'${events.length}',
+									style: TextStyle().copyWith(
+										color: Colors.white,
+										fontSize: 12,
+									),
+								),
+							),
+						)];
+					}
+
+					return [];
+				}
+			),
+		);
+	}
+}
+
 class _TeamPlayersView extends ViewModelBuilderWidget<TeamPlayersViewModel>
 {
 	@override
@@ -164,6 +241,7 @@ class _TeamPlayersView extends ViewModelBuilderWidget<TeamPlayersViewModel>
 	{
 		return model.dataReady ?
 		ListView.builder(
+			physics: BouncingScrollPhysics(),
 			itemCount: model.data.length,
 			itemBuilder: (context, index) {
 				var player = model.data[index];
