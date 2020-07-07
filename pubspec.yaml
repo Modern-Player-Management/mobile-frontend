@@ -29,6 +29,7 @@ dependencies:
   dynamic_theme: ^1.0.1
   flappy_search_bar: ^1.7.2
   table_calendar: ^2.2.3
+  ff_navigation_bar: ^0.1.5
 
   # services
   flutter_secure_storage: ^3.3.3

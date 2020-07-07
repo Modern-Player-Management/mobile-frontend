@@ -15,12 +15,53 @@ class TeamViewModel extends BaseViewModel
 	final BuildContext context;
 	Team team;
 
+	int selectedTab = 0;
+	final controller = PageController();
+
 	TeamViewModel({
 		@required this.context,
 		@required this.team
 	});
 
-	void addPlayer()
+	void setPlayers(List<Player> players)
+	{
+		team.players = players;
+		notifyListeners();
+	}
+
+	void onPageChanged(int index)
+	{
+		selectedTab = index;
+		notifyListeners();
+	}
+
+	void onSelectTab(int index)
+	{
+		selectedTab = index;
+		controller.animateToPage(
+			index, 
+			duration: Duration(milliseconds: 300), 
+			curve: Curves.easeInOut
+		);
+		notifyListeners();
+	}
+
+	void add()
+	{
+		switch(selectedTab)
+		{
+			case 0: _addEvent(); break;
+			case 1: _addPlayer(); break;
+			default: break; // wut ?
+		}
+	}
+
+	void _addEvent()
+	{
+
+	}
+
+	void _addPlayer()
 	{
 		_navigation.navigateTo(
 			Routes.searchPlayerViewRoute,
@@ -103,7 +144,13 @@ class TeamPlayersViewModel extends StreamViewModel<List<Player>>
 	}
 
 	@override
-	get stream => _playerDao.getStream(_teamViewModel.team.id, _teamViewModel.team.managerId);
+	get stream async * {
+		await for(var players in _playerDao.getStream(_teamViewModel.team.id, _teamViewModel.team.managerId))
+		{
+			_teamViewModel.setPlayers(players);
+			yield players;
+		}
+	}
 
 	void onPressed(Player player) async
 	{
