@@ -15,6 +15,7 @@ class EventManager
 	final _eventTypeDao = locator<AppDatabase>().eventTypeDao;
 
 	final _storage = locator<SecureStorage>();
+	final _uuid = locator<Uuid>();
 
 	DiscrepancyManager _discrepancyManager;
 	ParticipationManager _participationManager;
@@ -48,7 +49,7 @@ class EventManager
 		_saveUnsavedEvents(team);
 		_deleteUndeletedEvents(team);
 
-		_syncTypes();
+		await _syncTypes();
 
 		var models = await _eventDao.getSaved(team.id);
 		var keys = [
@@ -58,6 +59,7 @@ class EventManager
 
 		for(var event in team.events)
 		{
+			event.teamId = team.id;
 			await _eventDao.insertModel(event);
 			int index = keys.indexOf(event.id);
 			if(index != -1)
@@ -155,5 +157,99 @@ class EventManager
 		{
 			print("syncTypes: $e");
 		}
+	}
+
+	Future<bool> insert(Team team, Event event) async
+	{
+		_checkValidResponse();
+
+		event.id = _uuid.v1();
+		event.teamId = team.id;
+		event.create = true;
+
+		await _eventDao.insertModel(event);
+
+		try
+		{
+			var response = await _teamApi.addEvent(team.id, event);
+			if(validResponse(response))
+			{
+				var id = response.body.id;
+				await _eventDao.updateId(event.id, id);
+
+				event.id = id;
+				event.saved = true;
+				event.create = false;
+				await _eventDao.updateModel(event);
+			}
+			else
+			{
+				return false;
+			}
+		}
+		catch(e)
+		{
+			print("insertEvent: $e");
+			return false;
+		}
+
+		return true;
+	}
+
+	Future<bool> update(Event event) async
+	{
+		_checkValidResponse();
+
+		event.saved = false;
+		await _eventDao.updateModel(event);
+
+		try
+		{
+			var response = await _eventApi.updateEvent(event.id, event);
+			if(validResponse(response))
+			{
+				event.saved = true;
+				await _eventDao.updateModel(event);
+			}
+			else
+			{
+				return false;
+			}
+		}
+		catch(e) 
+		{
+			print("updateEvent: $e");
+			return false;
+		}
+
+		return true;
+	}
+
+	Future<bool> delete(Event event) async
+	{
+		_checkValidResponse();
+
+		event.deleted = true;
+		await _eventDao.updateModel(event);
+
+		try
+		{
+			var response = await _eventApi.deleteEvent(event.id);
+			if(validResponse(response))
+			{
+				await _eventDao.deleteModel(event);
+			}
+			else
+			{
+				return false;
+			}
+		}
+		catch(e) 
+		{
+			print("deleteEvent: $e");
+			return false;
+		}
+
+		return true;
 	}
 }
