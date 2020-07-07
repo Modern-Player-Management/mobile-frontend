@@ -20,4 +20,10 @@ class EventType
 	});
 
 	static const fromJson = _$EventTypeFromJson;
+
+	@override
+	String toString() 
+	{
+		return name;
+	}
 }

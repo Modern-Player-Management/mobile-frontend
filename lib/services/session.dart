@@ -25,7 +25,7 @@ class Session
 			_storage.player = null;
 
 			_navigation.pushNamedAndRemoveUntil(
-				Routes.authViewRoute, 
+				Routes.authView, 
 				predicate: (route) => route == null
 			);
 		}
@@ -42,7 +42,7 @@ class Session
 			if(redirect)
 			{
 				_navigation.pushNamedAndRemoveUntil(
-					Routes.homeViewRoute, 
+					Routes.homeView, 
 					predicate: (route) => route == null
 				);
 			}
@@ -68,7 +68,7 @@ class Session
 	void _goToAuthView()
 	{
 		_navigation.pushNamedAndRemoveUntil(
-			Routes.authViewRoute, 
+			Routes.authView, 
 			predicate: (route) => route == null
 		);
 	}

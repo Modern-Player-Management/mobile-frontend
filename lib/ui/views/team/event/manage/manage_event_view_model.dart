@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:mpm/utils/toast_factory.dart';
 
 import 'package:stacked/stacked.dart';
+import 'package:flutter_picker/flutter_picker.dart';
 
 import 'package:mpm/app/locator.dart';
 import 'package:mpm/utils/utils.dart';
+import 'package:mpm/utils/toast_factory.dart';
 
-class ManageEventViewModel extends BaseViewModel
+class ManageEventViewModel extends FutureViewModel<List<EventType>>
 {
 	final BuildContext context;
 	final Team team;
@@ -16,9 +17,21 @@ class ManageEventViewModel extends BaseViewModel
 	DateTime start;
 	DateTime end;
 
+	final _eventTypeDao = locator<AppDatabase>().eventTypeDao;
 	final _navigation = locator<NavigationService>();
 
 	final formKey = GlobalKey<FormState>();
+	final scaffoldKey = GlobalKey<ScaffoldState>();
+
+	String get type {
+		if(event?.type != null && data.isNotEmpty)
+		{
+			return data[event.type].name;
+		}
+
+		return "Select an event type";
+	} 
+
 
 	ManageEventViewModel({
 		@required this.context,
@@ -26,7 +39,7 @@ class ManageEventViewModel extends BaseViewModel
 		Event event
 	}) :
 		this.isEdit = event != null,
-		this.event = event ?? Event()
+		this.event = event ?? Event(currentHasConfirmed: false)
 	{
 		if(event?.start != null && event.start.isNotEmpty)
 		{
@@ -37,6 +50,29 @@ class ManageEventViewModel extends BaseViewModel
 		{
 			end = DateTime.parse(event.end);
 		}
+	}
+
+	@override
+	Future<List<EventType>> futureToRun() => _eventTypeDao.get();
+
+	String nameValidator(String str)
+	{
+		if(str.isEmpty || str.length < minCharacters)
+		{
+			return "You must enter a name with at least 3 characters";
+		}
+
+		return null;
+	}
+
+	String descriptionValidator(String str)
+	{
+		if(str.isEmpty || str.length < minCharacters)
+		{
+			return "You must enter a description with at least 3 characters";
+		}
+
+		return null;
 	}
 
 	bool onSelectStartDate(DateTime date)
@@ -80,24 +116,24 @@ class ManageEventViewModel extends BaseViewModel
 		return true;
 	}
 
-	String nameValidator(String str)
+	void selectEventType()
 	{
-		if(str.isEmpty || str.length < minCharacters)
-		{
-			return "You must enter a name with at least 3 characters";
-		}
-
-		return null;
+		Picker(
+			itemExtent: 48,
+			adapter: PickerDataAdapter<EventType>(
+				pickerdata: data
+			),
+			onConfirm: (picker, selected) {
+				event.type = selected[0];
+				notifyListeners();
+			}
+		).showModal(context);
 	}
 
-	String descriptionValidator(String str)
+	void onChanged(bool value)
 	{
-		if(str.isEmpty || str.length < minCharacters)
-		{
-			return "You must enter a description with at least 3 characters";
-		}
-
-		return null;
+		event.currentHasConfirmed = value;
+		notifyListeners();
 	}
 
 	void manageEvent() async

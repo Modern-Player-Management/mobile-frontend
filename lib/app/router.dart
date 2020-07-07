@@ -1,6 +1,8 @@
 
 import 'package:auto_route/auto_route_annotations.dart';
 
+import 'package:mpm/services/database/models/models.dart';
+
 import 'package:mpm/ui/views/splash/splash_view.dart';
 
 import 'package:mpm/ui/views/auth/auth_view.dart';
@@ -16,22 +18,24 @@ import 'package:mpm/ui/views/team/manage/manage_team_view.dart';
 import 'package:mpm/ui/views/player/player_view.dart';
 import 'package:mpm/ui/views/player/search/search_player_view.dart';
 
-@MaterialAutoRouter()
+@MaterialAutoRouter(
+	routes: [
+		AdaptiveRoute(page: SplashView, initial: true),
+
+		AdaptiveRoute(page: AuthView),
+		AdaptiveRoute(page: LoginView),
+		AdaptiveRoute(page: RegisterView),
+
+		AdaptiveRoute(page: HomeView),
+
+		AdaptiveRoute(page: TeamView),
+		AdaptiveRoute<Team>(page: ManageTeamView),
+		AdaptiveRoute<Event>(page: ManageEventView),
+
+		AdaptiveRoute(page: PlayerView),
+		AdaptiveRoute(page: SearchPlayerView),
+	]
+)
 class $Router
 {
-	@initial
-	SplashView splashViewRoute;
-
-	AuthView authViewRoute;
-	LoginView loginViewRoute;
-	RegisterView registerViewRoute;
-
-	HomeView homeViewRoute;
-
-	TeamView teamViewRoute;
-	ManageTeamView manageTeamViewRoute;
-	ManageEventView manageEventViewRoute;
-
-	PlayerView playerViewRoute;
-	SearchPlayerView searchPlayerViewRoute;
 }

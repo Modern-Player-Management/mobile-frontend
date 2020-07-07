@@ -20,9 +20,13 @@ class ManageEventView extends ViewModelBuilderWidget<ManageEventViewModel>
 	});
 
 	@override
+	bool get reactive => false;
+
+	@override
 	Widget builder(context, model, child)
 	{
 		return Scaffold(
+			key: model.scaffoldKey,
 			resizeToAvoidBottomInset: false,
 			appBar: AppBar(
 				title: Text(
@@ -38,7 +42,9 @@ class ManageEventView extends ViewModelBuilderWidget<ManageEventViewModel>
 							_NameTextField(),
 							_DescriptionTextField(),
 							SizedBox(height: 4),
-							_Dates()
+							_Dates(),
+							_Type(),
+							_Confirm()
 						],
 					),
 				),
@@ -130,6 +136,52 @@ class _Dates extends ViewModelWidget<ManageEventViewModel>
 					selectText: "Select an end date",
 				),
 			],
+		);
+	}
+}
+
+class _Type extends ViewModelWidget<ManageEventViewModel>
+{
+	@override
+	Widget build(context, model)
+	{
+		return Card(
+			child: InkWell(
+				child: Row(
+					children: <Widget>[
+						Padding(
+							padding: const EdgeInsets.all(16),
+							child: Text(
+								model.type,
+								style: Theme.of(context).textTheme.subtitle1,
+							),
+						),
+
+					],
+				),
+				onTap: model.selectEventType,
+			)
+		);
+	}
+}
+
+class _Confirm extends ViewModelWidget<ManageEventViewModel>
+{
+	@override
+	Widget build(context, model)
+	{
+		return Card(
+			child: ListTile(
+				title: Text(
+					"Confirm presence",
+					style: Theme.of(context).textTheme.subtitle1,
+				),
+				trailing: Switch.adaptive(
+					value: model.event.currentHasConfirmed,
+					onChanged: model.onChanged,
+				),
+				onTap: () => model.onChanged(!model.event.currentHasConfirmed),
+			),
 		);
 	}
 }

@@ -8,11 +8,11 @@ class AuthViewModel extends BaseViewModel
 
 	void toLogin()
 	{
-		navigation.navigateTo(Routes.loginViewRoute);
+		navigation.navigateTo(Routes.loginView);
 	}
 
 	void toRegister()
 	{
-		navigation.navigateTo(Routes.registerViewRoute);
+		navigation.navigateTo(Routes.registerView);
 	}
 }
