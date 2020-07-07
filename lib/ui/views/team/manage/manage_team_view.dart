@@ -58,6 +58,7 @@ class ManageTeamView extends ViewModelBuilderWidget<ManageTeamViewModel>
 	ManageTeamViewModel viewModelBuilder(context)
 	{
 		return ManageTeamViewModel(
+			context: context,
 			team: team
 		);
 	}
