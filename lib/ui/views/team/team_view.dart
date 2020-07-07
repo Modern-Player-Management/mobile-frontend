@@ -1,9 +1,8 @@
-import 'package:ff_navigation_bar/ff_navigation_bar.dart';
 import 'package:flutter/material.dart';
-import 'package:mpm/main.dart';
 
 import 'package:stacked/stacked.dart';
 import 'package:table_calendar/table_calendar.dart';
+import 'package:ff_navigation_bar/ff_navigation_bar.dart';
 
 import 'package:mpm/services/database/models/team.dart';
 import 'package:mpm/ui/views/team/team_view_model.dart';
@@ -44,7 +43,6 @@ class TeamView extends ViewModelBuilderWidget<TeamViewModel>
 			) : null
 		);
 	}
-  
 	@override
 	TeamViewModel viewModelBuilder(context)
 	{
@@ -53,6 +51,7 @@ class TeamView extends ViewModelBuilderWidget<TeamViewModel>
 			team: team
 		);
 	}
+  
 }
 
 class _Header extends ViewModelWidget<TeamViewModel>

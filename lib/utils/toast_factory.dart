@@ -55,6 +55,7 @@ class ToastFactory
 					fontSize: 18
 				),
 			),
+			duration: duration,
 			background: color
 		);
 	}

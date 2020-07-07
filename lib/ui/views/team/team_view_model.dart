@@ -58,7 +58,12 @@ class TeamViewModel extends BaseViewModel
 
 	void _addEvent()
 	{
-
+		_navigation.navigateTo(
+			Routes.manageEventViewRoute,
+			arguments: ManageEventViewArguments(
+				team: team
+			)
+		);
 	}
 
 	void _addPlayer()
@@ -122,7 +127,13 @@ class TeamCalendarViewModel extends StreamViewModel<List<Event>>
 	}
 
 	@override
-	get stream => _eventDao.getStream(_teamViewModel.team.id);
+	get stream async * {
+		await for(var events in _eventDao.getStream(_teamViewModel.team.id))
+		{
+			print(events);
+			yield events;
+		}
+	}
 }
 
 class TeamPlayersViewModel extends StreamViewModel<List<Player>>

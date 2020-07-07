@@ -23,6 +23,7 @@ class ManageTeamView extends ViewModelBuilderWidget<ManageTeamViewModel>
   	Widget builder(context, model, child)
 	{
 		return Scaffold(
+			resizeToAvoidBottomInset: false,
 			appBar: AppBar(
 				title: Text(
 					"${model.isEdit ? "Edit" : "Create"} a team"
