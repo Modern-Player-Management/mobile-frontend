@@ -782,44 +782,44 @@ class _$DiscrepancyDao extends DiscrepancyDao {
   }
 
   @override
-  Stream<List<Discrepancy>> getStream(String teamId) {
+  Stream<List<Discrepancy>> getStream(String eventId) {
     return _queryAdapter.queryListStream(
-        'select * from discrepancies where teamId = ? and deleted = 0',
-        arguments: <dynamic>[teamId],
+        'select * from discrepancies where eventId = ? and deleted = 0',
+        arguments: <dynamic>[eventId],
         queryableName: 'discrepancies',
         isView: false,
         mapper: _discrepanciesMapper);
   }
 
   @override
-  Future<List<Discrepancy>> getList(String teamId) async {
+  Future<List<Discrepancy>> getList(String eventId) async {
     return _queryAdapter.queryList(
-        'select * from discrepancies where teamId = ? and deleted = 0',
-        arguments: <dynamic>[teamId],
+        'select * from discrepancies where eventId = ? and deleted = 0',
+        arguments: <dynamic>[eventId],
         mapper: _discrepanciesMapper);
   }
 
   @override
-  Future<List<Discrepancy>> getSaved(String teamId) async {
+  Future<List<Discrepancy>> getSaved(String eventId) async {
     return _queryAdapter.queryList(
-        'select * from discrepancies where teamId = ? and saved = 1 and deleted = 0',
-        arguments: <dynamic>[teamId],
+        'select * from discrepancies where eventId = ? and saved = 1 and deleted = 0',
+        arguments: <dynamic>[eventId],
         mapper: _discrepanciesMapper);
   }
 
   @override
-  Future<List<Discrepancy>> getUnsaved(String teamId) async {
+  Future<List<Discrepancy>> getUnsaved(String eventId) async {
     return _queryAdapter.queryList(
-        'select * from discrepancies where teamId = ? and saved = 0 and deleted = 0',
-        arguments: <dynamic>[teamId],
+        'select * from discrepancies where eventId = ? and saved = 0 and deleted = 0',
+        arguments: <dynamic>[eventId],
         mapper: _discrepanciesMapper);
   }
 
   @override
-  Future<List<Discrepancy>> getUndeleted(String teamId) async {
+  Future<List<Discrepancy>> getUndeleted(String eventId) async {
     return _queryAdapter.queryList(
-        'select * from discrepancies where teamId = ? and deleted = 1',
-        arguments: <dynamic>[teamId],
+        'select * from discrepancies where eventId = ? and deleted = 1',
+        arguments: <dynamic>[eventId],
         mapper: _discrepanciesMapper);
   }
 
@@ -933,44 +933,44 @@ class _$ParticipationDao extends ParticipationDao {
   }
 
   @override
-  Stream<List<Participation>> getStream(String teamId) {
+  Stream<List<Participation>> getStream(String eventId) {
     return _queryAdapter.queryListStream(
-        'select * from participations where teamId = ? and deleted = 0',
-        arguments: <dynamic>[teamId],
+        'select * from participations where eventId = ? and deleted = 0',
+        arguments: <dynamic>[eventId],
         queryableName: 'participations',
         isView: false,
         mapper: _participationsMapper);
   }
 
   @override
-  Future<List<Participation>> getList(String teamId) async {
+  Future<List<Participation>> getList(String eventId) async {
     return _queryAdapter.queryList(
-        'select * from participations where teamId = ? and deleted = 0',
-        arguments: <dynamic>[teamId],
+        'select * from participations where eventId = ? and deleted = 0',
+        arguments: <dynamic>[eventId],
         mapper: _participationsMapper);
   }
 
   @override
-  Future<List<Participation>> getSaved(String teamId) async {
+  Future<List<Participation>> getSaved(String eventId) async {
     return _queryAdapter.queryList(
-        'select * from participations where teamId = ? and saved = 1 and deleted = 0',
-        arguments: <dynamic>[teamId],
+        'select * from participations where eventId = ? and saved = 1 and deleted = 0',
+        arguments: <dynamic>[eventId],
         mapper: _participationsMapper);
   }
 
   @override
-  Future<List<Participation>> getUnsaved(String teamId) async {
+  Future<List<Participation>> getUnsaved(String eventId) async {
     return _queryAdapter.queryList(
-        'select * from participations where teamId = ? and saved = 0 and deleted = 0',
-        arguments: <dynamic>[teamId],
+        'select * from participations where eventId = ? and saved = 0 and deleted = 0',
+        arguments: <dynamic>[eventId],
         mapper: _participationsMapper);
   }
 
   @override
-  Future<List<Participation>> getUndeleted(String teamId) async {
+  Future<List<Participation>> getUndeleted(String eventId) async {
     return _queryAdapter.queryList(
-        'select * from participations where teamId = ? and deleted = 1',
-        arguments: <dynamic>[teamId],
+        'select * from participations where eventId = ? and deleted = 1',
+        arguments: <dynamic>[eventId],
         mapper: _participationsMapper);
   }
 
