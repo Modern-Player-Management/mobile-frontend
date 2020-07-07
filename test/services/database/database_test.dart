@@ -61,7 +61,7 @@ void deleteTeamWithTwoPlayers() async
 	expect(teams.length, equals(0));
 
 	final events = await _db.playerDao.getList(team.id, team.managerId);
-	expect(events.length, equals(2));
+	expect(events.length, equals(1));
 }
 
 void deleteTeamWithTwoEvents() async
