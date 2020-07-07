@@ -29,7 +29,7 @@ class ManageEventViewModel extends FutureViewModel<List<EventType>>
 			return data[event.type].name;
 		}
 
-		return "Select an event type";
+		return "Select a type";
 	} 
 
 
