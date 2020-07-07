@@ -6,6 +6,7 @@ import 'package:flutter_picker/flutter_picker.dart';
 import 'package:mpm/app/locator.dart';
 import 'package:mpm/utils/utils.dart';
 import 'package:mpm/utils/toast_factory.dart';
+import 'package:mpm/utils/dialogs.dart';
 
 class ManageEventViewModel extends FutureViewModel<List<EventType>>
 {
@@ -39,18 +40,9 @@ class ManageEventViewModel extends FutureViewModel<List<EventType>>
 		Event event
 	}) :
 		this.isEdit = event != null,
-		this.event = event ?? Event(currentHasConfirmed: false)
-	{
-		if(event?.start != null && event.start.isNotEmpty)
-		{
-			start = DateTime.parse(event.start);
-		}
-
-		if(event?.end != null && event.end.isNotEmpty)
-		{
-			end = DateTime.parse(event.end);
-		}
-	}
+		this.event = event ?? Event(currentHasConfirmed: false),
+		this.start = event?.startDate,
+		this.end = event?.endDate;
 
 	@override
 	Future<List<EventType>> futureToRun() => _eventTypeDao.get();
@@ -143,9 +135,31 @@ class ManageEventViewModel extends FutureViewModel<List<EventType>>
 	{
 		if(formKey.currentState.validate())
 		{
+			showLoadingDialog(context);
 			formKey.currentState.save();
 
+			bool res = false;
+			dynamic result;
+
+			if(isEdit)
+			{
+				res = await _eventManager.update(event);
+				if(res)
+				{
+					result = event;
+				}
+			}
+			else
+			{
+				res = await _eventManager.insert(team, event);
+			}
+
+			_navigation.back();
 			
+			if(res)
+			{
+				_navigation.back(result: result);
+			}
 		}
 	}
 }
