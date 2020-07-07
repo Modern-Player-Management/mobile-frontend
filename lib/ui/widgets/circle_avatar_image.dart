@@ -34,7 +34,7 @@ class _CircleAvatarImageState extends State<CircleAvatarImage>
 	{
 		super.initState();
 		hasImage = widget.image != null;
-		url = "$serverUrl/api/files/${widget.image}";
+		url = "$serverUrl/files/${widget.image}";
 		headers = {
 			"Authorization": "Bearer ${_storage.token}"
 		};

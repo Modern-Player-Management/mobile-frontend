@@ -96,7 +96,7 @@ class _$AppDatabase extends AppDatabase {
         await database.execute(
             'CREATE TABLE IF NOT EXISTS `players` (`id` TEXT, `username` TEXT, `email` TEXT, `image` TEXT, `created` TEXT, `calendarSecret` TEXT, PRIMARY KEY (`id`))');
         await database.execute(
-            'CREATE TABLE IF NOT EXISTS `team_players` (`teamId` TEXT, `playerId` TEXT, `saved` INTEGER, `deleted` INTEGER, FOREIGN KEY (`teamId`) REFERENCES `teams` (`id`) ON UPDATE CASCADE ON DELETE CASCADE, FOREIGN KEY (`playerId`) REFERENCES `players` (`id`) ON UPDATE CASCADE ON DELETE CASCADE, PRIMARY KEY (`teamId`, `playerId`))');
+            'CREATE TABLE IF NOT EXISTS `team_players` (`teamId` TEXT, `playerId` TEXT, `saved` INTEGER, `deleted` INTEGER, PRIMARY KEY (`teamId`, `playerId`))');
         await database.execute(
             'CREATE TABLE IF NOT EXISTS `events` (`id` TEXT, `teamId` TEXT, `start` TEXT, `end` TEXT, `name` TEXT, `description` TEXT, `type` INTEGER, `currentHasConfirmed` INTEGER, `saved` INTEGER, `create` INTEGER, `deleted` INTEGER, FOREIGN KEY (`teamId`) REFERENCES `teams` (`id`) ON UPDATE CASCADE ON DELETE CASCADE, PRIMARY KEY (`id`))');
         await database.execute(
@@ -107,6 +107,10 @@ class _$AppDatabase extends AppDatabase {
             'CREATE TABLE IF NOT EXISTS `games` (`id` TEXT, `name` TEXT, `date` TEXT, `win` INTEGER, `teamId` TEXT, `saved` INTEGER, `create` INTEGER, `deleted` INTEGER, FOREIGN KEY (`teamId`) REFERENCES `teams` (`id`) ON UPDATE CASCADE ON DELETE CASCADE, PRIMARY KEY (`id`))');
         await database
             .execute('CREATE INDEX `index_teams_player` ON `teams` (`player`)');
+        await database.execute(
+            'CREATE INDEX `index_team_players_teamId` ON `team_players` (`teamId`)');
+        await database.execute(
+            'CREATE INDEX `index_team_players_playerId` ON `team_players` (`playerId`)');
 
         await callback?.onCreate?.call(database, version);
       },
@@ -375,7 +379,7 @@ class _$PlayerDao extends PlayerDao {
   @override
   Stream<List<Player>> getStream(String teamId, String managerId) {
     return _queryAdapter.queryListStream(
-        'select * from players left join team_players on players.id = team_players.playerId and team_players.teamId = ? and team_players.playerId != ? and team_players.deleted = 0',
+        'select * from players p inner join team_players tp on p.id = tp.playerId and tp.teamId = ? and tp.playerId != ? and tp.deleted = 0',
         arguments: <dynamic>[teamId, managerId],
         queryableName: 'players',
         isView: false,
@@ -385,7 +389,7 @@ class _$PlayerDao extends PlayerDao {
   @override
   Future<List<Player>> getList(String teamId, String managerId) async {
     return _queryAdapter.queryList(
-        'select * from players left join team_players on players.id = team_players.playerId and team_players.teamId = ? and team_players.playerId != ? and team_players.deleted = 0',
+        'select * from players inner join team_players on players.id = team_players.playerId and team_players.teamId = ? and team_players.playerId != ? and team_players.deleted = 0',
         arguments: <dynamic>[teamId, managerId],
         mapper: _playersMapper);
   }
