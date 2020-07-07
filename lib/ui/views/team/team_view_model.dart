@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:mpm/utils/dialogs.dart';
 
 import 'package:stacked/stacked.dart';
 import 'package:table_calendar/table_calendar.dart';
 
 import 'package:mpm/app/locator.dart';
+import 'package:mpm/utils/dialogs.dart';
 
 class TeamViewModel extends BaseViewModel
 {
@@ -102,7 +102,7 @@ class TeamViewModel extends BaseViewModel
 
 		if(res)
 		{
-			await _teamManager.deleteTeam(team);
+			await _teamManager.delete(team);
 			_navigation.back();
 		}
 	}
@@ -110,12 +110,14 @@ class TeamViewModel extends BaseViewModel
 	bool get isManager => team.managerId == _storage.player;
 }
 
-class TeamCalendarViewModel extends StreamViewModel<List<Event>>
+class TeamCalendarViewModel extends StreamViewModel<Map<DateTime, List<Event>>>
 {
 	final _eventDao = locator<AppDatabase>().eventDao;
 
 	final BuildContext context;
 	TeamViewModel _teamViewModel;
+
+	List<Event> selectedEvents = [];
 
 	final calendarController = CalendarController();
 
@@ -130,9 +132,31 @@ class TeamCalendarViewModel extends StreamViewModel<List<Event>>
 	get stream async * {
 		await for(var events in _eventDao.getStream(_teamViewModel.team.id))
 		{
-			print("events: $events");
-			yield events;
+			Map<DateTime, List<Event>> map = {};
+
+			for(var event in events)
+			{
+				var date = event.startDate;
+				date = DateTime(date.year, date.month, date.day);
+
+				if(map.containsKey(date))
+				{
+					map[date].add(event);
+				}
+				else
+				{
+					map[date] = [event];
+				}
+			}
+
+			yield map;
 		}
+	}
+
+	void onDaySelected(DateTime date, List<dynamic> events)
+	{
+		selectedEvents = List.from(events);
+		notifyListeners();
 	}
 }
 
