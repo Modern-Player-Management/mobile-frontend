@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-void showLoadingDialog(BuildContext context, {Function willPop, bool canPop = true}) 
+void showLoadingDialog(BuildContext context, {Function willPop, bool canPop = false}) 
 {
 	showDialog(
 		context: context,
