@@ -18,10 +18,10 @@ class ManageEventViewModel extends FutureViewModel<List<EventType>>
 	DateTime end;
 
 	final _eventTypeDao = locator<AppDatabase>().eventTypeDao;
+	final _eventManager = locator<EventManager>();
 	final _navigation = locator<NavigationService>();
 
 	final formKey = GlobalKey<FormState>();
-	final scaffoldKey = GlobalKey<ScaffoldState>();
 
 	String get type {
 		if(event?.type != null && data.isNotEmpty)
@@ -92,6 +92,7 @@ class ManageEventViewModel extends FutureViewModel<List<EventType>>
 		}
 
 		start = date;
+		event.start = start.toIso8601String();
 
 		return true;
 	}
@@ -111,7 +112,9 @@ class ManageEventViewModel extends FutureViewModel<List<EventType>>
 				return false;
 			}
 		}
+
 		end = date;
+		event.end = end.toIso8601String();
 
 		return true;
 	}
@@ -138,6 +141,11 @@ class ManageEventViewModel extends FutureViewModel<List<EventType>>
 
 	void manageEvent() async
 	{
+		if(formKey.currentState.validate())
+		{
+			formKey.currentState.save();
 
+			
+		}
 	}
 }

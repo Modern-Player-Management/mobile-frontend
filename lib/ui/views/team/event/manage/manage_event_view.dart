@@ -26,7 +26,6 @@ class ManageEventView extends ViewModelBuilderWidget<ManageEventViewModel>
 	Widget builder(context, model, child)
 	{
 		return Scaffold(
-			key: model.scaffoldKey,
 			resizeToAvoidBottomInset: false,
 			appBar: AppBar(
 				title: Text(
