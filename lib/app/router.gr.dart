@@ -21,120 +21,120 @@ import 'package:mpm/ui/views/player/player_view.dart';
 import 'package:mpm/services/database/models/player.dart';
 import 'package:mpm/ui/views/player/search/search_player_view.dart';
 
-abstract class Routes {
-  static const splashViewRoute = '/';
-  static const authViewRoute = '/auth-view-route';
-  static const loginViewRoute = '/login-view-route';
-  static const registerViewRoute = '/register-view-route';
-  static const homeViewRoute = '/home-view-route';
-  static const teamViewRoute = '/team-view-route';
-  static const manageTeamViewRoute = '/manage-team-view-route';
-  static const manageEventViewRoute = '/manage-event-view-route';
-  static const playerViewRoute = '/player-view-route';
-  static const searchPlayerViewRoute = '/search-player-view-route';
-  static const all = {
-    splashViewRoute,
-    authViewRoute,
-    loginViewRoute,
-    registerViewRoute,
-    homeViewRoute,
-    teamViewRoute,
-    manageTeamViewRoute,
-    manageEventViewRoute,
-    playerViewRoute,
-    searchPlayerViewRoute,
+class Routes {
+  static const String splashView = '/';
+  static const String authView = '/auth-view';
+  static const String loginView = '/login-view';
+  static const String registerView = '/register-view';
+  static const String homeView = '/home-view';
+  static const String teamView = '/team-view';
+  static const String manageTeamView = '/manage-team-view';
+  static const String manageEventView = '/manage-event-view';
+  static const String playerView = '/player-view';
+  static const String searchPlayerView = '/search-player-view';
+  static const all = <String>{
+    splashView,
+    authView,
+    loginView,
+    registerView,
+    homeView,
+    teamView,
+    manageTeamView,
+    manageEventView,
+    playerView,
+    searchPlayerView,
   };
 }
 
 class Router extends RouterBase {
   @override
-  Set<String> get allRoutes => Routes.all;
-
-  @Deprecated('call ExtendedNavigator.ofRouter<Router>() directly')
-  static ExtendedNavigatorState get navigator =>
-      ExtendedNavigator.ofRouter<Router>();
-
+  List<RouteDef> get routes => _routes;
+  final _routes = <RouteDef>[
+    RouteDef(Routes.splashView, page: SplashView),
+    RouteDef(Routes.authView, page: AuthView),
+    RouteDef(Routes.loginView, page: LoginView),
+    RouteDef(Routes.registerView, page: RegisterView),
+    RouteDef(Routes.homeView, page: HomeView),
+    RouteDef(Routes.teamView, page: TeamView),
+    RouteDef(Routes.manageTeamView, page: ManageTeamView),
+    RouteDef(Routes.manageEventView, page: ManageEventView),
+    RouteDef(Routes.playerView, page: PlayerView),
+    RouteDef(Routes.searchPlayerView, page: SearchPlayerView),
+  ];
   @override
-  Route<dynamic> onGenerateRoute(RouteSettings settings) {
-    final args = settings.arguments;
-    switch (settings.name) {
-      case Routes.splashViewRoute:
-        return MaterialPageRoute<dynamic>(
-          builder: (context) => SplashView(),
-          settings: settings,
-        );
-      case Routes.authViewRoute:
-        return MaterialPageRoute<dynamic>(
-          builder: (context) => AuthView(),
-          settings: settings,
-        );
-      case Routes.loginViewRoute:
-        return MaterialPageRoute<dynamic>(
-          builder: (context) => LoginView(),
-          settings: settings,
-        );
-      case Routes.registerViewRoute:
-        return MaterialPageRoute<dynamic>(
-          builder: (context) => RegisterView(),
-          settings: settings,
-        );
-      case Routes.homeViewRoute:
-        return MaterialPageRoute<dynamic>(
-          builder: (context) => HomeView(),
-          settings: settings,
-        );
-      case Routes.teamViewRoute:
-        if (hasInvalidArgs<TeamViewArguments>(args)) {
-          return misTypedArgsRoute<TeamViewArguments>(args);
-        }
-        final typedArgs = args as TeamViewArguments ?? TeamViewArguments();
-        return MaterialPageRoute<dynamic>(
-          builder: (context) => TeamView(team: typedArgs.team),
-          settings: settings,
-        );
-      case Routes.manageTeamViewRoute:
-        if (hasInvalidArgs<ManageTeamViewArguments>(args)) {
-          return misTypedArgsRoute<ManageTeamViewArguments>(args);
-        }
-        final typedArgs =
-            args as ManageTeamViewArguments ?? ManageTeamViewArguments();
-        return MaterialPageRoute<dynamic>(
-          builder: (context) => ManageTeamView(team: typedArgs.team),
-          settings: settings,
-        );
-      case Routes.manageEventViewRoute:
-        if (hasInvalidArgs<ManageEventViewArguments>(args, isRequired: true)) {
-          return misTypedArgsRoute<ManageEventViewArguments>(args);
-        }
-        final typedArgs = args as ManageEventViewArguments;
-        return MaterialPageRoute<dynamic>(
-          builder: (context) =>
-              ManageEventView(team: typedArgs.team, event: typedArgs.event),
-          settings: settings,
-        );
-      case Routes.playerViewRoute:
-        if (hasInvalidArgs<PlayerViewArguments>(args)) {
-          return misTypedArgsRoute<PlayerViewArguments>(args);
-        }
-        final typedArgs = args as PlayerViewArguments ?? PlayerViewArguments();
-        return MaterialPageRoute<dynamic>(
-          builder: (context) => PlayerView(player: typedArgs.player),
-          settings: settings,
-        );
-      case Routes.searchPlayerViewRoute:
-        if (hasInvalidArgs<SearchPlayerViewArguments>(args)) {
-          return misTypedArgsRoute<SearchPlayerViewArguments>(args);
-        }
-        final typedArgs =
-            args as SearchPlayerViewArguments ?? SearchPlayerViewArguments();
-        return MaterialPageRoute<dynamic>(
-          builder: (context) => SearchPlayerView(team: typedArgs.team),
-          settings: settings,
-        );
-      default:
-        return unknownRoutePage(settings.name);
-    }
-  }
+  Map<Type, AutoRouteFactory> get pagesMap => _pagesMap;
+  final _pagesMap = <Type, AutoRouteFactory>{
+    SplashView: (RouteData data) {
+      return buildAdaptivePageRoute<dynamic>(
+        builder: (context) => SplashView(),
+        settings: data,
+      );
+    },
+    AuthView: (RouteData data) {
+      return buildAdaptivePageRoute<dynamic>(
+        builder: (context) => AuthView(),
+        settings: data,
+      );
+    },
+    LoginView: (RouteData data) {
+      return buildAdaptivePageRoute<dynamic>(
+        builder: (context) => LoginView(),
+        settings: data,
+      );
+    },
+    RegisterView: (RouteData data) {
+      return buildAdaptivePageRoute<dynamic>(
+        builder: (context) => RegisterView(),
+        settings: data,
+      );
+    },
+    HomeView: (RouteData data) {
+      return buildAdaptivePageRoute<dynamic>(
+        builder: (context) => HomeView(),
+        settings: data,
+      );
+    },
+    TeamView: (RouteData data) {
+      var args =
+          data.getArgs<TeamViewArguments>(orElse: () => TeamViewArguments());
+      return buildAdaptivePageRoute<dynamic>(
+        builder: (context) => TeamView(team: args.team),
+        settings: data,
+      );
+    },
+    ManageTeamView: (RouteData data) {
+      var args = data.getArgs<ManageTeamViewArguments>(
+          orElse: () => ManageTeamViewArguments());
+      return buildAdaptivePageRoute<Team>(
+        builder: (context) => ManageTeamView(team: args.team),
+        settings: data,
+      );
+    },
+    ManageEventView: (RouteData data) {
+      var args = data.getArgs<ManageEventViewArguments>(nullOk: false);
+      return buildAdaptivePageRoute<Event>(
+        builder: (context) =>
+            ManageEventView(team: args.team, event: args.event),
+        settings: data,
+      );
+    },
+    PlayerView: (RouteData data) {
+      var args = data.getArgs<PlayerViewArguments>(
+          orElse: () => PlayerViewArguments());
+      return buildAdaptivePageRoute<dynamic>(
+        builder: (context) => PlayerView(player: args.player),
+        settings: data,
+      );
+    },
+    SearchPlayerView: (RouteData data) {
+      var args = data.getArgs<SearchPlayerViewArguments>(
+          orElse: () => SearchPlayerViewArguments());
+      return buildAdaptivePageRoute<dynamic>(
+        builder: (context) => SearchPlayerView(team: args.team),
+        settings: data,
+      );
+    },
+  };
 }
 
 // *************************************************************************

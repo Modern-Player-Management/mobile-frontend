@@ -18,7 +18,7 @@ class HomeViewModel extends BaseViewModel
 	void playerInfo() async
 	{
 		_navigation.navigateTo(
-			Routes.playerViewRoute,
+			Routes.playerView,
 			arguments: PlayerViewArguments(
 				player: await _playerDao.get(_storage.player)
 			)
@@ -27,7 +27,7 @@ class HomeViewModel extends BaseViewModel
 
 	void createTeam()
 	{
-		_navigation.navigateTo(Routes.manageTeamViewRoute);
+		_navigation.navigateTo(Routes.manageTeamView);
 	}
 }
 
@@ -42,7 +42,7 @@ class HomeTeamsViewModel extends StreamViewModel<List<Team>>
 	void onTap(Team team) async
 	{
 		await _navigation.navigateTo(
-			Routes.teamViewRoute,
+			Routes.teamView,
 			arguments: TeamViewArguments(
 				team: team,
 			)
