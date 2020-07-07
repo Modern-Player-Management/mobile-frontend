@@ -29,7 +29,7 @@ class Event
 	String teamId;
 
 	String start, end;
-	String name, description; 
+	String name, description;
 
 	int type;
 
@@ -47,6 +47,24 @@ class Event
 
 	@ignore
 	List<Discrepancy> discrepancies;
+
+	DateTime get startDate {
+		if(start != null && start.isNotEmpty)
+		{
+			return DateTime.parse(start);
+		}
+
+		return null;
+	}
+
+	DateTime get endDate {
+		if(end != null && end.isNotEmpty)
+		{
+			return DateTime.parse(end);
+		}
+
+		return null;
+	}
 
   	Event({
 		this.id, 
