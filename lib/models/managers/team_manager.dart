@@ -80,7 +80,6 @@ class TeamManager
 					}
 
 					await _playerManager.syncPlayers(team);
-
 					await _eventManager.syncEvents(team);
 					await _gameManager.syncGames(team);
 				}
@@ -168,7 +167,6 @@ class TeamManager
 			for(var team in teams)
 			{
 				team.manager = await _playerDao.get(team.managerId);
-				team.players = await _playerDao.getList(team.id, team.managerId);
 			}
 
 			yield teams;
