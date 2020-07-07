@@ -173,18 +173,15 @@ class TeamManager
 		}
 	}
 
-	Future<bool> insertTeam(Team team, [bool add = true]) async
+	Future<bool> insert(Team team) async
 	{
 		_checkValidResponse();
 
-		if(add) 
-		{
-			team.id = _uuid.v1();
-			team.player = _storage.player;
-			team.saved = false;
+		team.id = _uuid.v1();
+		team.player = _storage.player;
+		team.create = true;
 
-			await _teamDao.insertModel(team);
-		}
+		await _teamDao.insertModel(team);
 
 		try
 		{
@@ -196,6 +193,7 @@ class TeamManager
 
 				team.id = id;
 				team.saved = true;
+				team.create = false;
 				await _teamDao.updateModel(team);
 			}
 			else
@@ -205,19 +203,18 @@ class TeamManager
 		}
 		catch(e) 
 		{
-			print("insertModel: $e");
+			print("insertTeam: $e");
 			return false;
 		}
 
 		return true;
 	}
 
-	Future<bool> updateTeam(Team team) async
+	Future<bool> update(Team team) async
 	{
 		_checkValidResponse();
 		
 		team.saved = false;
-		team.create = true;
 		await _teamDao.updateModel(team);
 
 		try
@@ -235,14 +232,14 @@ class TeamManager
 		}
 		catch(e) 
 		{
-			print("updateModel: $e");
+			print("updateTeam: $e");
 			return false;
 		}
 
 		return true;
 	}
 
-	Future<bool> deleteTeam(Team team) async
+	Future<bool> delete(Team team) async
 	{
 		_checkValidResponse();
 		
@@ -263,7 +260,7 @@ class TeamManager
 		}
 		catch(e) 
 		{
-			print("deleteModel: $e");
+			print("deleteTeam: $e");
 			return false;
 		}
 
