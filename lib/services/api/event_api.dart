@@ -60,6 +60,6 @@ abstract class EventApi extends ChopperService
 	@Get(path: "/ical/{icalSecret}")
 	Future<Response> getIcal(@Path() String icalSecret);
 
-	@Get(path: "/ical/{icalSecret}")
+	@Get(path: "/types")
 	Future<Response<List<String>>> getEventTypes();
 }
