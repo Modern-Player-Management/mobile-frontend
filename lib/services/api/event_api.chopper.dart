@@ -57,7 +57,7 @@ class _$EventApi extends EventApi {
 
   @override
   Future<Response<List<String>>> getEventTypes() {
-    final $url = '/ical/{icalSecret}';
+    final $url = '/types';
     final $request = Request('GET', $url, client.baseUrl);
     return client.send<List<String>, String>($request);
   }

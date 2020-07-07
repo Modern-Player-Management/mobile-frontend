@@ -12,6 +12,7 @@ class EventManager
 	final _eventApi = locator<EventApi>();
 
 	final _eventDao = locator<AppDatabase>().eventDao;
+	final _eventTypeDao = locator<AppDatabase>().eventTypeDao;
 
 	final _storage = locator<SecureStorage>();
 
@@ -46,6 +47,8 @@ class EventManager
 		_checkValidResponse();
 		_saveUnsavedEvents(team);
 		_deleteUndeletedEvents(team);
+
+		_syncTypes();
 
 		var models = await _eventDao.getSaved(team.id);
 		var keys = [
@@ -127,6 +130,30 @@ class EventManager
 				print("deleteUndeletedEvents: $e");
 				return;
 			}
+		}
+	}
+
+	Future<void> _syncTypes() async
+	{
+		try
+		{
+			var res = await _eventApi.getEventTypes();
+			if(validResponse(res))
+			{
+				var types = res.body;
+
+				for(int i = 0; i < types.length; i++)
+				{
+					_eventTypeDao.insertModel(EventType(
+						index: i,
+						name: types[i]
+					));
+				}
+			}
+		}
+		catch(e)
+		{
+			print("syncTypes: $e");
 		}
 	}
 }
