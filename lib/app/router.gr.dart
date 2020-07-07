@@ -15,6 +15,8 @@ import 'package:mpm/ui/views/home/home_view.dart';
 import 'package:mpm/ui/views/team/team_view.dart';
 import 'package:mpm/services/database/models/team.dart';
 import 'package:mpm/ui/views/team/manage/manage_team_view.dart';
+import 'package:mpm/ui/views/team/event/manage/manage_event_view.dart';
+import 'package:mpm/services/database/models/event.dart';
 import 'package:mpm/ui/views/player/player_view.dart';
 import 'package:mpm/services/database/models/player.dart';
 import 'package:mpm/ui/views/player/search/search_player_view.dart';
@@ -27,6 +29,7 @@ abstract class Routes {
   static const homeViewRoute = '/home-view-route';
   static const teamViewRoute = '/team-view-route';
   static const manageTeamViewRoute = '/manage-team-view-route';
+  static const manageEventViewRoute = '/manage-event-view-route';
   static const playerViewRoute = '/player-view-route';
   static const searchPlayerViewRoute = '/search-player-view-route';
   static const all = {
@@ -37,6 +40,7 @@ abstract class Routes {
     homeViewRoute,
     teamViewRoute,
     manageTeamViewRoute,
+    manageEventViewRoute,
     playerViewRoute,
     searchPlayerViewRoute,
   };
@@ -98,6 +102,16 @@ class Router extends RouterBase {
           builder: (context) => ManageTeamView(team: typedArgs.team),
           settings: settings,
         );
+      case Routes.manageEventViewRoute:
+        if (hasInvalidArgs<ManageEventViewArguments>(args, isRequired: true)) {
+          return misTypedArgsRoute<ManageEventViewArguments>(args);
+        }
+        final typedArgs = args as ManageEventViewArguments;
+        return MaterialPageRoute<dynamic>(
+          builder: (context) =>
+              ManageEventView(team: typedArgs.team, event: typedArgs.event),
+          settings: settings,
+        );
       case Routes.playerViewRoute:
         if (hasInvalidArgs<PlayerViewArguments>(args)) {
           return misTypedArgsRoute<PlayerViewArguments>(args);
@@ -137,6 +151,13 @@ class TeamViewArguments {
 class ManageTeamViewArguments {
   final Team team;
   ManageTeamViewArguments({this.team});
+}
+
+//ManageEventView arguments holder class
+class ManageEventViewArguments {
+  final Team team;
+  final Event event;
+  ManageEventViewArguments({@required this.team, this.event});
 }
 
 //PlayerView arguments holder class
