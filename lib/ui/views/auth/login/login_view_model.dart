@@ -46,8 +46,8 @@ class LoginViewModel extends BaseViewModel
 	{
 		if(formKey.currentState.validate())
 		{
+			showLoadingDialog(context);
 			formKey.currentState.save();
-			showLoadingDialog(context, canPop: false);
 			try
 			{
 				final res = await _authApi.authenticate(player.username, player.password);
