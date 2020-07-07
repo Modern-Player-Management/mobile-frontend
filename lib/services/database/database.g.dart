@@ -68,6 +68,8 @@ class _$AppDatabase extends AppDatabase {
 
   EventDao _eventDaoInstance;
 
+  EventTypeDao _eventTypeDaoInstance;
+
   DiscrepancyDao _discrepancyDaoInstance;
 
   ParticipationDao _participationDaoInstance;
@@ -99,6 +101,8 @@ class _$AppDatabase extends AppDatabase {
             'CREATE TABLE IF NOT EXISTS `team_players` (`teamId` TEXT, `playerId` TEXT, `saved` INTEGER, `deleted` INTEGER, PRIMARY KEY (`teamId`, `playerId`))');
         await database.execute(
             'CREATE TABLE IF NOT EXISTS `events` (`id` TEXT, `teamId` TEXT, `start` TEXT, `end` TEXT, `name` TEXT, `description` TEXT, `type` INTEGER, `currentHasConfirmed` INTEGER, `saved` INTEGER, `create` INTEGER, `deleted` INTEGER, FOREIGN KEY (`teamId`) REFERENCES `teams` (`id`) ON UPDATE CASCADE ON DELETE CASCADE, PRIMARY KEY (`id`))');
+        await database.execute(
+            'CREATE TABLE IF NOT EXISTS `event_types` (`index` INTEGER, `name` TEXT, PRIMARY KEY (`index`))');
         await database.execute(
             'CREATE TABLE IF NOT EXISTS `discrepancies` (`id` TEXT, `type` INTEGER, `reason` TEXT, `userId` TEXT, `username` TEXT, `delayLength` INTEGER, `eventId` TEXT, `saved` INTEGER, `create` INTEGER, `deleted` INTEGER, FOREIGN KEY (`eventId`) REFERENCES `events` (`id`) ON UPDATE CASCADE ON DELETE CASCADE, PRIMARY KEY (`id`))');
         await database.execute(
@@ -136,6 +140,11 @@ class _$AppDatabase extends AppDatabase {
   @override
   EventDao get eventDao {
     return _eventDaoInstance ??= _$EventDao(database, changeListener);
+  }
+
+  @override
+  EventTypeDao get eventTypeDao {
+    return _eventTypeDaoInstance ??= _$EventTypeDao(database, changeListener);
   }
 
   @override
@@ -691,6 +700,66 @@ class _$EventDao extends EventDao {
   @override
   Future<int> deleteModel(Event model) {
     return _eventDeletionAdapter.deleteAndReturnChangedRows(model);
+  }
+}
+
+class _$EventTypeDao extends EventTypeDao {
+  _$EventTypeDao(this.database, this.changeListener)
+      : _queryAdapter = QueryAdapter(database),
+        _eventTypeInsertionAdapter = InsertionAdapter(
+            database,
+            'event_types',
+            (EventType item) =>
+                <String, dynamic>{'index': item.index, 'name': item.name}),
+        _eventTypeUpdateAdapter = UpdateAdapter(
+            database,
+            'event_types',
+            ['index'],
+            (EventType item) =>
+                <String, dynamic>{'index': item.index, 'name': item.name}),
+        _eventTypeDeletionAdapter = DeletionAdapter(
+            database,
+            'event_types',
+            ['index'],
+            (EventType item) =>
+                <String, dynamic>{'index': item.index, 'name': item.name});
+
+  final sqflite.DatabaseExecutor database;
+
+  final StreamController<String> changeListener;
+
+  final QueryAdapter _queryAdapter;
+
+  static final _event_typesMapper = (Map<String, dynamic> row) =>
+      EventType(index: row['index'] as int, name: row['name'] as String);
+
+  final InsertionAdapter<EventType> _eventTypeInsertionAdapter;
+
+  final UpdateAdapter<EventType> _eventTypeUpdateAdapter;
+
+  final DeletionAdapter<EventType> _eventTypeDeletionAdapter;
+
+  @override
+  Future<List<EventType>> get() async {
+    return _queryAdapter.queryList('select * from event_types',
+        mapper: _event_typesMapper);
+  }
+
+  @override
+  Future<int> insertModel(EventType model) {
+    return _eventTypeInsertionAdapter.insertAndReturnId(
+        model, OnConflictStrategy.replace);
+  }
+
+  @override
+  Future<int> updateModel(EventType model) {
+    return _eventTypeUpdateAdapter.updateAndReturnChangedRows(
+        model, OnConflictStrategy.abort);
+  }
+
+  @override
+  Future<int> deleteModel(EventType model) {
+    return _eventTypeDeletionAdapter.deleteAndReturnChangedRows(model);
   }
 }
 
