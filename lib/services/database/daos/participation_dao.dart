@@ -12,20 +12,20 @@ abstract class ParticipationDao extends ModelDao<Participation>
 	@Query('update participations set id = :newId where id = :oldId')
 	Future<void> updateId(String oldId, String newId);
 
-	@Query('select * from participations where teamId = :teamId and deleted = 0 ')
-	Stream<List<Participation>> getStream(String teamId);
+	@Query('select * from participations where eventId = :eventId and deleted = 0 ')
+	Stream<List<Participation>> getStream(String eventId);
 
-	@Query('select * from participations where teamId = :teamId and deleted = 0 ')
-	Future<List<Participation>> getList(String teamId);
+	@Query('select * from participations where eventId = :eventId and deleted = 0 ')
+	Future<List<Participation>> getList(String eventId);
 
-	@Query('select * from participations where teamId = :teamId '
+	@Query('select * from participations where eventId = :eventId '
 		'and saved = 1 and deleted = 0')
-	Future<List<Participation>> getSaved(String teamId);
+	Future<List<Participation>> getSaved(String eventId);
 
-	@Query('select * from participations where teamId = :teamId '
+	@Query('select * from participations where eventId = :eventId '
 		'and saved = 0 and deleted = 0')
-	Future<List<Participation>> getUnsaved(String teamId);
+	Future<List<Participation>> getUnsaved(String eventId);
 
-	@Query('select * from participations where teamId = :teamId and deleted = 1')
-	Future<List<Participation>> getUndeleted(String teamId);
+	@Query('select * from participations where eventId = :eventId and deleted = 1')
+	Future<List<Participation>> getUndeleted(String eventId);
 }
