@@ -30,9 +30,6 @@ class TeamWidget extends StatelessWidget
 					subtitle: Text(
 						"Manager : ${team.manager.username}"
 					),
-					trailing: Text(
-						"Players : ${team.players.length}"
-					),
 					onTap: () => onTap(team),
 				),
 			),

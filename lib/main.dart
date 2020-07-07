@@ -99,11 +99,7 @@ class AppModel extends BaseViewModel with WidgetsBindingObserver
 		switch(result)
 		{
 			case ConnectivityResult.mobile:
-			case ConnectivityResult.wifi: 
-				if(!_session.online)
-				{
-					_session.synchronize(redirect: false);
-				}
+			case ConnectivityResult.wifi:
 				_session.online = true;
 				break;
 			case ConnectivityResult.none:
