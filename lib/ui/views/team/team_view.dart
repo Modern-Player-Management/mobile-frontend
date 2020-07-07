@@ -1,4 +1,6 @@
+import 'package:ff_navigation_bar/ff_navigation_bar.dart';
 import 'package:flutter/material.dart';
+import 'package:mpm/main.dart';
 
 import 'package:stacked/stacked.dart';
 import 'package:table_calendar/table_calendar.dart';
@@ -19,25 +21,26 @@ class TeamView extends ViewModelBuilderWidget<TeamViewModel>
   	Widget builder(context, model, child)
 	{
 		return Scaffold(
-			body: CustomScrollView(
-				slivers: <Widget>[
-					SliverAppBar(
-						title: Text(
-							"${model.team.name}"
-						),
-						floating: true,
-					),
+			appBar: AppBar(
+				title: Text(
+					"${model.team.name}"
+				),
+			),
+			body: Column(
+				children: <Widget>[
 					_Header(),
-					_Calendar(),
-					_TeamPlayersView()
+					Expanded(
+						child: _Tabs(),
+					)
 				],
 			),
+			bottomNavigationBar: _NavigationBar(),
 			floatingActionButton: model.isManager ?
 			FloatingActionButton(
 				child: Icon(
 					Icons.add
 				),
-				onPressed: model.addPlayer,
+				onPressed: model.add,
 			) : null
 		);
 	}
@@ -57,40 +60,77 @@ class _Header extends ViewModelWidget<TeamViewModel>
 	@override
 	Widget build(context, model)
 	{
-		return SliverToBoxAdapter(
-			child: Card(
-				child: ListTile(
-					leading: CircleAvatarImage(
-						image: model.team.image,
-					),
-					title: Text(
-						"${model.team.description}"
-					),
-					subtitle: Text(
-						"Players: ${model.team.players.length}"
-					),
-					trailing: model.isManager ?
-					Row(
-						mainAxisSize: MainAxisSize.min,
-						children: <Widget>[
-							IconButton(
-								icon: Icon(
-									Icons.edit,
-									color: Colors.green,
-								),
-								onPressed: model.edit,
+		return Card(
+			child: ListTile(
+				leading: CircleAvatarImage(
+					image: model.team.image,
+				),
+				title: Text(
+					"${model.team.description}"
+				),
+				subtitle: Text(
+					"Players: ${model.team.players.length}"
+				),
+				trailing: model.isManager ?
+				Row(
+					mainAxisSize: MainAxisSize.min,
+					children: <Widget>[
+						IconButton(
+							icon: Icon(
+								Icons.edit,
+								color: Colors.green,
 							),
-							IconButton(
-								icon: Icon(
-									Icons.delete,
-									color: Colors.red,
-								),
-								onPressed: model.delete,
+							onPressed: model.edit,
+						),
+						IconButton(
+							icon: Icon(
+								Icons.delete,
+								color: Colors.red,
 							),
-						],
-					) : null,
+							onPressed: model.delete,
+						),
+					],
+				) : null,
+			)
+		);
+	}
+}
+
+class _Tabs extends ViewModelWidget<TeamViewModel>
+{
+	@override
+	Widget build(context, model)
+	{
+		return PageView(
+			controller: model.controller,
+			onPageChanged: model.onPageChanged,
+			children: <Widget>[
+				_Calendar(),
+				_TeamPlayersView()
+			],
+		);
+	}
+}
+
+class _NavigationBar extends ViewModelWidget<TeamViewModel>
+{
+	@override
+	Widget build(context, model)
+	{
+		return FFNavigationBar(
+			theme: FFNavigationBarTheme(),
+			selectedIndex: model.selectedTab,
+			onSelectTab: model.onSelectTab,
+			items: [
+				FFNavigationBarItem(
+					iconData: Icons.calendar_today,
+					label: 'Events',
+				),
+				FFNavigationBarItem(
+					iconData: Icons.group,
+					label: 'Players',
 				)
-			),
+			],
 		);
 	}
 }
@@ -100,16 +140,12 @@ class _Calendar extends ViewModelBuilderWidget<TeamCalendarViewModel>
 	@override
 	Widget builder(context, model, child)
 	{
-		return SliverToBoxAdapter(
-			child: Card(
-				child: TableCalendar(
-					locale: 'fr_FR',
-					headerStyle: HeaderStyle(
-						formatButtonVisible: false
-					),
-					calendarController: model.calendarController,
-				),
+		return TableCalendar(
+			locale: 'fr_FR',
+			headerStyle: HeaderStyle(
+				formatButtonVisible: false
 			),
+			calendarController: model.calendarController,
 		);
 	}
 
@@ -128,38 +164,34 @@ class _TeamPlayersView extends ViewModelBuilderWidget<TeamPlayersViewModel>
 	Widget builder(context, model, child)
 	{
 		return model.dataReady ?
-		SliverList(
-			delegate: SliverChildBuilderDelegate(
-				(context, index) {
-					var player = model.data[index];
-					return Card(
-						child: ListTile(
-							leading: CircleAvatarImage(
-								image: player.image,
-								icon: Icons.person,
+		ListView.builder(
+			itemCount: model.data.length,
+			itemBuilder: (context, index) {
+				var player = model.data[index];
+				return Card(
+					child: ListTile(
+						leading: CircleAvatarImage(
+							image: player.image,
+							icon: Icons.person,
+						),
+						title: Text(
+							player.username
+						),
+						trailing: model.isManager ?
+						IconButton(
+							icon: Icon(
+								Icons.delete,
+								color: Colors.red,
 							),
-							title: Text(
-								player.username
-							),
-							trailing: model.isManager ?
-							IconButton(
-								icon: Icon(
-									Icons.delete,
-									color: Colors.red,
-								),
-								onPressed: () => model.onPressed(player),
-							) : null,
-							onTap: () => model.onTap(player),
-						)
-					);
-				},
-				childCount: model.data.length
-			),
+							onPressed: () => model.onPressed(player),
+						) : null,
+						onTap: () => model.onTap(player),
+					)
+				);
+			}
 		) :
-		SliverToBoxAdapter(
-			child: Center(
-				child: CircularProgressIndicator(),
-			),
+		Center(
+			child: CircularProgressIndicator(),
 		);
 	}
 
