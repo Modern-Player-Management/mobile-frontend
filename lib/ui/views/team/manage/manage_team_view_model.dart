@@ -29,8 +29,8 @@ class ManageTeamViewModel extends BaseViewModel
 	ManageTeamViewModel({
 		Team team
 	}) :
-	this.isEdit = team != null,
-	this.team = team ?? Team();
+		this.isEdit = team != null,
+		this.team = team ?? Team();
 
 	String nameValidator(String str)
 	{

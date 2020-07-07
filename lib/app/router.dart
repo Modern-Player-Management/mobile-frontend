@@ -8,6 +8,7 @@ import 'package:mpm/ui/views/auth/login/login_view.dart';
 import 'package:mpm/ui/views/auth/register/register_view.dart';
 
 import 'package:mpm/ui/views/home/home_view.dart';
+import 'package:mpm/ui/views/team/event/manage/manage_event_view.dart';
 
 import 'package:mpm/ui/views/team/team_view.dart';
 import 'package:mpm/ui/views/team/manage/manage_team_view.dart';
@@ -29,6 +30,7 @@ class $Router
 
 	TeamView teamViewRoute;
 	ManageTeamView manageTeamViewRoute;
+	ManageEventView manageEventViewRoute;
 
 	PlayerView playerViewRoute;
 	SearchPlayerView searchPlayerViewRoute;
