@@ -40,6 +40,8 @@ class Game
 	@JsonKey(ignore: true)
 	bool deleted;
 
+	bool get isWin => win == 1;
+
 	Game({
 		this.id,
 		this.name,

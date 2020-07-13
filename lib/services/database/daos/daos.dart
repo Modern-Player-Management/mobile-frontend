@@ -5,4 +5,3 @@ export 'package:mpm/services/database/daos/game_dao.dart';
 export 'package:mpm/services/database/daos/event_dao.dart';
 export 'package:mpm/services/database/daos/event_type_dao.dart';
 export 'package:mpm/services/database/daos/discrepancy_dao.dart';
-export 'package:mpm/services/database/daos/participation_dao.dart';
