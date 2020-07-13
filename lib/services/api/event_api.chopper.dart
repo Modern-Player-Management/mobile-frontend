@@ -20,7 +20,8 @@ class _$EventApi extends EventApi {
   Future<Response<dynamic>> presence(
       String eventId, Participation participation) {
     final $url = '/$eventId/presence';
-    final $request = Request('POST', $url, client.baseUrl);
+    final $body = participation;
+    final $request = Request('POST', $url, client.baseUrl, body: $body);
     return client.send<dynamic, dynamic>($request);
   }
 
@@ -34,11 +35,11 @@ class _$EventApi extends EventApi {
   }
 
   @override
-  Future<Response<Event>> updateEvent(String eventId, Event event) {
+  Future<Response<dynamic>> updateEvent(String eventId, Event event) {
     final $url = '/$eventId';
     final $body = event;
     final $request = Request('PUT', $url, client.baseUrl, body: $body);
-    return client.send<Event, Event>($request);
+    return client.send<dynamic, dynamic>($request);
   }
 
   @override
