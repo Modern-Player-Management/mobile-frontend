@@ -72,8 +72,6 @@ class _$AppDatabase extends AppDatabase {
 
   DiscrepancyDao _discrepancyDaoInstance;
 
-  ParticipationDao _participationDaoInstance;
-
   GameDao _gameDaoInstance;
 
   Future<sqflite.Database> open(String path, List<Migration> migrations,
@@ -105,8 +103,6 @@ class _$AppDatabase extends AppDatabase {
             'CREATE TABLE IF NOT EXISTS `event_types` (`index` INTEGER, `name` TEXT, PRIMARY KEY (`index`))');
         await database.execute(
             'CREATE TABLE IF NOT EXISTS `discrepancies` (`id` TEXT, `type` INTEGER, `reason` TEXT, `userId` TEXT, `username` TEXT, `delayLength` INTEGER, `eventId` TEXT, `saved` INTEGER, `create` INTEGER, `deleted` INTEGER, FOREIGN KEY (`eventId`) REFERENCES `events` (`id`) ON UPDATE CASCADE ON DELETE CASCADE, PRIMARY KEY (`id`))');
-        await database.execute(
-            'CREATE TABLE IF NOT EXISTS `participations` (`id` TEXT, `confirmed` INTEGER, `userId` TEXT, `username` TEXT, `eventId` TEXT, `saved` INTEGER, `create` INTEGER, `deleted` INTEGER, FOREIGN KEY (`eventId`) REFERENCES `events` (`id`) ON UPDATE CASCADE ON DELETE CASCADE, PRIMARY KEY (`id`))');
         await database.execute(
             'CREATE TABLE IF NOT EXISTS `games` (`id` TEXT, `name` TEXT, `date` TEXT, `win` INTEGER, `teamId` TEXT, `saved` INTEGER, `create` INTEGER, `deleted` INTEGER, FOREIGN KEY (`teamId`) REFERENCES `teams` (`id`) ON UPDATE CASCADE ON DELETE CASCADE, PRIMARY KEY (`id`))');
         await database
@@ -151,12 +147,6 @@ class _$AppDatabase extends AppDatabase {
   DiscrepancyDao get discrepancyDao {
     return _discrepancyDaoInstance ??=
         _$DiscrepancyDao(database, changeListener);
-  }
-
-  @override
-  ParticipationDao get participationDao {
-    return _participationDaoInstance ??=
-        _$ParticipationDao(database, changeListener);
   }
 
   @override
@@ -911,157 +901,6 @@ class _$DiscrepancyDao extends DiscrepancyDao {
   @override
   Future<int> deleteModel(Discrepancy model) {
     return _discrepancyDeletionAdapter.deleteAndReturnChangedRows(model);
-  }
-}
-
-class _$ParticipationDao extends ParticipationDao {
-  _$ParticipationDao(this.database, this.changeListener)
-      : _queryAdapter = QueryAdapter(database, changeListener),
-        _participationInsertionAdapter = InsertionAdapter(
-            database,
-            'participations',
-            (Participation item) => <String, dynamic>{
-                  'id': item.id,
-                  'confirmed':
-                      item.confirmed == null ? null : (item.confirmed ? 1 : 0),
-                  'userId': item.userId,
-                  'username': item.username,
-                  'eventId': item.eventId,
-                  'saved': item.saved == null ? null : (item.saved ? 1 : 0),
-                  'create': item.create == null ? null : (item.create ? 1 : 0),
-                  'deleted':
-                      item.deleted == null ? null : (item.deleted ? 1 : 0)
-                },
-            changeListener),
-        _participationUpdateAdapter = UpdateAdapter(
-            database,
-            'participations',
-            ['id'],
-            (Participation item) => <String, dynamic>{
-                  'id': item.id,
-                  'confirmed':
-                      item.confirmed == null ? null : (item.confirmed ? 1 : 0),
-                  'userId': item.userId,
-                  'username': item.username,
-                  'eventId': item.eventId,
-                  'saved': item.saved == null ? null : (item.saved ? 1 : 0),
-                  'create': item.create == null ? null : (item.create ? 1 : 0),
-                  'deleted':
-                      item.deleted == null ? null : (item.deleted ? 1 : 0)
-                },
-            changeListener),
-        _participationDeletionAdapter = DeletionAdapter(
-            database,
-            'participations',
-            ['id'],
-            (Participation item) => <String, dynamic>{
-                  'id': item.id,
-                  'confirmed':
-                      item.confirmed == null ? null : (item.confirmed ? 1 : 0),
-                  'userId': item.userId,
-                  'username': item.username,
-                  'eventId': item.eventId,
-                  'saved': item.saved == null ? null : (item.saved ? 1 : 0),
-                  'create': item.create == null ? null : (item.create ? 1 : 0),
-                  'deleted':
-                      item.deleted == null ? null : (item.deleted ? 1 : 0)
-                },
-            changeListener);
-
-  final sqflite.DatabaseExecutor database;
-
-  final StreamController<String> changeListener;
-
-  final QueryAdapter _queryAdapter;
-
-  static final _participationsMapper = (Map<String, dynamic> row) =>
-      Participation(
-          id: row['id'] as String,
-          confirmed:
-              row['confirmed'] == null ? null : (row['confirmed'] as int) != 0,
-          userId: row['userId'] as String,
-          username: row['username'] as String,
-          saved: row['saved'] == null ? null : (row['saved'] as int) != 0,
-          create: row['create'] == null ? null : (row['create'] as int) != 0,
-          deleted:
-              row['deleted'] == null ? null : (row['deleted'] as int) != 0);
-
-  final InsertionAdapter<Participation> _participationInsertionAdapter;
-
-  final UpdateAdapter<Participation> _participationUpdateAdapter;
-
-  final DeletionAdapter<Participation> _participationDeletionAdapter;
-
-  @override
-  Future<Participation> get(String id) async {
-    return _queryAdapter.query('select * from participations where id = ?',
-        arguments: <dynamic>[id], mapper: _participationsMapper);
-  }
-
-  @override
-  Future<void> updateId(String oldId, String newId) async {
-    await _queryAdapter.queryNoReturn(
-        'update participations set id = ? where id = ?',
-        arguments: <dynamic>[oldId, newId]);
-  }
-
-  @override
-  Stream<List<Participation>> getStream(String eventId) {
-    return _queryAdapter.queryListStream(
-        'select * from participations where eventId = ? and deleted = 0',
-        arguments: <dynamic>[eventId],
-        queryableName: 'participations',
-        isView: false,
-        mapper: _participationsMapper);
-  }
-
-  @override
-  Future<List<Participation>> getList(String eventId) async {
-    return _queryAdapter.queryList(
-        'select * from participations where eventId = ? and deleted = 0',
-        arguments: <dynamic>[eventId],
-        mapper: _participationsMapper);
-  }
-
-  @override
-  Future<List<Participation>> getSaved(String eventId) async {
-    return _queryAdapter.queryList(
-        'select * from participations where eventId = ? and saved = 1 and deleted = 0',
-        arguments: <dynamic>[eventId],
-        mapper: _participationsMapper);
-  }
-
-  @override
-  Future<List<Participation>> getUnsaved(String eventId) async {
-    return _queryAdapter.queryList(
-        'select * from participations where eventId = ? and saved = 0 and deleted = 0',
-        arguments: <dynamic>[eventId],
-        mapper: _participationsMapper);
-  }
-
-  @override
-  Future<List<Participation>> getUndeleted(String eventId) async {
-    return _queryAdapter.queryList(
-        'select * from participations where eventId = ? and deleted = 1',
-        arguments: <dynamic>[eventId],
-        mapper: _participationsMapper);
-  }
-
-  @override
-  Future<int> insertModel(Participation model) {
-    return _participationInsertionAdapter.insertAndReturnId(
-        model, OnConflictStrategy.replace);
-  }
-
-  @override
-  Future<int> updateModel(Participation model) {
-    return _participationUpdateAdapter.updateAndReturnChangedRows(
-        model, OnConflictStrategy.abort);
-  }
-
-  @override
-  Future<int> deleteModel(Participation model) {
-    return _participationDeletionAdapter.deleteAndReturnChangedRows(model);
   }
 }
 
