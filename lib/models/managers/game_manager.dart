@@ -36,7 +36,8 @@ class GameManager
 		}
 
 		_checkValidResponse();
-		_deleteUndeletedGames(team);
+		
+		await _deleteUndeletedGames(team);
 
 		var models = await _gameDao.getSaved(team.id);
 		var keys = [
@@ -63,7 +64,7 @@ class GameManager
 		}
 	}
 
-	void _deleteUndeletedGames(Team team) async
+	Future<void> _deleteUndeletedGames(Team team) async
 	{
 		for(var game in await _gameDao.getUndeleted(team.id))
 		{

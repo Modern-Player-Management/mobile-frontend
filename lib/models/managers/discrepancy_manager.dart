@@ -37,8 +37,9 @@ class DiscrepancyManager
 		}
 
 		_checkValidResponse();
-		_saveUnsavedDiscrepancies(event);
-		_deleteUndeletedDiscrepancies(event);
+
+		await _saveUnsavedDiscrepancies(event);
+		await _deleteUndeletedDiscrepancies(event);
 
 		var models = await _discrepancyDao.getSaved(event.id);
 		var keys = [
@@ -65,7 +66,7 @@ class DiscrepancyManager
 		}
 	}
 
-	void _saveUnsavedDiscrepancies(Event event) async
+	Future<void> _saveUnsavedDiscrepancies(Event event) async
 	{
 		for(var discrepancy in await _discrepancyDao.getUnsaved(event.id))
 		{
@@ -102,7 +103,7 @@ class DiscrepancyManager
 		}
 	}
 
-	void _deleteUndeletedDiscrepancies(Event event) async
+	Future<void> _deleteUndeletedDiscrepancies(Event event) async
 	{
 		for(var discrepancy in await _discrepancyDao.getUndeleted(event.id))
 		{

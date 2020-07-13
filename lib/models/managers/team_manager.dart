@@ -48,8 +48,8 @@ class TeamManager
 
 		_checkValidResponse();
 
-		_saveUnsavedTeams();
-		_deleteUndeletedTeams();
+		await _saveUnsavedTeams();
+		await _deleteUndeletedTeams();
 
 		try
 		{
@@ -103,7 +103,7 @@ class TeamManager
 		return true;
 	}
 
-	void _saveUnsavedTeams() async
+	Future<void> _saveUnsavedTeams() async
 	{
 		for(var team in await _teamDao.getUnsaved(_storage.player))
 		{
@@ -140,7 +140,7 @@ class TeamManager
 		}
 	}
 
-	void _deleteUndeletedTeams() async
+	Future<void> _deleteUndeletedTeams() async
 	{
 		for(var team in await _teamDao.getUndeleted(_storage.player))
 		{
