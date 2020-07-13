@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 import 'package:stacked/stacked.dart';
-import 'package:table_calendar/table_calendar.dart';
 
 import 'package:mpm/app/locator.dart';
 import 'package:mpm/utils/dialogs.dart';
@@ -52,6 +51,7 @@ class TeamViewModel extends BaseViewModel
 		{
 			case 0: _addEvent(); break;
 			case 1: _addPlayer(); break;
+			case 2: break; // nothing todo for games
 			default: break; // wut ?
 		}
 	}
@@ -108,104 +108,5 @@ class TeamViewModel extends BaseViewModel
 	}
 
 	bool get isManager => team.managerId == _storage.player;
-}
-
-class TeamCalendarViewModel extends StreamViewModel<Map<DateTime, List<Event>>>
-{
-	final _eventDao = locator<AppDatabase>().eventDao;
-
-	final BuildContext context;
-	TeamViewModel _teamViewModel;
-
-	List<Event> selectedEvents = [];
-
-	final calendarController = CalendarController();
-
-	TeamCalendarViewModel({
-		@required this.context
-	})
-	{
-		_teamViewModel = getParentViewModel<TeamViewModel>(context);
-	}
-
-	@override
-	get stream async * {
-		await for(var events in _eventDao.getStream(_teamViewModel.team.id))
-		{
-			Map<DateTime, List<Event>> map = {};
-
-			for(var event in events)
-			{
-				var date = event.startDate;
-				date = DateTime(date.year, date.month, date.day);
-
-				if(map.containsKey(date))
-				{
-					map[date].add(event);
-				}
-				else
-				{
-					map[date] = [event];
-				}
-			}
-
-			yield map;
-		}
-	}
-
-	void onDaySelected(DateTime date, List<dynamic> events)
-	{
-		selectedEvents = List.from(events);
-		notifyListeners();
-	}
-}
-
-class TeamPlayersViewModel extends StreamViewModel<List<Player>>
-{
-	final _playerManager = locator<PlayerManager>();
-
-	final _playerDao = locator<AppDatabase>().playerDao;
-	final _navigation = locator<NavigationService>();
-
-	final BuildContext context;
-
-	TeamViewModel _teamViewModel;
-
-	TeamPlayersViewModel({
-		@required this.context
-	})
-	{
-		_teamViewModel = getParentViewModel<TeamViewModel>(context);
-	}
-
-	@override
-	get stream async * {
-		await for(var players in _playerDao.getStream(_teamViewModel.team.id, _teamViewModel.team.managerId))
-		{
-			_teamViewModel.setPlayers(players);
-			yield players;
-		}
-	}
-
-	void onPressed(Player player) async
-	{
-		final teamPlayer = TeamPlayer(
-			teamId: _teamViewModel.team.id,
-			playerId: player.id
-		);
-
-		await _playerManager.removeTeamPlayer(teamPlayer);
-	}
-
-	void onTap(Player player)
-	{
-		_navigation.navigateTo(
-			Routes.playerView,
-			arguments: PlayerViewArguments(
-				player: player
-			)
-		);
-	}
-
-	bool get isManager => _teamViewModel.isManager;
+	bool get isGameTab => selectedTab == 2;
 }
