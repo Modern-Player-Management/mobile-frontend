@@ -18,7 +18,6 @@ class EventManager
 	final _uuid = locator<Uuid>();
 
 	DiscrepancyManager _discrepancyManager;
-	ParticipationManager _participationManager;
 
 	bool Function(Response) validResponse;
 
@@ -27,7 +26,6 @@ class EventManager
 	}) : this.validResponse = validResponse
 	{
 		_discrepancyManager = locator<DiscrepancyManager>(param1: validResponse);
-		_participationManager = locator<ParticipationManager>(param1: validResponse);
 	}
 
 	void _checkValidResponse()
@@ -46,8 +44,9 @@ class EventManager
 		}
 
 		_checkValidResponse();
-		_saveUnsavedEvents(team);
-		_deleteUndeletedEvents(team);
+		
+		await _saveUnsavedEvents(team);
+		await _deleteUndeletedEvents(team);
 
 		await _syncTypes();
 
@@ -69,7 +68,6 @@ class EventManager
 			}
 
 			await _discrepancyManager.syncDiscrepancies(event);
-			await _participationManager.syncParticipations(event);
 		}
 
 		for(var model in models)
@@ -78,7 +76,7 @@ class EventManager
 		}
 	}
 
-	void _saveUnsavedEvents(Team team) async
+	Future<void> _saveUnsavedEvents(Team team) async
 	{
 		for(var event in await _eventDao.getUnsaved(team.id))
 		{
@@ -115,7 +113,7 @@ class EventManager
 		}
 	}
 
-	void _deleteUndeletedEvents(Team team) async
+	Future<void> _deleteUndeletedEvents(Team team) async
 	{
 		for(var event in await _eventDao.getUndeleted(team.id))
 		{
@@ -181,19 +179,15 @@ class EventManager
 				event.saved = true;
 				event.create = false;
 				await _eventDao.updateModel(event);
-			}
-			else
-			{
-				return false;
+				return true;
 			}
 		}
 		catch(e)
 		{
 			print("insertEvent: $e");
-			return false;
 		}
 
-		return true;
+		return false;
 	}
 
 	Future<bool> update(Event event) async
@@ -210,19 +204,15 @@ class EventManager
 			{
 				event.saved = true;
 				await _eventDao.updateModel(event);
-			}
-			else
-			{
-				return false;
+				return true;
 			}
 		}
 		catch(e) 
 		{
 			print("updateEvent: $e");
-			return false;
 		}
 
-		return true;
+		return false;
 	}
 
 	Future<bool> delete(Event event) async
@@ -238,18 +228,38 @@ class EventManager
 			if(validResponse(response))
 			{
 				await _eventDao.deleteModel(event);
-			}
-			else
-			{
-				return false;
+				return true;
 			}
 		}
 		catch(e) 
 		{
 			print("deleteEvent: $e");
-			return false;
 		}
 
-		return true;
+		return false;
+	}
+
+	Future<bool> presence(Event event, bool confirmed) async
+	{
+		_checkValidResponse();
+
+		try
+		{
+			var response = await _eventApi.presence(event.id, Participation(
+				confirmed: confirmed
+			));
+			if(validResponse(response))
+			{
+				event.currentHasConfirmed = confirmed;
+				_eventDao.updateModel(event);
+				return true;
+			}
+		}
+		catch(e) 
+		{
+			print("presence: $e");
+		}
+
+		return false;
 	}
 }

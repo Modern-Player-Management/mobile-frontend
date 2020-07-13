@@ -40,8 +40,8 @@ class PlayerManager
 
 		_checkValidResponse();
 
-		_saveUnsavedPlayers(team);
-		_deleteUndeletedPlayers(team);
+		await _saveUnsavedPlayers(team);
+		await _deleteUndeletedPlayers(team);
 
 		await _playerDao.insertModel(team.manager);
 		await _teamPlayerDao.insertModel(TeamPlayer(
@@ -64,7 +64,7 @@ class PlayerManager
 		}
 	}
 
-	void _saveUnsavedPlayers(Team team) async
+	Future<void> _saveUnsavedPlayers(Team team) async
 	{
 		for(var teamPlayer in await _teamPlayerDao.getUnsaved(team.id))
 		{
@@ -85,7 +85,7 @@ class PlayerManager
 		}
 	}
 
-	void _deleteUndeletedPlayers(Team team) async
+	Future<void> _deleteUndeletedPlayers(Team team) async
 	{
 		for(var teamPlayer in await _teamPlayerDao.getUndeleted(team.id))
 		{
