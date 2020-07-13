@@ -43,7 +43,6 @@ class ManageEventView extends ViewModelBuilderWidget<ManageEventViewModel>
 							SizedBox(height: 4),
 							_Dates(),
 							_Type(),
-							_Confirm()
 						],
 					),
 				),
@@ -127,10 +126,12 @@ class _Dates extends ViewModelWidget<ManageEventViewModel>
 			mainAxisSize: MainAxisSize.min,
 			children: <Widget>[
 				DatePicker(
+					initialDate: model.start,
 					onSelectDate: model.onSelectStartDate,
 					selectText: "Select a start date",
 				),
 				DatePicker(
+					initialDate: model.end,
 					onSelectDate: model.onSelectEndDate,
 					selectText: "Select an end date",
 				),
@@ -160,27 +161,6 @@ class _Type extends ViewModelWidget<ManageEventViewModel>
 				),
 				onTap: model.selectEventType,
 			)
-		);
-	}
-}
-
-class _Confirm extends ViewModelWidget<ManageEventViewModel>
-{
-	@override
-	Widget build(context, model)
-	{
-		return Card(
-			child: ListTile(
-				title: Text(
-					"Confirm presence",
-					style: Theme.of(context).textTheme.subtitle1,
-				),
-				trailing: Switch.adaptive(
-					value: model.event.currentHasConfirmed,
-					onChanged: model.onChanged,
-				),
-				onTap: () => model.onChanged(!model.event.currentHasConfirmed),
-			),
 		);
 	}
 }
