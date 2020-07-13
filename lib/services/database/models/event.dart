@@ -66,6 +66,10 @@ class Event
 		return null;
 	}
 
+	@JsonKey(ignore: true)
+	@ignore
+	String typeName;
+
   	Event({
 		this.id, 
 		this.teamId,
@@ -74,7 +78,7 @@ class Event
 		this.name, 
 		this.description,
 		this.type,
-		this.currentHasConfirmed,
+		this.currentHasConfirmed = false,
 		this.participations,
 		this.discrepancies,
 		bool saved = false,
