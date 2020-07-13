@@ -65,7 +65,7 @@ class TeamEventsView extends ViewModelBuilderWidget<TeamCalendarViewModel>
 												Icons.delete,
 												color: Colors.red,
 											),
-											onPressed: (){},
+											onPressed: () => model.delete(event, index),
 										) : Container()
 									],
 								),
