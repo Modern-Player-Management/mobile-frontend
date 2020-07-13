@@ -18,7 +18,7 @@ import 'package:mpm/ui/views/team/manage/manage_team_view.dart';
 import 'package:mpm/ui/views/player/player_view.dart';
 import 'package:mpm/ui/views/player/search/search_player_view.dart';
 
-@MaterialAutoRouter(
+@AdaptiveAutoRouter(
 	routes: [
 		AdaptiveRoute(page: SplashView, initial: true),
 

@@ -13,7 +13,6 @@ export 'package:mpm/models/managers/player_manager.dart';
 export 'package:mpm/models/managers/event_manager.dart';
 export 'package:mpm/models/managers/game_manager.dart';
 export 'package:mpm/models/managers/discrepancy_manager.dart';
-export 'package:mpm/models/managers/participation_manager.dart';
 
 export 'package:mpm/services/api/auth_api.dart';
 export 'package:mpm/services/api/team_api.dart';

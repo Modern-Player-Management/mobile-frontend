@@ -16,7 +16,6 @@ import 'package:mpm/models/managers/event_manager.dart';
 import 'package:mpm/services/api/file_api.dart';
 import 'package:mpm/services/api/game_api.dart';
 import 'package:mpm/models/managers/game_manager.dart';
-import 'package:mpm/models/managers/participation_manager.dart';
 import 'package:mpm/services/api/player_api.dart';
 import 'package:mpm/models/managers/player_manager.dart';
 import 'package:mpm/services/secure_storage.dart';
@@ -44,8 +43,6 @@ void $initGetIt(GetIt g, {String environment}) {
       (validResponse, _) => GameManager(validResponse: validResponse));
   g.registerLazySingleton<NavigationService>(
       () => thirdPartyServices.navigationService);
-  g.registerFactoryParam<ParticipationManager, Function, dynamic>(
-      (validResponse, _) => ParticipationManager(validResponse: validResponse));
   g.registerLazySingleton<PlayerApi>(() => PlayerApi.create());
   g.registerFactoryParam<PlayerManager, Function, dynamic>(
       (validResponse, _) => PlayerManager(validResponse: validResponse));
