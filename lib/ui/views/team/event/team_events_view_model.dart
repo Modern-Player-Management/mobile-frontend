@@ -63,6 +63,11 @@ class TeamCalendarViewModel extends StreamViewModel<Map<DateTime, List<Event>>>
 				}
 			}
 
+			var date = DateTime.now();
+			date = DateTime(date.year, date.month, date.day);
+
+			selectedEvents = map[date] ?? [];
+
 			yield map;
 		}
 	}
@@ -89,6 +94,17 @@ class TeamCalendarViewModel extends StreamViewModel<Map<DateTime, List<Event>>>
 				style: ToastStyle.error
 			);
 		}
+	}
+
+	void delete(Event event, int index) async
+	{
+		showLoadingDialog(context);
+
+		await _eventManager.delete(event);
+
+		_navigation.back();
+
+		notifyListeners();
 	}
 
 	void updateEvent(Event event)
