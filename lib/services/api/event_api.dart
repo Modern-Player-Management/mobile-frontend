@@ -46,13 +46,13 @@ abstract class EventApi extends ChopperService
 	// events requests
 
 	@Post(path: "/{eventId}/presence")
-	Future<Response> presence(@Path() String eventId, Participation participation);
+	Future<Response> presence(@Path() String eventId, @Body() Participation participation);
 
 	@Post(path: "/{eventId}/discrepancies")
 	Future<Response<Discrepancy>> addDiscrepancy(@Path() String eventId, @Body() Discrepancy discrepancy);
 
 	@Put(path: "/{eventId}")
-	Future<Response<Event>> updateEvent(@Path() String eventId, @Body() Event event);
+	Future<Response> updateEvent(@Path() String eventId, @Body() Event event);
 
 	@Delete(path: "/{eventId}")
 	Future<Response> deleteEvent(@Path() String eventId);
