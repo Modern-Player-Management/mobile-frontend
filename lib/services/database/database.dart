@@ -19,7 +19,6 @@ part 'database.g.dart';
 	Event,
 	EventType,
 	Discrepancy,
-	Participation,
 	Game,
 ], version: 1)
 @singleton
@@ -31,7 +30,6 @@ abstract class AppDatabase extends FloorDatabase
 	EventDao get eventDao;
 	EventTypeDao get eventTypeDao;
 	DiscrepancyDao get discrepancyDao;
-	ParticipationDao get participationDao;
 	GameDao get gameDao;
 
 	@factoryMethod
