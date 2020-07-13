@@ -12,7 +12,6 @@ class HomeViewModel extends BaseViewModel
 	Future<void> onRefresh() async
 	{
 		await _teamManager.syncTeams();
-		Future.delayed(Duration(seconds: 2));
 	}
 
 	void playerInfo() async
