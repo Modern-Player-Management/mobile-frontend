@@ -25,7 +25,7 @@ class ManageEventViewModel extends FutureViewModel<List<EventType>>
 	final formKey = GlobalKey<FormState>();
 
 	String get type {
-		if(event?.type != null && data.isNotEmpty)
+		if(event?.type != null && data != null && data.isNotEmpty)
 		{
 			return data[event.type].name;
 		}
@@ -125,16 +125,20 @@ class ManageEventViewModel extends FutureViewModel<List<EventType>>
 		).showModal(context);
 	}
 
-	void onChanged(bool value)
-	{
-		event.currentHasConfirmed = value;
-		notifyListeners();
-	}
-
 	void manageEvent() async
 	{
 		if(formKey.currentState.validate())
 		{
+			if(event.type == null)
+			{
+				ToastFactory.show(
+					context: context, 
+					msg: "You must select an event type",
+					style: ToastStyle.error
+				);
+				return;
+			}
+
 			showLoadingDialog(context);
 			formKey.currentState.save();
 
