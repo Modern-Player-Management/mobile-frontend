@@ -30,6 +30,7 @@ class TeamGamesView extends ViewModelBuilderWidget<TeamGamesViewModel>
 							game.isWin ? Icons.check : Icons.clear,
 							color: game.isWin ? Colors.green : Colors.red,
 						),
+						onTap: () => model.onTap(game),
 					)
 				);
 			}
@@ -38,6 +39,7 @@ class TeamGamesView extends ViewModelBuilderWidget<TeamGamesViewModel>
 			child: CircularProgressIndicator(),
 		);
 	}
+	
 	@override
 	TeamGamesViewModel viewModelBuilder(context)
 	{

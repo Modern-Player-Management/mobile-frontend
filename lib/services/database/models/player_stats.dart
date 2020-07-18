@@ -32,13 +32,6 @@ class PlayerStats
 	@JsonKey(ignore: true)
 	String gameId;
 
-	@JsonKey(ignore: true)
-	bool saved;
-	@JsonKey(ignore: true)
-	bool create;
-	@JsonKey(ignore: true)
-	bool deleted;
-
 	PlayerStats({
 		this.id,
 		this.player,
@@ -50,13 +43,9 @@ class PlayerStats
 		this.goalShots,
 		this.created,
 		this.gameId,
-		bool saved = false,
-		bool create = false,
-		bool deleted = false,
-	}) :
-		this.saved = saved ?? false,
-		this.create = create ?? false,
-		this.deleted = deleted ?? false;
+	});
 
 	static const fromJson = _$PlayerStatsFromJson;
+
+	DateTime get date => DateTime.parse(created);
 }

@@ -28,7 +28,7 @@ class Game
 	int win;
 
 	@ignore
-	List<PlayerStats> playerStats;
+	List<PlayerStats> playersStats;
 
 	@JsonKey(ignore: true)
 	String teamId;
@@ -47,7 +47,7 @@ class Game
 		this.name,
 		this.date,
 		this.win,
-		this.playerStats,
+		this.playersStats,
 		this.teamId,
 		bool saved = false,
 		bool create = false,
