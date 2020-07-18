@@ -20,6 +20,7 @@ part 'database.g.dart';
 	EventType,
 	Discrepancy,
 	Game,
+	PlayerStats
 ], version: 1)
 @singleton
 abstract class AppDatabase extends FloorDatabase 
@@ -31,6 +32,7 @@ abstract class AppDatabase extends FloorDatabase
 	EventTypeDao get eventTypeDao;
 	DiscrepancyDao get discrepancyDao;
 	GameDao get gameDao;
+	PlayerStatsDao get playerStatsDao;
 
 	@factoryMethod
 	static Future<AppDatabase> create() async 

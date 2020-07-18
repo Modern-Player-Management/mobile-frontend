@@ -12,7 +12,7 @@ Game _$GameFromJson(Map<String, dynamic> json) {
     name: json['name'] as String,
     date: json['date'] as String,
     win: json['win'] as int,
-    playerStats: (json['playerStats'] as List)
+    playersStats: (json['playersStats'] as List)
         ?.map((e) =>
             e == null ? null : PlayerStats.fromJson(e as Map<String, dynamic>))
         ?.toList(),
@@ -24,5 +24,5 @@ Map<String, dynamic> _$GameToJson(Game instance) => <String, dynamic>{
       'name': instance.name,
       'date': instance.date,
       'win': instance.win,
-      'playerStats': instance.playerStats,
+      'playersStats': instance.playersStats,
     };

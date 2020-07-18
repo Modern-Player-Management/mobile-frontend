@@ -74,6 +74,8 @@ class _$AppDatabase extends AppDatabase {
 
   GameDao _gameDaoInstance;
 
+  PlayerStatsDao _playerStatsDaoInstance;
+
   Future<sqflite.Database> open(String path, List<Migration> migrations,
       [Callback callback]) async {
     final databaseOptions = sqflite.OpenDatabaseOptions(
@@ -105,6 +107,8 @@ class _$AppDatabase extends AppDatabase {
             'CREATE TABLE IF NOT EXISTS `discrepancies` (`id` TEXT, `type` INTEGER, `reason` TEXT, `userId` TEXT, `username` TEXT, `delayLength` INTEGER, `eventId` TEXT, `saved` INTEGER, `create` INTEGER, `deleted` INTEGER, FOREIGN KEY (`eventId`) REFERENCES `events` (`id`) ON UPDATE CASCADE ON DELETE CASCADE, PRIMARY KEY (`id`))');
         await database.execute(
             'CREATE TABLE IF NOT EXISTS `games` (`id` TEXT, `name` TEXT, `date` TEXT, `win` INTEGER, `teamId` TEXT, `saved` INTEGER, `create` INTEGER, `deleted` INTEGER, FOREIGN KEY (`teamId`) REFERENCES `teams` (`id`) ON UPDATE CASCADE ON DELETE CASCADE, PRIMARY KEY (`id`))');
+        await database.execute(
+            'CREATE TABLE IF NOT EXISTS `player_stats` (`id` TEXT, `player` TEXT, `goals` INTEGER, `saves` INTEGER, `shots` INTEGER, `assists` INTEGER, `score` INTEGER, `goalShots` INTEGER, `created` TEXT, `gameId` TEXT, FOREIGN KEY (`gameId`) REFERENCES `games` (`id`) ON UPDATE CASCADE ON DELETE CASCADE, PRIMARY KEY (`id`))');
         await database
             .execute('CREATE INDEX `index_teams_player` ON `teams` (`player`)');
         await database.execute(
@@ -152,6 +156,12 @@ class _$AppDatabase extends AppDatabase {
   @override
   GameDao get gameDao {
     return _gameDaoInstance ??= _$GameDao(database, changeListener);
+  }
+
+  @override
+  PlayerStatsDao get playerStatsDao {
+    return _playerStatsDaoInstance ??=
+        _$PlayerStatsDao(database, changeListener);
   }
 }
 
@@ -1046,5 +1056,106 @@ class _$GameDao extends GameDao {
   @override
   Future<int> deleteModel(Game model) {
     return _gameDeletionAdapter.deleteAndReturnChangedRows(model);
+  }
+}
+
+class _$PlayerStatsDao extends PlayerStatsDao {
+  _$PlayerStatsDao(this.database, this.changeListener)
+      : _queryAdapter = QueryAdapter(database),
+        _playerStatsInsertionAdapter = InsertionAdapter(
+            database,
+            'player_stats',
+            (PlayerStats item) => <String, dynamic>{
+                  'id': item.id,
+                  'player': item.player,
+                  'goals': item.goals,
+                  'saves': item.saves,
+                  'shots': item.shots,
+                  'assists': item.assists,
+                  'score': item.score,
+                  'goalShots': item.goalShots,
+                  'created': item.created,
+                  'gameId': item.gameId
+                }),
+        _playerStatsUpdateAdapter = UpdateAdapter(
+            database,
+            'player_stats',
+            ['id'],
+            (PlayerStats item) => <String, dynamic>{
+                  'id': item.id,
+                  'player': item.player,
+                  'goals': item.goals,
+                  'saves': item.saves,
+                  'shots': item.shots,
+                  'assists': item.assists,
+                  'score': item.score,
+                  'goalShots': item.goalShots,
+                  'created': item.created,
+                  'gameId': item.gameId
+                }),
+        _playerStatsDeletionAdapter = DeletionAdapter(
+            database,
+            'player_stats',
+            ['id'],
+            (PlayerStats item) => <String, dynamic>{
+                  'id': item.id,
+                  'player': item.player,
+                  'goals': item.goals,
+                  'saves': item.saves,
+                  'shots': item.shots,
+                  'assists': item.assists,
+                  'score': item.score,
+                  'goalShots': item.goalShots,
+                  'created': item.created,
+                  'gameId': item.gameId
+                });
+
+  final sqflite.DatabaseExecutor database;
+
+  final StreamController<String> changeListener;
+
+  final QueryAdapter _queryAdapter;
+
+  static final _player_statsMapper = (Map<String, dynamic> row) => PlayerStats(
+      id: row['id'] as String,
+      player: row['player'] as String,
+      goals: row['goals'] as int,
+      saves: row['saves'] as int,
+      shots: row['shots'] as int,
+      assists: row['assists'] as int,
+      score: row['score'] as int,
+      goalShots: row['goalShots'] as int,
+      created: row['created'] as String,
+      gameId: row['gameId'] as String);
+
+  final InsertionAdapter<PlayerStats> _playerStatsInsertionAdapter;
+
+  final UpdateAdapter<PlayerStats> _playerStatsUpdateAdapter;
+
+  final DeletionAdapter<PlayerStats> _playerStatsDeletionAdapter;
+
+  @override
+  Future<List<PlayerStats>> getList(String gameId) async {
+    return _queryAdapter.queryList(
+        'select * from player_stats where gameId = ? order by score',
+        arguments: <dynamic>[gameId],
+        mapper: _player_statsMapper);
+  }
+
+  @override
+  Future<int> insertModel(PlayerStats model) {
+    return _playerStatsInsertionAdapter.insertAndReturnId(
+        model, OnConflictStrategy.replace);
+  }
+
+  @override
+  Future<int> updateModel(PlayerStats model) {
+    return _playerStatsUpdateAdapter.updateAndReturnChangedRows(
+        model, OnConflictStrategy.abort);
+  }
+
+  @override
+  Future<int> deleteModel(PlayerStats model) {
+    return _playerStatsDeletionAdapter.deleteAndReturnChangedRows(model);
   }
 }

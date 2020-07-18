@@ -14,6 +14,7 @@ import 'package:mpm/ui/views/team/event/manage/manage_event_view.dart';
 
 import 'package:mpm/ui/views/team/team_view.dart';
 import 'package:mpm/ui/views/team/manage/manage_team_view.dart';
+import 'package:mpm/ui/views/team/game/team_game_view.dart';
 
 import 'package:mpm/ui/views/player/player_view.dart';
 import 'package:mpm/ui/views/player/search/search_player_view.dart';
@@ -31,6 +32,7 @@ import 'package:mpm/ui/views/player/search/search_player_view.dart';
 		AdaptiveRoute(page: TeamView),
 		AdaptiveRoute<Team>(page: ManageTeamView),
 		AdaptiveRoute<Event>(page: ManageEventView),
+		AdaptiveRoute(page: TeamGameView),
 
 		AdaptiveRoute(page: PlayerView),
 		AdaptiveRoute(page: SearchPlayerView),

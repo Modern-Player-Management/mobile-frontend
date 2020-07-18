@@ -6,3 +6,4 @@ export 'package:mpm/services/database/models/event.dart';
 export 'package:mpm/services/database/models/event_type.dart';
 export 'package:mpm/services/database/models/discrepancy.dart';
 export 'package:mpm/services/database/models/participation.dart';
+export 'package:mpm/services/database/models/player_stats.dart';

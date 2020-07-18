@@ -11,6 +11,7 @@ class GameManager
 	final _gameApi = locator<GameApi>();
 
 	final _gameDao = locator<AppDatabase>().gameDao;
+	final _playerStatsDao = locator<AppDatabase>().playerStatsDao;
 
 	final _storage = locator<SecureStorage>();
 
@@ -55,6 +56,12 @@ class GameManager
 			{
 				models.removeAt(index);
 				keys.removeAt(index);
+			}
+
+			for(var playerStats in game.playersStats)
+			{
+				playerStats.gameId = game.id;
+				_playerStatsDao.insertModel(playerStats);
 			}
 		}
 

@@ -9,8 +9,6 @@ import 'package:injectable/injectable.dart';
 
 import 'package:mpm/app/locator.dart';
 import 'package:mpm/services/api/converters/json_serializable_converter.dart';
-import 'package:mpm/services/database/models/participation.dart';
-import 'package:mpm/services/database/models/player_stats.dart';
 import 'package:mpm/utils/utils.dart';
 
 part 'team_api.chopper.dart';
@@ -35,7 +33,8 @@ abstract class TeamApi extends ChopperService
 				Player: Player.fromJson,
 				Event: Event.fromJson,
 				Participation: Participation.fromJson,
-				Discrepancy: Discrepancy.fromJson
+				Discrepancy: Discrepancy.fromJson,
+				PlayerStats: PlayerStats.fromJson
 			}),
 			interceptors: [
 				(Request request) 
