@@ -9,6 +9,7 @@ class TeamGamesViewModel extends StreamViewModel<List<Game>>
 {
 	final BuildContext context;
 	final _gameDao = locator<AppDatabase>().gameDao;
+	final _navigation = locator<NavigationService>();
 
 	TeamViewModel _teamViewModel;
 
@@ -20,4 +21,14 @@ class TeamGamesViewModel extends StreamViewModel<List<Game>>
 	}
 
 	get stream => _gameDao.getStream(_teamViewModel.team.id);
+
+	void onTap(Game game)
+	{
+		_navigation.navigateTo(
+			Routes.teamGameView,
+			arguments: TeamGameViewArguments(
+				game: game
+			)
+		);
+	}
 }
