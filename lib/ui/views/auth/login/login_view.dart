@@ -4,6 +4,7 @@ import 'package:stacked/stacked.dart';
 import 'package:stacked_hooks/stacked_hooks.dart';
 
 import 'package:mpm/ui/views/auth/login/login_view_model.dart';
+import 'package:mpm/ui/widgets/logo.dart';
 
 class LoginView extends ViewModelBuilderWidget<LoginViewModel>
 {
@@ -25,10 +26,7 @@ class LoginView extends ViewModelBuilderWidget<LoginViewModel>
 									key: model.formKey,
 									child: Column(
 										children: <Widget>[
-											Text(
-												"MPM Logo",
-												style: Theme.of(context).textTheme.headline4
-											),
+											Logo(),
 											SizedBox(height: 16),
 											_UsernameTextField(),
 											_PasswordTextField(),
