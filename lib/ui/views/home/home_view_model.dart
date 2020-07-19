@@ -4,14 +4,13 @@ import 'package:mpm/app/locator.dart';
 
 class HomeViewModel extends BaseViewModel
 {
-	final _playerDao = locator<AppDatabase>().playerDao;
 	final _storage = locator<SecureStorage>();
-	final _teamManager = locator<TeamManager>();
 	final _navigation = locator<NavigationService>();
+	final _session = locator<Session>();
 
 	Future<void> onRefresh() async
 	{
-		await _teamManager.syncTeams();
+		await _session.synchronize(redirect: false);
 	}
 
 	void playerInfo() async
@@ -19,7 +18,7 @@ class HomeViewModel extends BaseViewModel
 		_navigation.navigateTo(
 			Routes.playerView,
 			arguments: PlayerViewArguments(
-				player: await _playerDao.get(_storage.player)
+				playerId: _storage.player
 			)
 		);
 	}

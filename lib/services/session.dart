@@ -8,6 +8,8 @@ class Session
 {
 	final _storage = locator<SecureStorage>();
 	final _navigation = locator<NavigationService>();
+	final _playerApi = locator<PlayerApi>();
+	final _playerDao = locator<AppDatabase>().playerDao;
 
 	TeamManager _teamManager;
 	bool online = false;
@@ -37,8 +39,6 @@ class Session
 	{
 		if(isAuth)
 		{
-			await _teamManager.syncTeams();
-
 			if(redirect)
 			{
 				_navigation.pushNamedAndRemoveUntil(
@@ -46,6 +46,9 @@ class Session
 					predicate: (route) => route == null
 				);
 			}
+
+			await _teamManager.syncTeams();
+			await _syncPlayer();			
 		}
 		else
 		{
@@ -54,6 +57,24 @@ class Session
 			{
 				_goToAuthView();
 			}
+		}
+	}
+
+	Future<void> _syncPlayer() async
+	{
+		try
+		{
+			var response = await _playerApi.getProfile();
+			if(validResponse(response))
+			{
+				final player = response.body;
+				player.id = _storage.player;
+				await _playerDao.insertModel(player);
+			}
+		}
+		catch(e)
+		{
+			print("syncPlayer: $e");
 		}
 	}
 

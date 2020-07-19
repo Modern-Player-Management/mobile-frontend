@@ -28,7 +28,7 @@ class TeamWidget extends StatelessWidget
 						"${team.name}"
 					),
 					subtitle: Text(
-						"Manager : ${team.manager.username}"
+						"Manager : ${team.manager?.username}"
 					),
 					onTap: () => onTap(team),
 				),

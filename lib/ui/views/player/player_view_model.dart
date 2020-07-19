@@ -5,26 +5,30 @@ import 'package:stacked/stacked.dart';
 import 'package:mpm/app/locator.dart';
 import 'package:validators/validators.dart';
 
-class PlayerViewModel extends BaseViewModel
+class PlayerViewModel extends FutureViewModel<Player>
 {
 	final _storage = locator<SecureStorage>();
 	final _session = locator<Session>();
+	final _playerDao = locator<AppDatabase>().playerDao;
 
-	final Player player;
+	final String playerId;
 	String passwordError;
 
 	PlayerViewModel({
-		@required this.player
+		@required this.playerId
 	});
+
+	@override
+	Future<Player> futureToRun() => _playerDao.get(playerId);
 
 	void disconnect()
 	{
 		_session.disconnect();
 	}
 
-	bool get hasImage => player?.image != null;
+	bool get hasImage => data?.image != null;
 
-	bool get isProfil => player.id == _storage.player;
+	bool get isProfil => data?.id == _storage.player;
 
 	String usernameValidator(String str)
 	{
@@ -56,7 +60,7 @@ class PlayerViewModel extends BaseViewModel
 	void passwordChanged(String str)
 	{
 		passwordError = passwordValidator(str);
-		player.password = str;
+		data.password = str;
 		notifyListeners();
 	}
 
@@ -93,7 +97,7 @@ class PlayerViewModel extends BaseViewModel
 		{
 			return "You must confirm the password";
 		}
-		if(str != player.password)
+		if(str != data.password)
 		{
 			return "Password confirmation and password must match";
 		}

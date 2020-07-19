@@ -20,7 +20,6 @@ import 'package:mpm/services/database/models/event.dart';
 import 'package:mpm/ui/views/team/game/team_game_view.dart';
 import 'package:mpm/services/database/models/game.dart';
 import 'package:mpm/ui/views/player/player_view.dart';
-import 'package:mpm/services/database/models/player.dart';
 import 'package:mpm/ui/views/player/search/search_player_view.dart';
 
 class Routes {
@@ -134,7 +133,7 @@ class Router extends RouterBase {
       var args = data.getArgs<PlayerViewArguments>(
           orElse: () => PlayerViewArguments());
       return buildAdaptivePageRoute<dynamic>(
-        builder: (context) => PlayerView(player: args.player),
+        builder: (context) => PlayerView(playerId: args.playerId),
         settings: data,
       );
     },
@@ -180,8 +179,8 @@ class TeamGameViewArguments {
 
 //PlayerView arguments holder class
 class PlayerViewArguments {
-  final Player player;
-  PlayerViewArguments({this.player});
+  final String playerId;
+  PlayerViewArguments({this.playerId});
 }
 
 //SearchPlayerView arguments holder class
