@@ -59,6 +59,7 @@ class PlayerView extends ViewModelBuilderWidget<PlayerViewModel>
 	PlayerViewModel viewModelBuilder(context)
 	{
 		return PlayerViewModel(
+			context: context,
 			playerId: playerId
 		);
 	}
