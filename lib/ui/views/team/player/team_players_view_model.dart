@@ -42,15 +42,5 @@ class TeamPlayersViewModel extends StreamViewModel<List<Player>>
 		await _playerManager.removeTeamPlayer(teamPlayer);
 	}
 
-	void onTap(Player player)
-	{
-		_navigation.navigateTo(
-			Routes.playerView,
-			arguments: PlayerViewArguments(
-				player: player
-			)
-		);
-	}
-
 	bool get isManager => _teamViewModel.isManager;
 }
