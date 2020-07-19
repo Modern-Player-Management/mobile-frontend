@@ -17,6 +17,7 @@ import 'package:mpm/services/database/models/team.dart';
 import 'package:mpm/ui/views/team/manage/manage_team_view.dart';
 import 'package:mpm/ui/views/team/event/manage/manage_event_view.dart';
 import 'package:mpm/services/database/models/event.dart';
+import 'package:mpm/ui/views/team/event/discrepancy/discrepancy_view.dart';
 import 'package:mpm/ui/views/team/game/team_game_view.dart';
 import 'package:mpm/services/database/models/game.dart';
 import 'package:mpm/ui/views/player/player_view.dart';
@@ -31,6 +32,7 @@ class Routes {
   static const String teamView = '/team-view';
   static const String manageTeamView = '/manage-team-view';
   static const String manageEventView = '/manage-event-view';
+  static const String discrepancyView = '/discrepancy-view';
   static const String teamGameView = '/team-game-view';
   static const String playerView = '/player-view';
   static const String searchPlayerView = '/search-player-view';
@@ -43,6 +45,7 @@ class Routes {
     teamView,
     manageTeamView,
     manageEventView,
+    discrepancyView,
     teamGameView,
     playerView,
     searchPlayerView,
@@ -61,6 +64,7 @@ class Router extends RouterBase {
     RouteDef(Routes.teamView, page: TeamView),
     RouteDef(Routes.manageTeamView, page: ManageTeamView),
     RouteDef(Routes.manageEventView, page: ManageEventView),
+    RouteDef(Routes.discrepancyView, page: DiscrepancyView),
     RouteDef(Routes.teamGameView, page: TeamGameView),
     RouteDef(Routes.playerView, page: PlayerView),
     RouteDef(Routes.searchPlayerView, page: SearchPlayerView),
@@ -122,6 +126,13 @@ class Router extends RouterBase {
         settings: data,
       );
     },
+    DiscrepancyView: (RouteData data) {
+      var args = data.getArgs<DiscrepancyViewArguments>(nullOk: false);
+      return buildAdaptivePageRoute<dynamic>(
+        builder: (context) => DiscrepancyView(event: args.event),
+        settings: data,
+      );
+    },
     TeamGameView: (RouteData data) {
       var args = data.getArgs<TeamGameViewArguments>(nullOk: false);
       return buildAdaptivePageRoute<dynamic>(
@@ -169,6 +180,12 @@ class ManageEventViewArguments {
   final Team team;
   final Event event;
   ManageEventViewArguments({@required this.team, this.event});
+}
+
+//DiscrepancyView arguments holder class
+class DiscrepancyViewArguments {
+  final Event event;
+  DiscrepancyViewArguments({@required this.event});
 }
 
 //TeamGameView arguments holder class
