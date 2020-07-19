@@ -12,7 +12,6 @@ class LoginViewModel extends BaseViewModel
 	final _storage = locator<SecureStorage>();
 	final _session = locator<Session>();
 	final _navigation = locator<NavigationService>();
-	final _playerDao = locator<AppDatabase>().playerDao;
 
 	final formKey = GlobalKey<FormState>();
 
@@ -56,9 +55,6 @@ class LoginViewModel extends BaseViewModel
 				{
 					_storage.player = res.body['id'];
 					_storage.token = res.body['token'];
-
-					final player = Player.fromJson(res.body);
-					await _playerDao.insertModel(player);
 
 					_session.synchronize();
 				}
