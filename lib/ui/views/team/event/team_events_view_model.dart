@@ -13,13 +13,10 @@ class TeamCalendarViewModel extends StreamViewModel<Map<DateTime, List<Event>>>
 	final _eventManager = locator<EventManager>();
 	final _eventDao = locator<AppDatabase>().eventDao;
 	final _eventTypeDao = locator<AppDatabase>().eventTypeDao;
-	final _playerDao = locator<AppDatabase>().playerDao;
 
 	final _navigation = locator<NavigationService>();
-	final _storage = locator<SecureStorage>();
 
-	Player _player;
-
+	DateTime _selectedDate;
 	final BuildContext context;
 	TeamViewModel _teamViewModel;
 
@@ -34,7 +31,6 @@ class TeamCalendarViewModel extends StreamViewModel<Map<DateTime, List<Event>>>
 	})
 	{
 		_teamViewModel = getParentViewModel<TeamViewModel>(context);
-		_playerDao.get(_storage.player).then((value) => _player = value);
 	}
 
 	@override
@@ -63,10 +59,13 @@ class TeamCalendarViewModel extends StreamViewModel<Map<DateTime, List<Event>>>
 				}
 			}
 
-			var date = DateTime.now();
-			date = DateTime(date.year, date.month, date.day);
+			if(_selectedDate == null)
+			{
+				_selectedDate = DateTime.now();
+				_selectedDate = DateTime(_selectedDate.year, _selectedDate.month, _selectedDate.day);
+			}
 
-			selectedEvents = map[date] ?? [];
+			selectedEvents = map[_selectedDate] ?? [];
 
 			yield map;
 		}
@@ -74,6 +73,7 @@ class TeamCalendarViewModel extends StreamViewModel<Map<DateTime, List<Event>>>
 
 	void onDaySelected(DateTime date, List<dynamic> events)
 	{
+		_selectedDate = DateTime(date.year, date.month, date.day);
 		selectedEvents = List.from(events);
 		notifyListeners();
 	}
@@ -96,6 +96,16 @@ class TeamCalendarViewModel extends StreamViewModel<Map<DateTime, List<Event>>>
 		}
 	}
 
+	void delay(Event event)
+	{
+		_navigation.navigateTo(
+			Routes.discrepancyView,
+			arguments: DiscrepancyViewArguments(
+				event: event
+			)
+		);
+	}
+
 	void delete(Event event, int index) async
 	{
 		showLoadingDialog(context);
@@ -103,8 +113,6 @@ class TeamCalendarViewModel extends StreamViewModel<Map<DateTime, List<Event>>>
 		await _eventManager.delete(event);
 
 		_navigation.back();
-
-		notifyListeners();
 	}
 
 	void updateEvent(Event event)

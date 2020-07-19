@@ -59,6 +59,12 @@ class TeamEventsView extends ViewModelBuilderWidget<TeamCalendarViewModel>
 											),
 											onPressed: () => model.presence(event),
 										),
+										IconButton(
+											icon: Icon(
+												Icons.timer,
+											),
+											onPressed: () => model.delay(event),
+										),
 										model.isManager ?
 										IconButton(
 											icon: Icon(
