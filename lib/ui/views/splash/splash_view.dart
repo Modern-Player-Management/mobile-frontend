@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:stacked/stacked.dart';
 
 import 'package:mpm/ui/views/splash/splash_view_model.dart';
+import 'package:mpm/ui/widgets/logo.dart';
 
 class SplashView extends ViewModelBuilderWidget<SplashViewModel>
 {
@@ -17,14 +18,7 @@ class SplashView extends ViewModelBuilderWidget<SplashViewModel>
 					mainAxisAlignment: MainAxisAlignment.center,
 					crossAxisAlignment: CrossAxisAlignment.center,
 					children: <Widget>[
-						CircularProgressIndicator(),
-						SizedBox(height: 32),
-						Text(
-							"Put a splash screen here !",
-							style: TextStyle(
-								fontSize: 20
-							),
-						)
+						Logo()
 					],
 				),
 			),
