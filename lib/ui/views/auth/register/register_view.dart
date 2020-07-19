@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 
 import 'package:stacked/stacked.dart';
+import 'package:stacked_hooks/stacked_hooks.dart';
 
 import 'package:mpm/ui/views/auth/register/register_view_model.dart';
-import 'package:stacked_hooks/stacked_hooks.dart';
+import 'package:mpm/ui/widgets/logo.dart';
 
 class RegisterView extends ViewModelBuilderWidget<RegisterViewModel>
 {
@@ -25,10 +26,7 @@ class RegisterView extends ViewModelBuilderWidget<RegisterViewModel>
 									key: model.formKey,
 									child: Column(
 										children: <Widget>[
-											Text(
-												"MPM Logo",
-												style: Theme.of(context).textTheme.headline4
-											),
+											Logo(),
 											SizedBox(height: 16),
 											_UsernameTextField(),
 											_EmailTextField(),
