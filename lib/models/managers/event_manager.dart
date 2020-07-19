@@ -251,7 +251,7 @@ class EventManager
 			if(validResponse(response))
 			{
 				event.currentHasConfirmed = confirmed;
-				_eventDao.updateModel(event);
+				await _eventDao.updateModel(event);
 				return true;
 			}
 		}
