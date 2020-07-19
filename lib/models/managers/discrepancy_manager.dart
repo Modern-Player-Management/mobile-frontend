@@ -14,6 +14,7 @@ class DiscrepancyManager
 	final _discrepancyDao = locator<AppDatabase>().discrepancyDao;
 
 	final _storage = locator<SecureStorage>();
+	final _uuid = locator<Uuid>();
 
 	bool Function(Response) validResponse;
 
@@ -77,9 +78,6 @@ class DiscrepancyManager
 					var res = await _eventApi.addDiscrepancy(event.id, discrepancy);
 					if(validResponse(res))
 					{
-						var id = res.body.id;
-						_discrepancyDao.updateId(discrepancy.id, id);
-						discrepancy.id = id;
 						discrepancy.saved = true;
 						discrepancy.create = false;
 						await _discrepancyDao.updateModel(discrepancy);
@@ -121,5 +119,31 @@ class DiscrepancyManager
 				return;
 			}
 		}
+	}
+
+	Future<String> add(Event event, Discrepancy discrepancy) async
+	{
+		_checkValidResponse();
+
+		discrepancy.eventId = event.id;
+
+		try
+		{
+			var response = await _eventApi.addDiscrepancy(event.id, discrepancy);
+			if(validResponse(response))
+			{
+				discrepancy.saved = true;
+				discrepancy.create = false;
+				await _discrepancyDao.insertModel(discrepancy);
+			}
+
+			return response.body["error"];
+		}
+		catch(e)
+		{
+			print("discrepancy manager, add: $e");
+		}
+
+		return "An error occured when adding a discrepancy";
 	}
 }
