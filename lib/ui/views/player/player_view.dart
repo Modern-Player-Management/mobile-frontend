@@ -4,20 +4,16 @@ import 'package:mpm/utils/colors.dart';
 
 import 'package:stacked/stacked.dart';
 
-import 'package:mpm/services/database/models/player.dart';
 import 'package:mpm/ui/views/player/player_view_model.dart';
 import 'package:mpm/ui/widgets/circle_avatar_image.dart';
 import 'package:stacked_hooks/stacked_hooks.dart';
 
 class PlayerView extends ViewModelBuilderWidget<PlayerViewModel>
 {
-	@override
-	bool get reactive => false;
-
-	final Player player;
+	final String playerId;
 
 	PlayerView({
-		this.player
+		this.playerId
 	});
 
   	@override
@@ -38,7 +34,8 @@ class PlayerView extends ViewModelBuilderWidget<PlayerViewModel>
 					) : Container()
 				],
 			),
-			body: Padding(
+			body: model.dataReady ?
+			Padding(
 				padding: const EdgeInsets.all(8.0),
 				child: SingleChildScrollView(
 					child: Column(
@@ -51,6 +48,9 @@ class PlayerView extends ViewModelBuilderWidget<PlayerViewModel>
 						],
 					),
 				),
+			) :
+			Center(
+				child: CircularProgressIndicator(),
 			)
 		);
 	}
@@ -59,7 +59,7 @@ class PlayerView extends ViewModelBuilderWidget<PlayerViewModel>
 	PlayerViewModel viewModelBuilder(context)
 	{
 		return PlayerViewModel(
-			player: player
+			playerId: playerId
 		);
 	}
 }
@@ -72,11 +72,11 @@ class _Header extends ViewModelWidget<PlayerViewModel>
 		return Card(
 			child: ListTile(
 				leading: CircleAvatarImage(
-					image: model.player.image,
+					image: model.data.image,
 					icon: Icons.person,
 				),
 				title: Text(
-					model.player.username
+					model.data.username
 				),
 			),
 		);
@@ -85,6 +85,9 @@ class _Header extends ViewModelWidget<PlayerViewModel>
 
 class _UpdateInfo extends ViewModelWidget<PlayerViewModel>
 {
+	@override
+	bool get reactive => false;
+
 	@override
 	Widget build(context, model)
 	{
@@ -126,7 +129,7 @@ class _UsernameTextField extends HookViewModelWidget<PlayerViewModel>
 	Widget buildViewModelWidget(context, model) 
 	{
 		return TextFormField(
-			initialValue: model.player.username,
+			initialValue: model.data.username,
 			decoration: InputDecoration(
 				labelText: "Username",
 				prefixIcon: Icon(
@@ -135,8 +138,8 @@ class _UsernameTextField extends HookViewModelWidget<PlayerViewModel>
 				),
 			),
 			validator: model.usernameValidator,
-			onChanged: (str) => model.player.username = str,
-			onSaved: (str) => model.player.username = str,
+			onChanged: (str) => model.data.username = str,
+			onSaved: (str) => model.data.username = str,
 		);
 	}
 }
@@ -150,7 +153,7 @@ class _EmailTextField extends HookViewModelWidget<PlayerViewModel>
 	Widget buildViewModelWidget(context, model) 
 	{
 		return TextFormField(
-			initialValue: model.player.email,
+			initialValue: model.data.email,
 			decoration: InputDecoration(
 				labelText: "Email",
 				prefixIcon: Icon(
@@ -159,14 +162,17 @@ class _EmailTextField extends HookViewModelWidget<PlayerViewModel>
 				),
 			),
 			validator: model.emailValidator,
-			onChanged: (str) => model.player.email = str,
-			onSaved: (str) => model.player.email = str,
+			onChanged: (str) => model.data.email = str,
+			onSaved: (str) => model.data.email = str,
 		);
 	}
 }
 
 class _UpdatePassword extends ViewModelWidget<PlayerViewModel>
 {
+	@override
+	bool get reactive => false;
+
 	@override
 	Widget build(context, model)
 	{
@@ -208,7 +214,7 @@ class _PasswordTextField extends HookViewModelWidget<PlayerViewModel>
 	Widget buildViewModelWidget(context, model) 
 	{
 		return TextFormField(
-			initialValue: model.player.password,
+			initialValue: model.data.password,
 			decoration: InputDecoration(
 				labelText: "Password",
 				prefixIcon: Icon(
@@ -220,7 +226,7 @@ class _PasswordTextField extends HookViewModelWidget<PlayerViewModel>
 			obscureText: true,
 			validator: model.passwordValidator,
 			onChanged: model.passwordChanged,
-			onSaved: (str) => model.player.password = str,
+			onSaved: (str) => model.data.password = str,
 		);
 	}
 }
@@ -249,6 +255,9 @@ class _ConfirmPasswordTextField extends HookViewModelWidget<PlayerViewModel>
 
 class _ChangeImage extends ViewModelWidget<PlayerViewModel>
 {
+	@override
+	bool get reactive => false;
+
 	@override
 	Widget build(context, model)
 	{
