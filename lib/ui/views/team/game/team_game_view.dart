@@ -30,7 +30,7 @@ class TeamGameView extends ViewModelBuilderWidget<TeamGameViewModel>
 				children: <Widget>[
 					_Header(),
 					Expanded(
-						child: _Players(),
+						child: _PlayersStats(),
 					)
 				],
 			),
@@ -76,7 +76,7 @@ class _Header extends ViewModelWidget<TeamGameViewModel>
 	}
 }
 
-class _Players extends ViewModelWidget<TeamGameViewModel>
+class _PlayersStats extends ViewModelWidget<TeamGameViewModel>
 {
 	@override
 	Widget build(context, model)
@@ -87,21 +87,73 @@ class _Players extends ViewModelWidget<TeamGameViewModel>
 			itemCount: model.data.length,
 			itemBuilder: (context, index){
 				var playerStats = model.data[index];
-				return ListTile(
-					leading: Icon(
-						Icons.person
-					),
-					title: Text(
-						playerStats.player
-					),
-					trailing: Text(
-						"${playerStats.score}"
+				return Card(
+					child: Column(
+						mainAxisSize: MainAxisSize.min,
+						crossAxisAlignment: CrossAxisAlignment.start,
+						children: <Widget>[
+							ListTile(
+								leading: Icon(
+									Icons.person
+								),
+								title: Text(
+									playerStats.player
+								),
+								trailing: Text(
+									"${playerStats.score}"
+								),
+							),
+							_StatsWidget(
+								left: "Goals: ${playerStats.goals}",
+								right: "GoalShots: ${playerStats.goalShots}",
+							),
+							_StatsWidget(
+								left: "Shots: ${playerStats.shots}",
+								right: "Saves: ${playerStats.saves}",
+							),
+							_StatsWidget(
+								left: "Assists: ${playerStats.assists}",
+								right: "",
+							),
+						],
 					),
 				);
 			},
 		) :
 		Center(
 			child: CircularProgressIndicator(),
+		);
+	}
+}
+
+class _StatsWidget extends StatelessWidget
+{
+	final String left;
+	final String right;
+
+	_StatsWidget({
+		@required this.left,
+		@required this.right
+	});
+
+	@override
+	Widget build(context)
+	{
+		return Padding(
+			padding: const EdgeInsets.all(8.0),
+			child: Row(
+				children: <Widget>[
+					Text(
+						left,
+						style: Theme.of(context).textTheme.subtitle2,
+					),
+					SizedBox(width: 32),
+					Text(
+						right,
+						style: Theme.of(context).textTheme.subtitle2,
+					)
+				],
+			),
 		);
 	}
 }
