@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mpm/utils/dialogs.dart';
 
 import 'package:stacked/stacked.dart';
 
@@ -10,11 +11,15 @@ class PlayerViewModel extends FutureViewModel<Player>
 	final _storage = locator<SecureStorage>();
 	final _session = locator<Session>();
 	final _playerDao = locator<AppDatabase>().playerDao;
+	final _playerManager = locator<PlayerManager>();
+	final _navigation = locator<NavigationService>();
 
+	final BuildContext context;
 	final String playerId;
 	String passwordError;
 
 	PlayerViewModel({
+		@required this.context,
 		@required this.playerId
 	});
 
@@ -52,7 +57,7 @@ class PlayerViewModel extends FutureViewModel<Player>
 		return null;
 	}
 
-	void updateInformation()
+	void updateInformation() async
 	{
 		
 	}
@@ -104,7 +109,7 @@ class PlayerViewModel extends FutureViewModel<Player>
 		return null;
 	}
 
-	void updatePassword()
+	void updatePassword() async
 	{
 		
 	}

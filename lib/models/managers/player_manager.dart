@@ -189,4 +189,54 @@ class PlayerManager
 
 		return true;
 	}
+
+	Future<bool> updatePlayerInformation(Player player) async
+	{
+		_checkValidResponse();
+
+		var data = Player()
+			..username = player.username
+			..email = player.email;
+
+		try
+		{
+			var response = await _playerApi.updatePlayer(player.id, data);
+			if(validResponse(response))
+			{
+				await _playerDao.updateModel(player);
+				return true;
+			}
+		}
+		catch(e)
+		{
+			print("updatePlayerInformation: $e");
+		}
+		
+		return false;
+	}
+
+	Future<bool> updatePlayerPassword(Player player) async
+	{
+		_checkValidResponse();
+
+		var data = Player()..password = player.password;
+
+		if(data.password != null)
+		{
+			try
+			{
+				var response = await _playerApi.updatePlayer(player.id, data);
+				if(validResponse(response))
+				{
+					return true;
+				}
+			}
+			catch(e)
+			{
+				print("updatePlayerPassword: $e");
+			}
+		}
+
+		return false;
+	}
 }
