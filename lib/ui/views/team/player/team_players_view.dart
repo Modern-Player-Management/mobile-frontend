@@ -32,8 +32,7 @@ class TeamPlayersView extends ViewModelBuilderWidget<TeamPlayersViewModel>
 								color: Colors.red,
 							),
 							onPressed: () => model.onPressed(player),
-						) : null,
-						onTap: () => model.onTap(player),
+						) : null
 					)
 				);
 			}
