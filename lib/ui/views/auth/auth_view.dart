@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:stacked/stacked.dart';
 
 import 'package:mpm/ui/views/auth/auth_view_model.dart';
+import 'package:mpm/ui/widgets/logo.dart';
 
 class AuthView extends ViewModelBuilderWidget<AuthViewModel>
 {
@@ -19,10 +20,7 @@ class AuthView extends ViewModelBuilderWidget<AuthViewModel>
 					child: Column(
 						mainAxisAlignment: MainAxisAlignment.center,
 						children: <Widget>[
-							Text(
-								"MPM Logo",
-								style: Theme.of(context).textTheme.headline4
-							),
+							Logo(),
 							SizedBox(height: 16),
 							_LoginButton(),
 							SizedBox(height: 8),
