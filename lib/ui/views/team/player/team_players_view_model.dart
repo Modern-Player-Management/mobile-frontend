@@ -1,16 +1,18 @@
 import 'package:flutter/material.dart';
-import 'package:mpm/utils/toast_factory.dart';
 
 import 'package:stacked/stacked.dart';
 
 import 'package:mpm/app/locator.dart';
 import 'package:mpm/ui/views/team/team_view_model.dart';
+import 'package:mpm/utils/dialogs.dart';
+import 'package:mpm/utils/toast_factory.dart';
 
 class TeamPlayersViewModel extends StreamViewModel<List<Player>>
 {
 	final _playerManager = locator<PlayerManager>();
 
 	final _playerDao = locator<AppDatabase>().playerDao;
+	final _navigation = locator<NavigationService>();
 
 	final BuildContext context;
 
@@ -34,12 +36,16 @@ class TeamPlayersViewModel extends StreamViewModel<List<Player>>
 
 	void onPressed(Player player) async
 	{
+		showLoadingDialog(context, canPop: false);
+
 		final teamPlayer = TeamPlayer(
 			teamId: _teamViewModel.team.id,
 			playerId: player.id
 		);
 
 		var res = await _playerManager.removeTeamPlayer(teamPlayer);
+
+		_navigation.back();
 
 		if(res)
 		{
