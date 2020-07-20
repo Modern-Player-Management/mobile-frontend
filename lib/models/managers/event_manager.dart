@@ -87,9 +87,9 @@ class EventManager
 					var res = await _teamApi.addEvent(team.id, event);
 					if(validResponse(res))
 					{
-						var id = res.body.id;
-						_eventDao.updateId(team.id, id);
-						event.id = id;
+						await _eventDao.deleteModel(event);
+
+						event.id = res.body.id;
 						event.create = false;
 						event.saved = true;
 						await _eventDao.updateModel(event);
@@ -172,13 +172,12 @@ class EventManager
 			var response = await _teamApi.addEvent(team.id, event);
 			if(validResponse(response))
 			{
-				var id = response.body.id;
-				await _eventDao.updateId(event.id, id);
+				await _eventDao.deleteModel(event);
 
-				event.id = id;
+				event.id = response.body.id;
 				event.saved = true;
 				event.create = false;
-				await _eventDao.updateModel(event);
+				await _eventDao.insertModel(event);
 				return true;
 			}
 		}

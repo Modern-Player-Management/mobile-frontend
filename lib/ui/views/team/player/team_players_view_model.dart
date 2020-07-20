@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mpm/utils/toast_factory.dart';
 
 import 'package:stacked/stacked.dart';
 
@@ -10,7 +11,6 @@ class TeamPlayersViewModel extends StreamViewModel<List<Player>>
 	final _playerManager = locator<PlayerManager>();
 
 	final _playerDao = locator<AppDatabase>().playerDao;
-	final _navigation = locator<NavigationService>();
 
 	final BuildContext context;
 
@@ -39,7 +39,27 @@ class TeamPlayersViewModel extends StreamViewModel<List<Player>>
 			playerId: player.id
 		);
 
-		await _playerManager.removeTeamPlayer(teamPlayer);
+		var res = await _playerManager.removeTeamPlayer(teamPlayer);
+
+		if(res)
+		{
+			ToastFactory.show(
+				context: context, 
+				msg: "${player.username} has been removed from the team",
+				style: ToastStyle.success
+			);
+		}
+		else
+		{
+			ToastFactory.show(
+				context: context, 
+				msg: "An error occured when removing the player from the team",
+				style: ToastStyle.error
+			);
+		}
+
+		data.remove(player);
+		notifyListeners();
 	}
 
 	bool get isManager => _teamViewModel.isManager;

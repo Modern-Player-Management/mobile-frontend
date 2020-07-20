@@ -25,7 +25,7 @@ class SearchPlayerView extends ViewModelBuilderWidget<SearchPlayerViewModel>
 			body: Padding(
 				padding: const EdgeInsets.all(8.0),
 				child: SearchBar<Player>(
-					searchBarPadding: const EdgeInsets.only(top: 16),
+					searchBarPadding: const EdgeInsets.only(top: 32),
 					onSearch: model.onSearch,
 					placeHolder: Center(
 						child: Text(
@@ -68,6 +68,7 @@ class SearchPlayerView extends ViewModelBuilderWidget<SearchPlayerViewModel>
 	SearchPlayerViewModel viewModelBuilder(context)
 	{
 		return SearchPlayerViewModel(
+			context: context,
 			team: team
 		);
 	}
