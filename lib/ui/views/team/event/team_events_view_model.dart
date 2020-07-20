@@ -46,8 +46,6 @@ class TeamCalendarViewModel extends StreamViewModel<Map<DateTime, List<Event>>>
 			{
 				event.typeName = types[event.type];
 
-				print("event: ${event.id}: ${event.name}");
-
 				var date = event.startDate;
 				date = DateTime(date.year, date.month, date.day);
 

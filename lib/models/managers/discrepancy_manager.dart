@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 
 import 'package:chopper/chopper.dart';
@@ -136,7 +138,8 @@ class DiscrepancyManager
 				await _discrepancyDao.insertModel(discrepancy);
 			}
 
-			return response.body["error"];
+			var data = json.decode(response.bodyString);
+			return data["error"];
 		}
 		catch(e)
 		{

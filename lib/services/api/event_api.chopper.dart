@@ -26,12 +26,12 @@ class _$EventApi extends EventApi {
   }
 
   @override
-  Future<Response<Map<dynamic, dynamic>>> addDiscrepancy(
+  Future<Response<dynamic>> addDiscrepancy(
       String eventId, Discrepancy discrepancy) {
     final $url = '/$eventId/discrepancies';
     final $body = discrepancy;
     final $request = Request('POST', $url, client.baseUrl, body: $body);
-    return client.send<Map<dynamic, dynamic>, Map<dynamic, dynamic>>($request);
+    return client.send<dynamic, dynamic>($request);
   }
 
   @override

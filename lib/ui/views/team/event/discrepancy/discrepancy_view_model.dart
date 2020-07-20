@@ -27,7 +27,7 @@ class DiscrepancyViewModel extends BaseViewModel
 			return "Select a delay length";
 		}
 
-		return _format.format(DateTime.fromMillisecondsSinceEpoch(discrepancy.delayLength * 1000));
+		return _format.format(DateTime.fromMillisecondsSinceEpoch((discrepancy.delayLength  - 60) * 1000 * 60));
 	}
 
 	DiscrepancyViewModel({
@@ -63,7 +63,7 @@ class DiscrepancyViewModel extends BaseViewModel
 			onConfirm: (Picker picker, List value) {
 				var values = picker.getSelectedValues();
 				// 0 : hours & 1 : minutes
-				discrepancy.delayLength = value[0] * 3600 + values[1] * 60;
+				discrepancy.delayLength = values[0] * 60 + values[1];
 				notifyListeners();
 			}
 		).showModal(context);
@@ -101,7 +101,8 @@ class DiscrepancyViewModel extends BaseViewModel
 				ToastFactory.show(
 					context: context, 
 					msg: res,
-					style: ToastStyle.error
+					style: ToastStyle.error,
+					duration: Duration(seconds: 3)
 				);
 			}
 		}
