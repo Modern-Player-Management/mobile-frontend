@@ -9,9 +9,6 @@ abstract class PlayerDao extends ModelDao<Player>
 	@Query('select * from players where id = :id')
 	Future<Player> get(String id);
 
-	@Query('update players set id = :newId where id = :oldId')
-	Future<void> updateId(String oldId, String newId);
-
 	@Query('select * from players p inner join team_players tp on p.id = tp.playerId '
 		'and tp.teamId = :teamId and tp.playerId != :managerId and tp.deleted = 0')
 	Stream<List<Player>> getStream(String teamId, String managerId);

@@ -114,12 +114,12 @@ class TeamManager
 					var res = await _teamApi.createTeam(team);
 					if(validResponse(res))
 					{
-						var id = res.body.id;
-						_teamDao.updateId(team.id, id);
-						team.id = id;
+						await _teamDao.deleteModel(team);
+
+						team.id = res.body.id;
 						team.create = false;
 						team.saved = true;
-						await _teamDao.updateModel(team);
+						await _teamDao.insertModel(team);
 					}
 				}
 				else
@@ -177,37 +177,25 @@ class TeamManager
 	{
 		_checkValidResponse();
 
-		team.id = _uuid.v1();
-		team.player = _storage.player;
-		team.create = true;
-
-		await _teamDao.insertModel(team);
-
 		try
 		{
 			var response = await _teamApi.createTeam(team);
 			if(validResponse(response))
 			{
 				var id = response.body.id;
-				await _teamDao.updateId(team.id, id);
 
 				team.id = id;
 				team.saved = true;
-				team.create = false;
-				await _teamDao.updateModel(team);
-			}
-			else
-			{
-				return false;
+				await _teamDao.insertModel(team);
+				return true;
 			}
 		}
 		catch(e) 
 		{
 			print("insertTeam: $e");
-			return false;
 		}
 
-		return true;
+		return false;
 	}
 
 	Future<bool> update(Team team) async

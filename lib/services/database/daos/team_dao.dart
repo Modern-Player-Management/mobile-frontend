@@ -20,7 +20,4 @@ abstract class TeamDao extends ModelDao<Team>
 
 	@Query('select * from teams where player = :player and deleted = 1')
 	Future<List<Team>> getUndeleted(String player);
-
-	@Query('update teams set id = :newId where id = :oldId')
-	Future<void> updateId(String oldId, String newId);
 }

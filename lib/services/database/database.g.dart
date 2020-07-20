@@ -288,12 +288,6 @@ class _$TeamDao extends TeamDao {
   }
 
   @override
-  Future<void> updateId(String oldId, String newId) async {
-    await _queryAdapter.queryNoReturn('update teams set id = ? where id = ?',
-        arguments: <dynamic>[oldId, newId]);
-  }
-
-  @override
   Future<int> insertModel(Team model) {
     return _teamInsertionAdapter.insertAndReturnId(
         model, OnConflictStrategy.replace);
@@ -377,12 +371,6 @@ class _$PlayerDao extends PlayerDao {
   Future<Player> get(String id) async {
     return _queryAdapter.query('select * from players where id = ?',
         arguments: <dynamic>[id], mapper: _playersMapper);
-  }
-
-  @override
-  Future<void> updateId(String oldId, String newId) async {
-    await _queryAdapter.queryNoReturn('update players set id = ? where id = ?',
-        arguments: <dynamic>[oldId, newId]);
   }
 
   @override
@@ -638,12 +626,6 @@ class _$EventDao extends EventDao {
   }
 
   @override
-  Future<void> updateId(String oldId, String newId) async {
-    await _queryAdapter.queryNoReturn('update events set id = ? where id = ?',
-        arguments: <dynamic>[oldId, newId]);
-  }
-
-  @override
   Stream<List<Event>> getStream(String teamId) {
     return _queryAdapter.queryListStream(
         'select * from events where teamId = ? and deleted = 0',
@@ -848,13 +830,6 @@ class _$DiscrepancyDao extends DiscrepancyDao {
   }
 
   @override
-  Future<void> updateId(String oldId, String newId) async {
-    await _queryAdapter.queryNoReturn(
-        'update discrepancies set id = ? where id = ?',
-        arguments: <dynamic>[oldId, newId]);
-  }
-
-  @override
   Stream<List<Discrepancy>> getStream(String eventId) {
     return _queryAdapter.queryListStream(
         'select * from discrepancies where eventId = ? and deleted = 0',
@@ -991,12 +966,6 @@ class _$GameDao extends GameDao {
   Future<Game> get(String id) async {
     return _queryAdapter.query('select * from games where id = ?',
         arguments: <dynamic>[id], mapper: _gamesMapper);
-  }
-
-  @override
-  Future<void> updateId(String oldId, String newId) async {
-    await _queryAdapter.queryNoReturn('update games set id = ? where id = ?',
-        arguments: <dynamic>[oldId, newId]);
   }
 
   @override

@@ -159,11 +159,7 @@ class ManageEventViewModel extends FutureViewModel<List<EventType>>
 			}
 
 			_navigation.back();
-			
-			if(res)
-			{
-				_navigation.back(result: result);
-			}
+			_navigation.back(result: result);
 		}
 	}
 }

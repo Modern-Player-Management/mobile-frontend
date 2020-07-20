@@ -9,9 +9,6 @@ abstract class EventDao extends ModelDao<Event>
 	@Query('select * from events where id = :id')
 	Future<Event> get(String id);
 
-	@Query('update events set id = :newId where id = :oldId')
-	Future<void> updateId(String oldId, String newId);
-
 	@Query('select * from events where teamId = :teamId and deleted = 0 ')
 	Stream<List<Event>> getStream(String teamId);
 

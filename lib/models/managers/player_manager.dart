@@ -149,10 +149,7 @@ class PlayerManager
 			{
 				teamPlayer.saved = true;
 				await _teamPlayerDao.updateModel(teamPlayer);
-			}
-			else
-			{
-				return false;
+				return true;
 			}
 		}
 		catch(e) 
@@ -160,7 +157,7 @@ class PlayerManager
 			print("addTeamPlayer: $e");
 		}
 
-		return true;
+		return false;
 	}
 
 	Future<bool> removeTeamPlayer(TeamPlayer teamPlayer) async
@@ -176,10 +173,7 @@ class PlayerManager
 			if(validResponse(res))
 			{
 				await _teamPlayerDao.deleteModel(teamPlayer);
-			}
-			else
-			{
-				return false;
+				return true;
 			}
 		}
 		catch(e)
@@ -187,7 +181,7 @@ class PlayerManager
 			print("removeTeamPlayer: $e");
 		}
 
-		return true;
+		return false;
 	}
 
 	Future<bool> updatePlayerInformation(Player player) async

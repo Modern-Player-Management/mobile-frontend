@@ -9,9 +9,6 @@ abstract class GameDao extends ModelDao<Game>
 	@Query('select * from games where id = :id')
 	Future<Game> get(String id);
 
-	@Query('update games set id = :newId where id = :oldId')
-	Future<void> updateId(String oldId, String newId);
-
 	@Query('select * from games where teamId = :teamId and deleted = 0 ')
 	Stream<List<Game>> getStream(String teamId);
 

@@ -9,9 +9,6 @@ abstract class DiscrepancyDao extends ModelDao<Discrepancy>
 	@Query('select * from discrepancies where id = :id')
 	Future<Discrepancy> get(String id);
 
-	@Query('update discrepancies set id = :newId where id = :oldId')
-	Future<void> updateId(String oldId, String newId);
-
 	@Query('select * from discrepancies where eventId = :eventId and deleted = 0 ')
 	Stream<List<Discrepancy>> getStream(String eventId);
 
