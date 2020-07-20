@@ -177,16 +177,24 @@ class TeamManager
 	{
 		_checkValidResponse();
 
+		team.id = _uuid.v1();
+		team.player = _storage.player;
+		team.create = true;
+
+		await _teamDao.insertModel(team);
+
 		try
 		{
 			var response = await _teamApi.createTeam(team);
 			if(validResponse(response))
 			{
-				var id = response.body.id;
+				await _teamDao.deleteModel(team);
 
-				team.id = id;
+				team.id = response.body.id;
 				team.saved = true;
+				team.create = false;
 				await _teamDao.insertModel(team);
+
 				return true;
 			}
 		}
