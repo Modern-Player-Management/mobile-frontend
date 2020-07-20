@@ -25,19 +25,19 @@ class ToastFactory
 		switch(style) {
 			case ToastStyle.error: 
 				icon = Icons.error;
-				color = Colors.red.shade800;
+				color = Colors.red.shade400;
 				break;
 			case ToastStyle.warning: 
 				icon = Icons.warning;
-				color = Colors.yellow.shade800;
+				color = Colors.yellow.shade400;
 				break;
 			case ToastStyle.success: 
 				icon = Icons.info;
-				color = Colors.green.shade800;
+				color = Colors.green.shade400;
 				break;
 			default: 
 				icon = Icons.info;
-				color = Colors.blue.shade800;
+				color = Colors.blue.shade400;
 				break;
 		}
 
