@@ -136,10 +136,13 @@ class DiscrepancyManager
 				discrepancy.saved = true;
 				discrepancy.create = false;
 				await _discrepancyDao.insertModel(discrepancy);
+				return null;
 			}
-
-			var data = json.decode(response.bodyString);
-			return data["error"];
+			else
+			{
+				var data = json.decode(response.bodyString);
+				return data["error"];
+			}
 		}
 		catch(e)
 		{

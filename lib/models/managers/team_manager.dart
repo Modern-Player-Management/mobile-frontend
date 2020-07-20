@@ -66,7 +66,8 @@ class TeamManager
 
 				for(var team in teams)
 				{
-					team = (await _teamApi.getTeam(team.id)).body;
+					var res = await _teamApi.getTeam(team.id);
+					team = res.body;
 
 					team.player = _storage.player;
 					team.saved = true;

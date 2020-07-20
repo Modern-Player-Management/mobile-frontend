@@ -5,6 +5,7 @@ import 'package:validators/validators.dart';
 
 import 'package:mpm/app/locator.dart';
 import 'package:mpm/services/database/models/player.dart';
+import 'package:mpm/utils/dialogs.dart';
 
 class RegisterViewModel extends BaseViewModel
 {
@@ -14,6 +15,11 @@ class RegisterViewModel extends BaseViewModel
 
 	final Player player = Player();
 	String passwordError, requestError;
+	final BuildContext context;
+
+	RegisterViewModel({
+		@required this.context
+	});
 
 	String usernameValidator(String str)
 	{
@@ -89,6 +95,7 @@ class RegisterViewModel extends BaseViewModel
 		if(formKey.currentState.validate())
 		{
 			formKey.currentState.save();
+			showLoadingDialog(context);
 			try
 			{
 				final res = await _authApi.register(player.username, player.email, player.password);
@@ -106,6 +113,8 @@ class RegisterViewModel extends BaseViewModel
 			{
 				print("register: $e");
 			}
+
+			_navigation.back();
 		}
 	}
 }

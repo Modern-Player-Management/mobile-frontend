@@ -14,6 +14,7 @@ class DiscrepancyViewModel extends BaseViewModel
 
 	final formKey = GlobalKey<FormState>();
 	final _discrepancyManager = locator<DiscrepancyManager>();
+	final _navigation = locator<NavigationService>();
 
 	final discrepancy = Discrepancy(
 		type: 1
@@ -56,7 +57,7 @@ class DiscrepancyViewModel extends BaseViewModel
 			itemExtent: 48,
 			adapter: NumberPickerAdapter(
 				data: [
-					NumberPickerColumn(postfix: Text("Hour : "), begin: 1, end: 24),
+					NumberPickerColumn(postfix: Text("Hour : "), begin: 0, end: 24),
 					NumberPickerColumn(postfix: Text("Minute : "), begin: 1, end: 60),
 				]
 			),
@@ -90,6 +91,7 @@ class DiscrepancyViewModel extends BaseViewModel
 
 			if(res == null)
 			{
+				_navigation.back();
 				ToastFactory.show(
 					context: context, 
 					msg: "Discrepancy added !",
