@@ -14,7 +14,6 @@ class DiscrepancyManager
 	final _discrepancyDao = locator<AppDatabase>().discrepancyDao;
 
 	final _storage = locator<SecureStorage>();
-	final _uuid = locator<Uuid>();
 
 	bool Function(Response) validResponse;
 

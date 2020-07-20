@@ -41,7 +41,7 @@ class TeamEventsView extends ViewModelBuilderWidget<TeamCalendarViewModel>
 									color: event.currentHasConfirmed ? Colors.green : null,
 								),
 								title: Text(
-									"${event.typeName} : ${event.name}",
+									"${event.typeName} : \n${event.name}",
 									overflow: TextOverflow.ellipsis,
 								),
 								subtitle: Text(

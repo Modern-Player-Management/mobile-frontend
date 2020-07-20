@@ -46,6 +46,8 @@ class TeamCalendarViewModel extends StreamViewModel<Map<DateTime, List<Event>>>
 			{
 				event.typeName = types[event.type];
 
+				print("event: ${event.id}: ${event.name}");
+
 				var date = event.startDate;
 				date = DateTime(date.year, date.month, date.day);
 
@@ -110,7 +112,16 @@ class TeamCalendarViewModel extends StreamViewModel<Map<DateTime, List<Event>>>
 	{
 		showLoadingDialog(context);
 
-		await _eventManager.delete(event);
+		var res = await _eventManager.delete(event);
+
+		if(!res)
+		{
+			ToastFactory.show(
+				context: context, 
+				msg: "Failed to delete the event",
+				style: ToastStyle.error
+			);
+		}
 
 		_navigation.back();
 	}
