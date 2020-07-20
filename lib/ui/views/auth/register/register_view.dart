@@ -50,7 +50,9 @@ class RegisterView extends ViewModelBuilderWidget<RegisterViewModel>
 	@override
 	RegisterViewModel viewModelBuilder(context) 
 	{
-		return RegisterViewModel();
+		return RegisterViewModel(
+			context: context
+		);
 	}
 }
 
